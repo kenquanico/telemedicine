@@ -38,9 +38,9 @@ function PageRouter() {
 // ─── App Shell ────────────────────────────────────────────────────────────────
 function AppShell() {
     return (
-        <div className="min-h-screen bg-white font-['DM_Sans']">
+        <div className="min-h-screen bg-white font-['Geist']">
             <Navbar />
-            <main>
+            <main className="px-24 py-8">
                 <PageRouter />
             </main>
             <NotificationModal />

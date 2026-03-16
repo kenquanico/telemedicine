@@ -124,16 +124,8 @@ export interface Notification {
 
 // ─── App Page Keys ────────────────────────────────────────────────────────────
 export type PageKey =
-    | "home"
-    | "catalog"
-    | "product"
-    | "cart"
-    | "checkout"
-    | "orders"
-    | "tracking"
-    | "payment"
-    | "history"
-    | "account";
+    | "medicines"
+
 
 // ─── Filter State ─────────────────────────────────────────────────────────────
 export interface CatalogFilters {

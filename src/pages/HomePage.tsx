@@ -1,4 +1,3 @@
-
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import { MedicineCard, CategoryCard, SectionHeader } from "../components/UI";
@@ -23,75 +22,11 @@ export default function HomePage() {
 
     return (
         <div>
-            {/* ── Hero ──────────────────────────────────────────────────────────── */}
-            <div
-                style={{
-                    background: "linear-gradient(135deg, #061E29 0%, #1D546D 60%, #5F9598 100%)",
-                    padding: "56px 24px",
-                    textAlign: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                }}
-            >
-                {/* Decorative circles */}
-                <div
-                    style={{
-                        position: "absolute", top: -60, right: -60,
-                        width: 300, height: 300, borderRadius: "50%",
-                        background: "rgba(95,149,152,0.15)", pointerEvents: "none",
-                    }}
-                />
-                <div
-                    style={{
-                        position: "absolute", bottom: -80, left: -40,
-                        width: 200, height: 200, borderRadius: "50%",
-                        background: "rgba(255,255,255,0.05)", pointerEvents: "none",
-                    }}
-                />
-
-                <h1
-                    style={{
-                        fontFamily: "'Varela Round', sans-serif",
-                        fontSize: 36,
-                        color: "#fff",
-                        marginBottom: 12,
-                        position: "relative",
-                        zIndex: 1,
-                    }}
-                >
-                    Your Health, Delivered Fast 🏥
-                </h1>
-                <p style={{ fontSize: 16, color: "rgba(255,255,255,0.8)", maxWidth: 500, margin: "0 auto 24px", position: "relative", zIndex: 1 }}>
-                    Order medicines, vitamins, and health essentials online. Same-day
-                    delivery in Cebu City.
-                </p>
-
-                {/* Pills */}
-                <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", position: "relative", zIndex: 1 }}>
-                    {["🔥 Today's Deals", "💊 Prescription Meds", "🧴 Vitamins", "🩹 First Aid", "🚚 Free Delivery"].map((p) => (
-                        <span
-                            key={p}
-                            onClick={() => navigateTo("catalog")}
-                            style={{
-                                background: "rgba(255,255,255,0.15)",
-                                border: "1px solid rgba(255,255,255,0.25)",
-                                borderRadius: 20,
-                                padding: "6px 14px",
-                                color: "#fff",
-                                fontSize: 12,
-                                cursor: "pointer",
-                            }}
-                        >
-              {p}
-            </span>
-                    ))}
-                </div>
-            </div>
 
             {/* ── Categories ───────────────────────────────────────────────────── */}
-            <div style={{ padding: "32px 24px" }}>
+            <div className="px-10 py-12">
                 <SectionHeader title="Shop by Category" onSeeAll={() => navigateTo("catalog")} />
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 14 }}>
+                <div className="mt-2 grid grid-cols-5 gap-4">
                     {(Object.entries(CATEGORY_META) as [string, { label: string; icon: string; color: string }][]).map(
                         ([key, meta]) => (
                             <CategoryCard
@@ -107,67 +42,34 @@ export default function HomePage() {
             </div>
 
             {/* ── Promo Banners ────────────────────────────────────────────────── */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, padding: "0 24px 24px" }}>
-                <div
-                    style={{
-                        background: "linear-gradient(135deg, #1D546D, #5F9598)",
-                        borderRadius: 16,
-                        padding: 24,
-                        position: "relative",
-                        overflow: "hidden",
-                        minHeight: 130,
-                    }}
-                >
-                    <h3 style={{ color: "#fff", fontFamily: "'Varela Round',sans-serif", fontSize: 20, marginBottom: 6 }}>
+            <div className="grid grid-cols-2 gap-5 px-10 pb-10">
+                {/* Banner 1 */}
+                <div className="relative min-h-[140px] overflow-hidden rounded-2xl bg-gradient-to-br from-[#1D546D] to-[#5F9598] p-8">
+                    <h3 className="mb-2 font-['Geist'] text-xl font-bold text-white">
                         Get 20% Off Vitamins!
                     </h3>
-                    <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 13, marginBottom: 14 }}>
+                    <p className="mb-5 text-sm leading-relaxed text-white/80">
                         Use code <strong>HEALTH20</strong> at checkout
                     </p>
                     <button
                         onClick={() => navigateTo("catalog")}
-                        style={{
-                            background: "#fff",
-                            color: "#061E29",
-                            border: "none",
-                            borderRadius: 8,
-                            padding: "7px 16px",
-                            fontSize: 12,
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            fontFamily: "'DM Sans',sans-serif",
-                        }}
+                        className="cursor-pointer rounded-lg bg-white px-5 py-2.5 text-xs font-semibold text-[#061E29] transition-opacity hover:opacity-90 font-['Geist']"
                     >
                         Shop Now
                     </button>
                 </div>
-                <div
-                    style={{
-                        background: "linear-gradient(135deg, #061E29, #1D546D)",
-                        borderRadius: 16,
-                        padding: 24,
-                        minHeight: 130,
-                    }}
-                >
-                    <h3 style={{ color: "#fff", fontFamily: "'Varela Round',sans-serif", fontSize: 20, marginBottom: 6 }}>
+
+                {/* Banner 2 */}
+                <div className="min-h-[140px] rounded-2xl bg-gradient-to-br from-[#061E29] to-[#1D546D] p-8">
+                    <h3 className="mb-2 font-['Geist'] text-xl font-bold text-white">
                         Free Delivery Orders ₱500+
                     </h3>
-                    <p style={{ color: "rgba(255,255,255,0.8)", fontSize: 13, marginBottom: 14 }}>
+                    <p className="mb-5 text-sm leading-relaxed text-white/80">
                         Available within Cebu City metro area
                     </p>
                     <button
                         onClick={() => navigateTo("catalog")}
-                        style={{
-                            background: "#fff",
-                            color: "#061E29",
-                            border: "none",
-                            borderRadius: 8,
-                            padding: "7px 16px",
-                            fontSize: 12,
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            fontFamily: "'DM Sans',sans-serif",
-                        }}
+                        className="cursor-pointer rounded-lg bg-white px-5 py-2.5 text-xs font-semibold text-[#061E29] transition-opacity hover:opacity-90 font-['Geist']"
                     >
                         Order Now
                     </button>
@@ -175,9 +77,9 @@ export default function HomePage() {
             </div>
 
             {/* ── Featured Products ─────────────────────────────────────────────── */}
-            <div style={{ padding: "0 24px 32px" }}>
+            <div className="px-10 pb-12">
                 <SectionHeader title="Featured Products" onSeeAll={() => navigateTo("catalog")} />
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
+                <div className="mt-2 grid grid-cols-4 gap-5">
                     {PRODUCTS.slice(0, 4).map((p) => (
                         <MedicineCard
                             key={p.id}
@@ -190,28 +92,28 @@ export default function HomePage() {
             </div>
 
             {/* ── Feature Highlights ───────────────────────────────────────────── */}
-            <div style={{ background: "#F3F4F4", padding: "32px 24px" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+            <div className="bg-[#F3F4F4] px-10 py-12">
+                <div className="grid grid-cols-3 gap-6">
                     {[
-                        { icon: "🚚", bg: "#DBEAFE", title: "Same-Day Delivery", desc: "Order before 3PM for same-day delivery within Cebu City metro area." },
-                        { icon: "✅", bg: "#D1FAE5", title: "Authentic Medicines", desc: "All products are sourced from FDA-registered suppliers and pharmacies." },
-                        { icon: "💬", bg: "#FEF3C7", title: "Pharmacist Support", desc: "Chat with licensed pharmacists for medicine advice and guidance." },
+                        { icon: "🚚", bg: "bg-blue-100", title: "Same-Day Delivery", desc: "Order before 3PM for same-day delivery within Cebu City metro area." },
+                        { icon: "✅", bg: "bg-emerald-100", title: "Authentic Medicines", desc: "All products are sourced from FDA-registered suppliers and pharmacies." },
+                        { icon: "💬", bg: "bg-amber-100", title: "Pharmacist Support", desc: "Chat with licensed pharmacists for medicine advice and guidance." },
                     ].map((f) => (
-                        <div key={f.title} style={{ background: "#fff", borderRadius: 16, padding: 24, textAlign: "center" }}>
-                            <div style={{ width: 56, height: 56, borderRadius: 14, background: f.bg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, margin: "0 auto 14px" }}>
+                        <div key={f.title} className="rounded-2xl bg-white p-8 text-center">
+                            <div className={`mx-auto mb-5 flex h-15 w-15 items-center justify-center rounded-2xl text-2xl ${f.bg}`}>
                                 {f.icon}
                             </div>
-                            <div style={{ fontFamily: "'Varela Round',sans-serif", fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{f.title}</div>
-                            <div style={{ fontSize: 13, color: "#6B7280", lineHeight: 1.6 }}>{f.desc}</div>
+                            <div className="mb-2.5 font-['Geist'] text-[15px] font-bold text-[#061E29]">{f.title}</div>
+                            <div className="text-sm leading-relaxed text-gray-500">{f.desc}</div>
                         </div>
                     ))}
                 </div>
             </div>
 
             {/* ── Best Sellers ──────────────────────────────────────────────────── */}
-            <div style={{ padding: "32px 24px" }}>
+            <div className="px-10 py-12">
                 <SectionHeader title="Best Sellers" onSeeAll={() => navigateTo("catalog")} />
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
+                <div className="mt-2 grid grid-cols-4 gap-5">
                     {PRODUCTS.slice(4).map((p) => (
                         <MedicineCard
                             key={p.id}
