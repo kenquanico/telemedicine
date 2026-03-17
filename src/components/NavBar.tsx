@@ -3,20 +3,13 @@ import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
 import Logo from "../assets/dosely-4.svg";
 import {
-    Home,
-    LayoutGrid,
-    ShoppingCart,
-    ShoppingBag,
-    CheckCircle,
-    Package,
-    Truck,
-    CreditCard,
-    History,
     MapPin,
     Heart,
     UserRound,
     Globe,
     ChevronDown,
+    ShoppingBag,
+    LayoutGrid,
 } from "lucide-react";
 
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
@@ -79,12 +72,8 @@ const LANGUAGES = [
 ];
 
 // ─── Nav Tabs Config ──────────────────────────────────────────────────────────
-const NAV_TABS: { key: PageKey; label: string;  }[] = [
-    { key: "medicines",     label: "Medicines"},
-    { key: "pharmacy",     label: "Pharmacy"},
-    { key: "pharmacy",     label: "Pharmacy"},
-    { key: "pharmacy",     label: "Pharmacy"},
-
+const NAV_TABS: { key: PageKey; label: string; Icon: typeof LayoutGrid }[] = [
+    { key: "medicines", label: "Medicines", Icon: LayoutGrid },
 ];
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
@@ -225,7 +214,7 @@ export default function Navbar() {
             </nav>
 
             {/* ── Bottom Tab Nav ─────────────────────────────────────────────────── */}
-            <div className="bg-[#0F3244] flex gap-0.5 px-24 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-white/[0.06]">
+            <div className="bg-[#0F3244] flex gap-0.5 px-24 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-white/6">
                 {NAV_TABS.map((tab) => {
                     const isActive = currentPage === tab.key;
                     return (
