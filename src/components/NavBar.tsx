@@ -10,6 +10,8 @@ import {
     ChevronDown,
     ShoppingBag,
     LayoutGrid,
+    Store,
+    Building2,
 } from "lucide-react";
 
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
@@ -72,8 +74,30 @@ const LANGUAGES = [
 ];
 
 // ─── Nav Tabs Config ──────────────────────────────────────────────────────────
-const NAV_TABS: { key: PageKey; label: string; Icon: typeof LayoutGrid }[] = [
-    { key: "medicines", label: "Medicines", Icon: LayoutGrid },
+const NAV_TABS: {
+    label: string;
+    navigatesTo: PageKey;
+    activeOn: PageKey[];
+    Icon: typeof LayoutGrid;
+}[] = [
+    {
+        label: "Medicines",
+        navigatesTo: "home",
+        activeOn: ["home", "medicines", "catalog", "product"],
+        Icon: LayoutGrid,
+    },
+    {
+        label: "Pickup",
+        navigatesTo: "pickup",
+        activeOn: ["pickup"],
+        Icon: Store,
+    },
+    {
+        label: "Pharmacies",
+        navigatesTo: "pharmacies",
+        activeOn: ["pharmacies"],
+        Icon: Building2,
+    },
 ];
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
@@ -115,6 +139,7 @@ export default function Navbar() {
                 <button className="flex items-center gap-2.5 hover:bg-[#2d2d2d]/8 px-3 py-2 rounded-xl text-[#2d2d2d] text-base shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer font-['Geist']">
                     <MapPin size={22} className="text-[#2d2d2d]" strokeWidth={2} />
                     <span className="text-sm text-[#2d2d2d] epilogue-regular">Cebu City, PH</span>
+                    <ChevronDown size={14} strokeWidth={2} />
                 </button>
 
                 {/* Spacer */}
@@ -187,7 +212,7 @@ export default function Navbar() {
                     <div className="relative" ref={cartRef}>
                         <button
                             onClick={() => setCartOpen((o) => !o)}
-                            className="icon-btn icon-btn--active"
+                            className="icon-btn"
                             title="Cart"
                         >
                             <span className="relative">
@@ -214,28 +239,25 @@ export default function Navbar() {
             </nav>
 
             {/* ── Bottom Tab Nav ─────────────────────────────────────────────────── */}
-            <div className="bg-[#0F3244] flex gap-0.5 px-24 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden border-b border-white/6">
+            <div className="bg-white flex gap-0.5 px-16 overflow-x-auto border-b border-gray-100 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {NAV_TABS.map((tab) => {
-                    const isActive = currentPage === tab.key;
+                    const isActive = tab.activeOn.includes(currentPage);
                     return (
                         <button
-                            key={tab.key}
-                            onClick={() => navigateTo(tab.key)}
+                            key={tab.label}
+                            onClick={() => navigateTo(tab.navigatesTo)}
                             className={[
-                                "flex items-center gap-2.5 px-6 py-4 text-[15px] whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] transition-all duration-200 border-b-2 relative",
-                                isActive
-                                    ? "text-white font-semibold border-b-[#5F9598]"
-                                    : "text-white/50 font-normal border-b-transparent hover:text-white/80",
+                                "nav-tab flex items-center gap-2.5 px-7 py-[17px] text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular relative",
+                                isActive ? "nav-tab--active" : "",
                             ].join(" ")}
                         >
-                            <tab.Icon size={19} />
-                            {tab.label}
+                            <tab.Icon size={20} />
+                            <span className="nav-tab-label">{tab.label}</span>
+                            <span className="nav-tab-underline" />
                         </button>
                     );
                 })}
             </div>
-
-
 
             <style>{`
                 @keyframes slideDown {
@@ -244,6 +266,59 @@ export default function Navbar() {
                 }
                 .animate-slideDown { animation: slideDown 0.18s ease-out; }
 
+                /* ── Bottom bar tab base ── */
+                .nav-tab {
+                    color: rgba(45,45,45,0.40);
+                    font-weight: 400;
+                    transition: color 0.2s ease;
+                    padding-bottom: 16px;
+                }
+                .nav-tab:hover {
+                    color: rgba(45,45,45,0.70);
+                }
+
+                /* ── Underline span sits flush at the bottom edge ── */
+                .nav-tab-underline {
+                    position: absolute;
+                    bottom: 4px;
+                    left: 50%;
+                    transform: translateX(-50%) scaleX(0);
+                    transform-origin: center;
+                    height: 4px;
+                    border-radius: 2px 2px 2px 2px;
+                    background: #2d2d2d;
+                    width: calc(100% - 56px);
+                    transition:
+                        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        width     0.25s ease,
+                        opacity   0.2s ease;
+                    opacity: 0;
+                }
+
+                /* Active — full color, underline visible */
+                .nav-tab--active {
+                    color: #2d2d2d;
+                    font-weight: 500;
+                }
+                .nav-tab--active .nav-tab-underline {
+                    transform: translateX(-50%) scaleX(1);
+                    opacity: 1;
+                    width: calc(100% - 56px);
+                }
+
+                /* Hover on inactive tab — short subtle underline */
+                .nav-tab:not(.nav-tab--active):hover .nav-tab-underline {
+                    transform: translateX(-50%) scaleX(1);
+                    width: 28px;
+                    opacity: 0.25;
+                    background: #2d2d2d;
+                    transition:
+                        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        width     0.2s ease,
+                        opacity   0.2s ease;
+                }
+
+                /* ── Top bar icon buttons ── */
                 .icon-btn {
                     display: flex;
                     align-items: center;

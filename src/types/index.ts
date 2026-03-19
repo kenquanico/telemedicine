@@ -123,7 +123,7 @@ export interface Notification {
 }
 
 // ─── App Page Keys ────────────────────────────────────────────────────────────
-export type PageKey =
+export type PageKey =a
     | "home"
     | "catalog"
     | "product"
@@ -136,7 +136,10 @@ export type PageKey =
     | "account"
     | "favorites"
     | "medicines"
-    | "pharmacy";
+    | "pharmacy"
+    | "pickup"
+    | "pharmacies";
+
 export interface CatalogFilters {
     categories: Category[];
     priceRanges: string[];
