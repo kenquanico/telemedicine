@@ -17,6 +17,10 @@ interface AppContextValue {
     cartTotal: number;
     cartCount: number;
 
+    // Filter panel
+    filterOpen: boolean;
+    setFilterOpen: React.Dispatch<React.SetStateAction<boolean>>;
+
     // Orders
     orders: Order[];
     selectedOrderId: string | null;
@@ -52,6 +56,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [orders] = useState<Order[]>(ORDERS);
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
     const [addresses] = useState<Address[]>(ADDRESSES);
+    const [filterOpen, setFilterOpen] = useState(false);
     const [selectedAddressId, setSelectedAddressId] = useState<string>(ADDRESSES[0].id);
     const [modal, setModal] = useState<ModalState | null>(null);
 
@@ -121,6 +126,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 modal,
                 showModal,
                 closeModal,
+                filterOpen,
+                setFilterOpen,
             }}
         >
             {children}
