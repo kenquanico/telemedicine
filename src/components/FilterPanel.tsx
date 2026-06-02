@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useApp } from "../hooks/useApp";
-import { RotateCcw, SlidersHorizontal } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface FilterState {
@@ -18,14 +18,14 @@ export const DEFAULT_FILTERS: FilterState = {
 };
 
 const CATEGORIES = [
-    { key: "pain-relief",  label: "Pain Relief",  icon: "💊" },
-    { key: "antibiotics",  label: "Antibiotics",  icon: "🧬" },
-    { key: "vitamins",     label: "Vitamins",     icon: "🌿" },
-    { key: "heart-health", label: "Heart Health", icon: "❤️" },
-    { key: "cold-flu",     label: "Cold & Flu",   icon: "🤧" },
-    { key: "diabetes",     label: "Diabetes",     icon: "🩸" },
-    { key: "skin-care",    label: "Skin Care",    icon: "✨" },
-    { key: "digestive",    label: "Digestive",    icon: "🫁" },
+    { key: "pain-relief",  label: "Pain Relief"      },
+    { key: "antibiotics",  label: "Antibiotics"      },
+    { key: "vitamins",     label: "Vitamins"         },
+    { key: "heart-health", label: "Heart Health"     },
+    { key: "cold-flu",     label: "Cold & Flu"       },
+    { key: "diabetes",     label: "Diabetes"         },
+    { key: "skin-care",    label: "Skin Care"        },
+    { key: "digestive",    label: "Digestive"        },
 ];
 
 const SORT_OPTIONS = [
@@ -36,10 +36,10 @@ const SORT_OPTIONS = [
 ];
 
 const AVAILABILITY_OPTIONS = [
-    { value: "all",      label: "All"              },
-    { value: "in-stock", label: "In Stock"          },
-    { value: "otc",      label: "Over-the-Counter" },
-    { value: "rx",       label: "Prescription Only"},
+    { value: "all",      label: "All Items"          },
+    { value: "in-stock", label: "In Stock"           },
+    { value: "otc",      label: "Over-the-Counter"   },
+    { value: "rx",       label: "Prescription Only"  },
 ];
 
 // ─── Price Slider ─────────────────────────────────────────────────────────────
@@ -48,37 +48,57 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
     const pct = (v: number) => ((v - MIN) / (MAX - MIN)) * 100;
     return (
         <div>
-            <div className="flex justify-between mb-3">
-                <span className="text-xs text-gray-400 epilogue-regular">₱{value[0].toLocaleString()}</span>
-                <span className="text-xs text-gray-400 epilogue-regular">₱{value[1].toLocaleString()}</span>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+                <span style={{
+                    fontSize: 12, fontWeight: 700, color: "#2d2d2d",
+                    fontFamily: "'Epilogue', sans-serif",
+                    background: "#F7F9F9", borderRadius: 8, padding: "4px 10px",
+                    border: "1px solid #EAEFEE",
+                }}>₱{value[0].toLocaleString()}</span>
+                <span style={{
+                    fontSize: 12, fontWeight: 700, color: "#2d2d2d",
+                    fontFamily: "'Epilogue', sans-serif",
+                    background: "#F7F9F9", borderRadius: 8, padding: "4px 10px",
+                    border: "1px solid #EAEFEE",
+                }}>₱{value[1].toLocaleString()}</span>
             </div>
-            <div className="relative h-5 flex items-center">
-                <div className="absolute w-full h-1.5 bg-gray-200 rounded-full" />
-                <div className="absolute h-1.5 bg-[#427b77] rounded-full"
-                     style={{ left: `${pct(value[0])}%`, width: `${pct(value[1]) - pct(value[0])}%` }} />
+            <div style={{ position: "relative", height: 24, display: "flex", alignItems: "center" }}>
+                <div style={{ position: "absolute", width: "100%", height: 4, background: "#EAEFEE", borderRadius: 4 }} />
+                <div style={{
+                    position: "absolute", height: 4, background: "#427b77", borderRadius: 4,
+                    left: `${pct(value[0])}%`, width: `${pct(value[1]) - pct(value[0])}%`,
+                }} />
                 <input type="range" min={MIN} max={MAX} step={50} value={value[0]}
                        onChange={(e) => { const v = +e.target.value; if (v < value[1]) onChange([v, value[1]]); }}
-                       className="price-thumb absolute w-full appearance-none bg-transparent cursor-pointer" />
+                       className="price-thumb" style={{ position: "absolute", width: "100%", appearance: "none", background: "transparent", cursor: "pointer" }} />
                 <input type="range" min={MIN} max={MAX} step={50} value={value[1]}
                        onChange={(e) => { const v = +e.target.value; if (v > value[0]) onChange([value[0], v]); }}
-                       className="price-thumb absolute w-full appearance-none bg-transparent cursor-pointer" />
+                       className="price-thumb" style={{ position: "absolute", width: "100%", appearance: "none", background: "transparent", cursor: "pointer" }} />
             </div>
-            <div className="grid grid-cols-2 gap-1.5 mt-4">
+
+            {/* Quick presets */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginTop: 14 }}>
                 {([
-                    { label: "Under ₱100",  range: [0, 100]     as [number,number] },
-                    { label: "₱100–₱500",   range: [100, 500]   as [number,number] },
-                    { label: "₱500–₱1,000", range: [500, 1000]  as [number,number] },
-                    { label: "Over ₱1,000", range: [1000, 5000] as [number,number] },
+                    { label: "Under ₱100",  range: [0, 100]     as [number, number] },
+                    { label: "₱100–₱500",   range: [100, 500]   as [number, number] },
+                    { label: "₱500–₱1,000", range: [500, 1000]  as [number, number] },
+                    { label: "Over ₱1,000", range: [1000, 5000] as [number, number] },
                 ]).map((p) => {
                     const active = value[0] === p.range[0] && value[1] === p.range[1];
                     return (
                         <button key={p.label} onClick={() => onChange(p.range)}
-                                className={["text-xs py-1.5 px-2 rounded-lg border transition-all duration-150 cursor-pointer epilogue-regular text-left",
-                                    active ? "border-[#427b77] bg-[#427b77]/8 text-[#427b77] font-semibold"
-                                        : "border-gray-200 text-gray-400 hover:border-[#427b77]/40 hover:text-[#2d2d2d]",
-                                ].join(" ")}>
-                            {p.label}
-                        </button>
+                                style={{
+                                    fontSize: 11, padding: "7px 8px", borderRadius: 8,
+                                    border: `1.5px solid ${active ? "#427b77" : "#EAEFEE"}`,
+                                    background: active ? "rgba(66,123,119,0.07)" : "#fff",
+                                    color: active ? "#427b77" : "#9CA3AF",
+                                    fontWeight: active ? 700 : 500,
+                                    cursor: "pointer",
+                                    fontFamily: "'Epilogue', sans-serif",
+                                    transition: "all 0.15s",
+                                    textAlign: "left",
+                                }}
+                        >{p.label}</button>
                     );
                 })}
             </div>
@@ -86,26 +106,46 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
     );
 }
 
-// ─── Section heading ──────────────────────────────────────────────────────────
+// ─── Section Heading ──────────────────────────────────────────────────────────
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <div>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.12em] mb-2.5 epilogue-regular">{title}</p>
+            <p style={{
+                fontSize: 10, fontWeight: 800, color: "#9CA3AF",
+                textTransform: "uppercase", letterSpacing: "0.1em",
+                marginBottom: 10, fontFamily: "'Epilogue', sans-serif",
+            }}>{title}</p>
             {children}
         </div>
     );
 }
 
-// ─── Radio row ────────────────────────────────────────────────────────────────
+// ─── Radio Row ────────────────────────────────────────────────────────────────
 function RadioRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
     return (
         <button onClick={onClick}
-                className={["w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-all duration-150 cursor-pointer epilogue-regular text-left",
-                    active ? "bg-[#427b77]/8 text-[#427b77] font-semibold" : "text-gray-500 hover:bg-gray-50 hover:text-[#2d2d2d]",
-                ].join(" ")}>
-            <span className={["w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all",
-                active ? "border-[#427b77] bg-[#427b77]" : "border-gray-300"].join(" ")}>
-                {active && <span className="w-1 h-1 rounded-full bg-white" />}
+                style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 10,
+                    padding: "8px 10px", borderRadius: 10, border: "none",
+                    background: active ? "rgba(66,123,119,0.07)" : "transparent",
+                    color: active ? "#427b77" : "#6B7280",
+                    fontWeight: active ? 700 : 500,
+                    fontSize: 13, cursor: "pointer",
+                    fontFamily: "'Epilogue', sans-serif",
+                    textAlign: "left",
+                    transition: "all 0.15s",
+                }}
+                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "#F7F9F9"; }}
+                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+        >
+            <span style={{
+                width: 14, height: 14, borderRadius: "50%",
+                border: `2px solid ${active ? "#427b77" : "#D1D5DB"}`,
+                background: active ? "#427b77" : "transparent",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                flexShrink: 0, transition: "all 0.15s",
+            }}>
+                {active && <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#fff" }} />}
             </span>
             {children}
         </button>
@@ -136,34 +176,57 @@ export default function FilterPanel() {
 
     return (
         <>
-            <div className="w-64 shrink-0 self-start sticky top-24">
-                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-
+            <div style={{ width: 252, flexShrink: 0, alignSelf: "flex-start", position: "sticky", top: 96 }}>
+                <div style={{
+                    background: "#fff",
+                    borderRadius: 20,
+                    border: "1px solid #EAEFEE",
+                    boxShadow: "0 2px 16px rgba(45,45,45,0.05)",
+                    overflow: "hidden",
+                }}>
                     {/* Header */}
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-                        <div className="flex items-center gap-2">
-                            <SlidersHorizontal size={14} strokeWidth={2} className="text-[#427b77]" />
-                            <span className="text-sm font-semibold text-[#2d2d2d] epilogue-regular">Filters</span>
+                    <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        padding: "18px 20px 16px", borderBottom: "1px solid #F4F6F5",
+                    }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+                                Filters
+                            </span>
                             {activeCount > 0 && (
-                                <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full bg-[#427b77] text-white text-[10px] font-bold leading-none min-w-[18px]">
-                                    {activeCount}
-                                </span>
+                                <span style={{
+                                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                    minWidth: 20, height: 20, borderRadius: 10,
+                                    background: "#427b77", color: "#fff",
+                                    fontSize: 10, fontWeight: 800,
+                                    fontFamily: "'Epilogue', sans-serif",
+                                }}>{activeCount}</span>
                             )}
                         </div>
                         {activeCount > 0 && (
                             <button onClick={() => setFilters(DEFAULT_FILTERS)}
-                                    className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#427b77] transition-colors cursor-pointer epilogue-regular">
-                                <RotateCcw size={11} strokeWidth={2} />
+                                    style={{
+                                        display: "flex", alignItems: "center", gap: 5,
+                                        fontSize: 12, color: "#9CA3AF", background: "none",
+                                        border: "none", cursor: "pointer",
+                                        fontFamily: "'Epilogue', sans-serif",
+                                        fontWeight: 500, padding: "4px 8px", borderRadius: 8,
+                                        transition: "color 0.15s, background 0.15s",
+                                    }}
+                                    onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "#427b77"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(66,123,119,0.07)"; }}
+                                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                            >
+                                <RotateCcw size={11} strokeWidth={2.2} />
                                 Reset
                             </button>
                         )}
                     </div>
 
                     {/* Body */}
-                    <div className="px-5 py-5 space-y-5">
+                    <div style={{ padding: "20px 20px", display: "flex", flexDirection: "column", gap: 20 }}>
 
                         <Section title="Sort By">
-                            <div className="space-y-0.5">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                                 {SORT_OPTIONS.map((opt) => (
                                     <RadioRow key={opt.value} active={filters.sortBy === opt.value}
                                               onClick={() => setFilters((f) => ({ ...f, sortBy: opt.value as FilterState["sortBy"] }))}>
@@ -173,34 +236,49 @@ export default function FilterPanel() {
                             </div>
                         </Section>
 
-                        <div className="h-px bg-gray-100" />
+                        <div style={{ height: 1, background: "#F4F6F5" }} />
 
                         <Section title="Category">
-                            <div className="space-y-0.5">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                                 {CATEGORIES.map((cat) => {
                                     const active = filters.categories.includes(cat.key);
                                     return (
                                         <button key={cat.key} onClick={() => toggleCategory(cat.key)}
-                                                className={["w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm transition-all duration-150 cursor-pointer epilogue-regular text-left",
-                                                    active ? "bg-[#427b77]/8 text-[#427b77] font-semibold" : "text-gray-500 hover:bg-gray-50 hover:text-[#2d2d2d]",
-                                                ].join(" ")}>
-                                            <span className={["w-3.5 h-3.5 rounded flex items-center justify-center shrink-0 border-2 transition-all",
-                                                active ? "border-[#427b77] bg-[#427b77]" : "border-gray-300"].join(" ")}>
+                                                style={{
+                                                    width: "100%", display: "flex", alignItems: "center", gap: 10,
+                                                    padding: "8px 10px", borderRadius: 10, border: "none",
+                                                    background: active ? "rgba(66,123,119,0.07)" : "transparent",
+                                                    color: active ? "#427b77" : "#6B7280",
+                                                    fontWeight: active ? 700 : 500,
+                                                    fontSize: 13, cursor: "pointer",
+                                                    fontFamily: "'Epilogue', sans-serif",
+                                                    textAlign: "left",
+                                                    transition: "all 0.15s",
+                                                }}
+                                                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "#F7F9F9"; }}
+                                                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+                                        >
+                                            <span style={{
+                                                width: 14, height: 14, borderRadius: 4,
+                                                border: `2px solid ${active ? "#427b77" : "#D1D5DB"}`,
+                                                background: active ? "#427b77" : "transparent",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                flexShrink: 0, transition: "all 0.15s",
+                                            }}>
                                                 {active && (
                                                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
                                                         <path d="M1.5 4L3.2 5.7L6.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                                     </svg>
                                                 )}
                                             </span>
-                                            <span className="text-base leading-none">{cat.icon}</span>
-                                            <span>{cat.label}</span>
+                                            {cat.label}
                                         </button>
                                     );
                                 })}
                             </div>
                         </Section>
 
-                        <div className="h-px bg-gray-100" />
+                        <div style={{ height: 1, background: "#F4F6F5" }} />
 
                         <Section title="Price Range">
                             <PriceSlider
@@ -209,10 +287,10 @@ export default function FilterPanel() {
                             />
                         </Section>
 
-                        <div className="h-px bg-gray-100" />
+                        <div style={{ height: 1, background: "#F4F6F5" }} />
 
                         <Section title="Availability">
-                            <div className="space-y-0.5">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                                 {AVAILABILITY_OPTIONS.map((opt) => (
                                     <RadioRow key={opt.value} active={filters.availability === opt.value}
                                               onClick={() => setFilters((f) => ({ ...f, availability: opt.value as FilterState["availability"] }))}>
@@ -225,8 +303,19 @@ export default function FilterPanel() {
                     </div>
 
                     {/* Footer */}
-                    <div className="px-5 pb-5">
-                        <button className="w-full bg-[#2d2d2d] hover:bg-[#427b77] text-white rounded-xl py-3 text-sm font-semibold transition-colors duration-200 cursor-pointer epilogue-regular tracking-wide">
+                    <div style={{ padding: "0 20px 20px" }}>
+                        <button
+                            style={{
+                                width: "100%", background: "#2d2d2d", color: "#fff",
+                                border: "none", borderRadius: 12, padding: "13px 0",
+                                fontSize: 13, fontWeight: 700, cursor: "pointer",
+                                fontFamily: "'Epilogue', sans-serif",
+                                letterSpacing: "0.03em",
+                                transition: "background 0.2s",
+                            }}
+                            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#427b77"}
+                            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"}
+                        >
                             {activeCount > 0 ? `Apply Filters (${activeCount})` : "Apply Filters"}
                         </button>
                     </div>
@@ -234,17 +323,21 @@ export default function FilterPanel() {
             </div>
 
             <style>{`
+                .price-thumb { -webkit-appearance: none; }
                 .price-thumb::-webkit-slider-thumb {
                     -webkit-appearance: none;
-                    width: 16px; height: 16px; border-radius: 50%;
-                    background: white; border: 2px solid #427b77;
-                    box-shadow: 0 1px 4px rgba(66,123,119,0.25); cursor: pointer;
+                    width: 18px; height: 18px; border-radius: 50%;
+                    background: #fff; border: 2.5px solid #427b77;
+                    box-shadow: 0 2px 8px rgba(66,123,119,0.25); cursor: pointer;
+                    transition: box-shadow 0.15s;
                 }
-                .price-thumb::-webkit-slider-thumb:hover { box-shadow: 0 0 0 5px rgba(66,123,119,0.15); }
+                .price-thumb::-webkit-slider-thumb:hover {
+                    box-shadow: 0 0 0 6px rgba(66,123,119,0.14);
+                }
                 .price-thumb::-moz-range-thumb {
-                    width: 16px; height: 16px; border-radius: 50%;
-                    background: white; border: 2px solid #427b77;
-                    box-shadow: 0 1px 4px rgba(66,123,119,0.25); cursor: pointer;
+                    width: 18px; height: 18px; border-radius: 50%;
+                    background: #fff; border: 2.5px solid #427b77;
+                    box-shadow: 0 2px 8px rgba(66,123,119,0.25); cursor: pointer;
                 }
             `}</style>
         </>
