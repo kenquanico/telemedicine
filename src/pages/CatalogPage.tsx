@@ -5,28 +5,72 @@ import { MedicineCard } from "../components/UI";
 import type { Category, CatalogFilters } from "../types";
 
 const PRICE_RANGES = [
-    { label: "Under ₱50", min: 0, max: 50 },
-    { label: "₱50 – ₱200", min: 50, max: 200 },
-    { label: "₱200 – ₱500", min: 200, max: 500 },
-    { label: "₱500+", min: 500, max: Infinity },
+    { label: "Under ₱50",   min: 0,   max: 50        },
+    { label: "₱50 – ₱200",  min: 50,  max: 200       },
+    { label: "₱200 – ₱500", min: 200, max: 500       },
+    { label: "₱500+",       min: 500, max: Infinity   },
 ];
 
 const BRANDS = ["Unilab", "Pfizer", "Sanofi", "Johnson & Johnson", "Nature's Bounty", "Mundipharma", "Watsons"];
+
+// ─── Checkbox row ─────────────────────────────────────────────────────────────
+function CheckRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+    return (
+        <button onClick={onClick}
+                style={{
+                    width: "100%", display: "flex", alignItems: "center", gap: 10,
+                    padding: "8px 10px", borderRadius: 10, border: "none",
+                    background: active ? "rgba(66,123,119,0.07)" : "transparent",
+                    color: active ? "#427b77" : "#6B7280",
+                    fontWeight: active ? 700 : 500,
+                    fontSize: 13, cursor: "pointer",
+                    fontFamily: "'Epilogue', sans-serif",
+                    textAlign: "left", transition: "all 0.15s",
+                }}
+                onMouseEnter={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "#F7F9F9"; }}
+                onMouseLeave={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
+        >
+            <span style={{
+                width: 14, height: 14, borderRadius: 4, flexShrink: 0,
+                border: `2px solid ${active ? "#427b77" : "#D1D5DB"}`,
+                background: active ? "#427b77" : "transparent",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "all 0.15s",
+            }}>
+                {active && (
+                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                        <path d="M1.5 4L3.2 5.7L6.5 2.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                )}
+            </span>
+            {children}
+        </button>
+    );
+}
+
+// ─── Filter section heading ────────────────────────────────────────────────────
+function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
+    return (
+        <div style={{ marginBottom: 24 }}>
+            <p style={{
+                fontSize: 10, fontWeight: 800, color: "#9CA3AF",
+                textTransform: "uppercase", letterSpacing: "0.1em",
+                marginBottom: 10, fontFamily: "'Epilogue', sans-serif",
+            }}>{title}</p>
+            {children}
+        </div>
+    );
+}
 
 export default function CatalogPage() {
     const { navigateTo, addToCart, showModal } = useApp();
 
     const [filters, setFilters] = useState<CatalogFilters>({
-        categories: [],
-        priceRanges: [],
-        brands: [],
-        stockOnly: false,
-        searchQuery: "",
+        categories: [], priceRanges: [], brands: [], stockOnly: false, searchQuery: "",
     });
 
     const [activeTab, setActiveTab] = useState<Category | "all">("all");
 
-    // Filtered products
     const filtered = PRODUCTS.filter((p) => {
         if (activeTab !== "all" && p.category !== activeTab) return false;
         if (filters.categories.length > 0 && !filters.categories.includes(p.category)) return false;
@@ -41,11 +85,7 @@ export default function CatalogPage() {
         }
         if (filters.searchQuery) {
             const q = filters.searchQuery.toLowerCase();
-            return (
-                p.brandName.toLowerCase().includes(q) ||
-                p.genericName.toLowerCase().includes(q) ||
-                p.manufacturer.toLowerCase().includes(q)
-            );
+            return p.brandName.toLowerCase().includes(q) || p.genericName.toLowerCase().includes(q) || p.manufacturer.toLowerCase().includes(q);
         }
         return true;
     });
@@ -58,170 +98,130 @@ export default function CatalogPage() {
         if (!product) return;
         addToCart(product);
         showModal({
-            type: "added",
-            icon: "✅",
-            title: "Added to Cart!",
+            type: "added", icon: "✅", title: "Added to Cart!",
             message: `${product.brandName} ${product.strength} added to cart.`,
-            actionLabel: "View Cart",
-            onAction: () => navigateTo("cart"),
+            actionLabel: "View Cart", onAction: () => navigateTo("cart"),
         });
     };
 
+    const activeFilterCount = filters.categories.length + filters.priceRanges.length + filters.brands.length + (filters.stockOnly ? 1 : 0);
+
     return (
         <div>
-            <div style={{ background: "#F3F4F4", padding: "16px 24px", borderBottom: "1px solid #E5E7EB" }}>
-                <div style={{ fontSize: 13, color: "#6B7280", marginBottom: 2 }}>{filtered.length} products found</div>
-                <h2 style={{ fontFamily: "'Varela Round',sans-serif", fontSize: 22 }}>Medicine Catalog</h2>
+            {/* ── Page header ── */}
+            <div style={{ padding: "32px 64px 28px", borderBottom: "1px solid #F0F3F2" }}>
+                <p style={{ fontSize: 12, color: "#9CA3AF", marginBottom: 6, fontFamily: "'Epilogue', sans-serif", fontWeight: 500 }}>
+                    {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
+                </p>
+                <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#2d2d2d", letterSpacing: "-0.02em" }}>
+                    Medicine Catalog
+                </h2>
             </div>
 
-            <div style={{ display: "flex", gap: 24, padding: 24, alignItems: "flex-start" }}>
-                {/* ── Filter Sidebar ─────────────────────────────────────────────── */}
-                <div style={{ width: 220, flexShrink: 0 }}>
-                    <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
-                        🔽 Filters
-                    </div>
+            <div style={{ display: "flex", gap: 28, padding: "32px 64px", alignItems: "flex-start" }}>
 
-                    {/* Category */}
-                    <div style={{ marginBottom: 20 }}>
-                        <h4 style={{ fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.5px", color: "#6B7280" }}>
-                            Category
-                        </h4>
-                        {(Object.entries(CATEGORY_META) as [Category, { label: string; icon: string }][]).map(([key, meta]) => (
-                            <label key={key} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer", fontSize: 14 }}>
-                                <div
-                                    onClick={() => setFilters((f) => ({ ...f, categories: toggleArr(f.categories, key) }))}
-                                    style={{
-                                        width: 16, height: 16,
-                                        border: "2px solid",
-                                        borderColor: filters.categories.includes(key) ? "#5F9598" : "#E5E7EB",
-                                        background: filters.categories.includes(key) ? "#5F9598" : "#fff",
-                                        borderRadius: 4,
-                                        flexShrink: 0,
-                                        display: "flex", alignItems: "center", justifyContent: "center",
-                                        color: "#fff", fontSize: 10,
-                                    }}
-                                >
-                                    {filters.categories.includes(key) && "✓"}
-                                </div>
-                                {meta.icon} {meta.label}
-                            </label>
-                        ))}
-                    </div>
-
-                    {/* Price */}
-                    <div style={{ marginBottom: 20 }}>
-                        <h4 style={{ fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.5px", color: "#6B7280" }}>
-                            Price Range
-                        </h4>
-                        {PRICE_RANGES.map((r) => (
-                            <label key={r.label} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer", fontSize: 14 }}>
-                                <div
-                                    onClick={() => setFilters((f) => ({ ...f, priceRanges: toggleArr(f.priceRanges, r.label) }))}
-                                    style={{
-                                        width: 16, height: 16,
-                                        border: "2px solid",
-                                        borderColor: filters.priceRanges.includes(r.label) ? "#5F9598" : "#E5E7EB",
-                                        background: filters.priceRanges.includes(r.label) ? "#5F9598" : "#fff",
-                                        borderRadius: 4,
-                                        flexShrink: 0,
-                                        display: "flex", alignItems: "center", justifyContent: "center",
-                                        color: "#fff", fontSize: 10,
-                                    }}
-                                >
-                                    {filters.priceRanges.includes(r.label) && "✓"}
-                                </div>
-                                {r.label}
-                            </label>
-                        ))}
-                    </div>
-
-                    {/* Brand */}
-                    <div style={{ marginBottom: 20 }}>
-                        <h4 style={{ fontSize: 12, fontWeight: 700, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.5px", color: "#6B7280" }}>
-                            Brand
-                        </h4>
-                        {BRANDS.map((b) => (
-                            <label key={b} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, cursor: "pointer", fontSize: 14 }}>
-                                <div
-                                    onClick={() => setFilters((f) => ({ ...f, brands: toggleArr(f.brands, b) }))}
-                                    style={{
-                                        width: 16, height: 16,
-                                        border: "2px solid",
-                                        borderColor: filters.brands.includes(b) ? "#5F9598" : "#E5E7EB",
-                                        background: filters.brands.includes(b) ? "#5F9598" : "#fff",
-                                        borderRadius: 4,
-                                        flexShrink: 0,
-                                        display: "flex", alignItems: "center", justifyContent: "center",
-                                        color: "#fff", fontSize: 10,
-                                    }}
-                                >
-                                    {filters.brands.includes(b) && "✓"}
-                                </div>
-                                {b}
-                            </label>
-                        ))}
-                    </div>
-
-                    {/* In-stock only */}
-                    <label style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", fontSize: 14, marginBottom: 16 }}>
-                        <div
-                            onClick={() => setFilters((f) => ({ ...f, stockOnly: !f.stockOnly }))}
-                            style={{
-                                width: 16, height: 16,
-                                border: "2px solid",
-                                borderColor: filters.stockOnly ? "#5F9598" : "#E5E7EB",
-                                background: filters.stockOnly ? "#5F9598" : "#fff",
-                                borderRadius: 4, flexShrink: 0,
-                                display: "flex", alignItems: "center", justifyContent: "center",
-                                color: "#fff", fontSize: 10,
-                            }}
-                        >
-                            {filters.stockOnly && "✓"}
+                {/* ── Filter Sidebar ── */}
+                <div style={{
+                    width: 228, flexShrink: 0, position: "sticky", top: 96,
+                    background: "#fff", borderRadius: 20, border: "1px solid #EAEFEE",
+                    boxShadow: "0 2px 16px rgba(45,45,45,0.05)",
+                    overflow: "hidden",
+                }}>
+                    {/* Header */}
+                    <div style={{
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        padding: "18px 20px 16px", borderBottom: "1px solid #F4F6F5",
+                    }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <span style={{ fontSize: 14, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>Filters</span>
+                            {activeFilterCount > 0 && (
+                                <span style={{
+                                    display: "inline-flex", alignItems: "center", justifyContent: "center",
+                                    minWidth: 20, height: 20, borderRadius: 10,
+                                    background: "#427b77", color: "#fff", fontSize: 10, fontWeight: 800,
+                                    fontFamily: "'Epilogue', sans-serif",
+                                }}>{activeFilterCount}</span>
+                            )}
                         </div>
-                        In Stock Only
-                    </label>
+                        {activeFilterCount > 0 && (
+                            <button
+                                onClick={() => setFilters({ categories: [], priceRanges: [], brands: [], stockOnly: false, searchQuery: "" })}
+                                style={{
+                                    fontSize: 11, color: "#9CA3AF", background: "none", border: "none",
+                                    cursor: "pointer", fontFamily: "'Epilogue', sans-serif", fontWeight: 600,
+                                    padding: "4px 8px", borderRadius: 8, transition: "color 0.15s",
+                                }}
+                                onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.color = "#427b77"}
+                                onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"}
+                            >Clear all</button>
+                        )}
+                    </div>
 
-                    <button
-                        onClick={() => setFilters({ categories: [], priceRanges: [], brands: [], stockOnly: false, searchQuery: "" })}
-                        style={{
-                            width: "100%",
-                            background: "#1D546D",
-                            color: "#fff",
-                            border: "none",
-                            borderRadius: 8,
-                            padding: 10,
-                            fontSize: 13,
-                            fontWeight: 600,
-                            cursor: "pointer",
-                            fontFamily: "'DM Sans',sans-serif",
-                        }}
-                    >
-                        Clear Filters
-                    </button>
+                    {/* Filter body */}
+                    <div style={{ padding: "20px 20px 24px" }}>
+
+                        <FilterSection title="Category">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                {(Object.entries(CATEGORY_META) as [Category, { label: string; icon: string }][]).map(([key, meta]) => (
+                                    <CheckRow key={key} active={filters.categories.includes(key)}
+                                              onClick={() => setFilters((f) => ({ ...f, categories: toggleArr(f.categories, key) }))}>
+                                        {meta.label}
+                                    </CheckRow>
+                                ))}
+                            </div>
+                        </FilterSection>
+
+                        <FilterSection title="Price Range">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                {PRICE_RANGES.map((r) => (
+                                    <CheckRow key={r.label} active={filters.priceRanges.includes(r.label)}
+                                              onClick={() => setFilters((f) => ({ ...f, priceRanges: toggleArr(f.priceRanges, r.label) }))}>
+                                        {r.label}
+                                    </CheckRow>
+                                ))}
+                            </div>
+                        </FilterSection>
+
+                        <FilterSection title="Brand">
+                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                                {BRANDS.map((b) => (
+                                    <CheckRow key={b} active={filters.brands.includes(b)}
+                                              onClick={() => setFilters((f) => ({ ...f, brands: toggleArr(f.brands, b) }))}>
+                                        {b}
+                                    </CheckRow>
+                                ))}
+                            </div>
+                        </FilterSection>
+
+                        <CheckRow active={filters.stockOnly}
+                                  onClick={() => setFilters((f) => ({ ...f, stockOnly: !f.stockOnly }))}>
+                            In Stock Only
+                        </CheckRow>
+                    </div>
                 </div>
 
-                {/* ── Main Content ──────────────────────────────────────────────── */}
+                {/* ── Main Content ── */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                     {/* Category Tabs */}
-                    <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 28, flexWrap: "wrap" }}>
                         {(["all", ...Object.keys(CATEGORY_META)] as ("all" | Category)[]).map((tab) => {
                             const label = tab === "all" ? "All" : CATEGORY_META[tab as Category].label;
                             const isActive = activeTab === tab;
                             return (
-                                <button
-                                    key={tab}
-                                    onClick={() => setActiveTab(tab)}
-                                    style={{
-                                        border: isActive ? "none" : "1.5px solid #E5E7EB",
-                                        background: isActive ? "#1D546D" : "#fff",
-                                        color: isActive ? "#fff" : "#061E29",
-                                        borderRadius: 20,
-                                        padding: "7px 16px",
-                                        fontSize: 13,
-                                        cursor: "pointer",
-                                        fontFamily: "'DM Sans',sans-serif",
-                                        fontWeight: isActive ? 600 : 400,
-                                    }}
+                                <button key={tab} onClick={() => setActiveTab(tab)}
+                                        style={{
+                                            border: isActive ? "none" : "1.5px solid #EAEFEE",
+                                            background: isActive ? "#2d2d2d" : "#fff",
+                                            color: isActive ? "#fff" : "#6B7280",
+                                            borderRadius: 22, padding: "8px 18px",
+                                            fontSize: 13, cursor: "pointer",
+                                            fontFamily: "'Epilogue', sans-serif",
+                                            fontWeight: isActive ? 700 : 500,
+                                            transition: "all 0.18s",
+                                            letterSpacing: "0.01em",
+                                        }}
+                                        onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.borderColor = "#427b77"; (e.currentTarget as HTMLButtonElement).style.color = "#427b77"; } }}
+                                        onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLButtonElement).style.borderColor = "#EAEFEE"; (e.currentTarget as HTMLButtonElement).style.color = "#6B7280"; } }}
                                 >
                                     {tab === "all" ? "All" : `${CATEGORY_META[tab as Category].icon} ${label}`}
                                 </button>
@@ -231,20 +231,26 @@ export default function CatalogPage() {
 
                     {/* Grid */}
                     {filtered.length === 0 ? (
-                        <div style={{ textAlign: "center", padding: "48px 0", color: "#6B7280" }}>
-                            <div style={{ fontSize: 40, marginBottom: 12 }}>🔍</div>
-                            <div style={{ fontSize: 16, fontWeight: 600 }}>No products found</div>
-                            <div style={{ fontSize: 13, marginTop: 4 }}>Try adjusting your filters</div>
+                        <div style={{ textAlign: "center", padding: "80px 0", color: "#9CA3AF" }}>
+                            <div style={{
+                                width: 80, height: 80, borderRadius: 24,
+                                background: "#F4F6F5", display: "flex",
+                                alignItems: "center", justifyContent: "center",
+                                fontSize: 32, margin: "0 auto 20px",
+                            }}>🔍</div>
+                            <div style={{ fontSize: 17, fontWeight: 700, color: "#2d2d2d", marginBottom: 6, fontFamily: "'Epilogue', sans-serif" }}>
+                                No products found
+                            </div>
+                            <div style={{ fontSize: 13, fontFamily: "'Epilogue', sans-serif" }}>
+                                Try adjusting your filters or search
+                            </div>
                         </div>
                     ) : (
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16 }}>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }}>
                             {filtered.map((p) => (
-                                <MedicineCard
-                                    key={p.id}
-                                    product={p}
-                                    onView={() => navigateTo("product", p.id)}
-                                    onAdd={() => handleAdd(p.id)}
-                                />
+                                <MedicineCard key={p.id} product={p}
+                                              onView={() => navigateTo("product", p.id)}
+                                              onAdd={() => handleAdd(p.id)} />
                             ))}
                         </div>
                     )}
