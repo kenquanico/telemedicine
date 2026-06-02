@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { useApp } from "../hooks/useApp";
 import type { PaymentMethod } from "../types";
 import { PAYMENT_META } from "../data/mockData";
 import { Btn } from "../components/UI";
-import { useState } from "react";
 
 const DELIVERY_FEE = 49;
 const DISCOUNT = 28;
@@ -11,160 +11,217 @@ export default function CheckoutPage() {
     const { cartItems, cartTotal, navigateTo, addresses, selectedAddressId, showModal } = useApp();
     const address = addresses.find((a) => a.id === selectedAddressId) ?? addresses[0];
     const [payment, setPayment] = useState<PaymentMethod>("cod");
-
     const total = cartTotal + DELIVERY_FEE - DISCOUNT;
 
     const handlePlaceOrder = () => {
         showModal({
-            type: "success",
-            icon: "🎉",
-            title: "Order Placed!",
-            message: "Your order #MM-20250601 has been placed successfully. Estimated delivery: Today, 2–4 PM.",
+            type: "success", icon: "🎉", title: "Order Placed!",
+            message: "Your order #MM-20250601 has been placed. Estimated delivery: Today, 2–4 PM.",
             actionLabel: "Track My Order",
             onAction: () => navigateTo("tracking"),
         });
     };
 
     return (
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 24, padding: 24, alignItems: "flex-start" }}>
-            {/* ── Left ─────────────────────────────────────────────────────────── */}
-            <div>
-                <h2 style={{ fontFamily: "'Varela Round',sans-serif", fontSize: 22, marginBottom: 20 }}>Checkout</h2>
+        <div style={{ padding: "40px 64px" }}>
+            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#2d2d2d", letterSpacing: "-0.02em", marginBottom: 32 }}>
+                Checkout
+            </h2>
 
-                {/* Delivery Address */}
-                <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 14, padding: 20, marginBottom: 16 }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-                        📍 Delivery Address
-                    </h3>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                        {[
-                            { label: "First Name", value: address.firstName },
-                            { label: "Last Name", value: address.lastName },
-                        ].map(({ label, value }) => (
-                            <div key={label}>
-                                <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 5 }}>{label}</div>
-                                <input
-                                    defaultValue={value}
-                                    style={{ border: "1.5px solid #E5E7EB", borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "'DM Sans',sans-serif", outline: "none", width: "100%", boxSizing: "border-box" }}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div style={{ marginBottom: 12 }}>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 5 }}>Address Line</div>
-                        <input
-                            defaultValue={address.line}
-                            style={{ border: "1.5px solid #E5E7EB", borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "'DM Sans',sans-serif", outline: "none", width: "100%", boxSizing: "border-box" }}
-                        />
-                    </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                        {[
-                            { label: "City", value: address.city },
-                            { label: "ZIP Code", value: address.zip },
-                        ].map(({ label, value }) => (
-                            <div key={label}>
-                                <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 5 }}>{label}</div>
-                                <input
-                                    defaultValue={value}
-                                    style={{ border: "1.5px solid #E5E7EB", borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "'DM Sans',sans-serif", outline: "none", width: "100%", boxSizing: "border-box" }}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div>
-                        <div style={{ fontSize: 12, fontWeight: 600, color: "#6B7280", marginBottom: 5 }}>Phone Number</div>
-                        <input
-                            defaultValue={address.phone}
-                            style={{ border: "1.5px solid #E5E7EB", borderRadius: 8, padding: "10px 12px", fontSize: 14, fontFamily: "'DM Sans',sans-serif", outline: "none", width: "100%", boxSizing: "border-box" }}
-                        />
-                    </div>
-                </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 28, alignItems: "flex-start" }}>
+                {/* ── Left ── */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-                {/* Payment Method */}
-                <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 14, padding: 20 }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-                        💳 Payment Method
-                    </h3>
-                    {(Object.entries(PAYMENT_META) as [PaymentMethod, { label: string; icon: string }][]).map(([key, meta]) => (
-                        <div
-                            key={key}
-                            onClick={() => setPayment(key)}
-                            style={{
-                                border: `2px solid ${payment === key ? "#5F9598" : "#E5E7EB"}`,
-                                background: payment === key ? "#E8F4F5" : "#fff",
-                                borderRadius: 10,
-                                padding: 14,
-                                cursor: "pointer",
-                                marginBottom: 10,
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 12,
-                                transition: "all 0.18s",
-                            }}
-                        >
-                            <div
-                                style={{
-                                    width: 18, height: 18, borderRadius: "50%",
-                                    border: `2px solid ${payment === key ? "#5F9598" : "#E5E7EB"}`,
-                                    display: "flex", alignItems: "center", justifyContent: "center",
-                                    flexShrink: 0,
-                                }}
-                            >
-                                {payment === key && (
-                                    <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#5F9598" }} />
-                                )}
-                            </div>
-                            <span style={{ fontSize: 20 }}>{meta.icon}</span>
-                            <div>
-                                <div style={{ fontSize: 14, fontWeight: 600 }}>{meta.label}</div>
-                                <div style={{ fontSize: 12, color: "#6B7280" }}>
-                                    {key === "cod" && "Pay when your order arrives"}
-                                    {key === "gcash" && "Pay via GCash e-wallet"}
-                                    {key === "maya" && "Pay via Maya e-wallet"}
-                                    {key === "credit_card" && "Visa, Mastercard, JCB"}
+                    {/* Delivery Address */}
+                    <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 22, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif", display: "flex", alignItems: "center", gap: 8 }}>
+                            Delivery Address
+                        </h3>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                            {[
+                                { label: "First Name", value: address.firstName },
+                                { label: "Last Name",  value: address.lastName  },
+                            ].map(({ label, value }) => (
+                                <div key={label}>
+                                    <label style={{ fontSize: 11, fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                        {label}
+                                    </label>
+                                    <input defaultValue={value}
+                                           style={{
+                                               border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
+                                               fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                               width: "100%", boxSizing: "border-box", color: "#2d2d2d", fontWeight: 500,
+                                               transition: "border-color 0.15s",
+                                           }}
+                                           onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
+                                           onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
+                                    />
                                 </div>
-                            </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* ── Right: Summary ───────────────────────────────────────────────── */}
-            <div style={{ background: "#F3F4F4", borderRadius: 16, padding: 20, position: "sticky", top: 80 }}>
-                <h3 style={{ fontFamily: "'Varela Round',sans-serif", fontSize: 17, marginBottom: 16 }}>Order Summary</h3>
-
-                {/* Items preview */}
-                <div style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 10, padding: 12, marginBottom: 14 }}>
-                    <div style={{ fontSize: 12, color: "#6B7280", marginBottom: 8 }}>{cartItems.length} items</div>
-                    {cartItems.map((item) => (
-                        <div key={item.product.id} style={{ fontSize: 13, marginBottom: 4, display: "flex", justifyContent: "space-between" }}>
-                            <span>{item.product.image} {item.product.brandName} ×{item.quantity}</span>
-                            <span>₱{(item.product.price * item.quantity).toLocaleString()}</span>
+                        <div style={{ marginBottom: 14 }}>
+                            <label style={{ fontSize: 11, fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                Address Line
+                            </label>
+                            <input defaultValue={address.line}
+                                   style={{
+                                       border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
+                                       fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                       width: "100%", boxSizing: "border-box", color: "#2d2d2d", fontWeight: 500,
+                                       transition: "border-color 0.15s",
+                                   }}
+                                   onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
+                                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
+                            />
                         </div>
-                    ))}
-                </div>
-
-                {[
-                    { label: "Subtotal", value: `₱${cartTotal.toLocaleString()}` },
-                    { label: "Delivery", value: `₱${DELIVERY_FEE}`, muted: true },
-                    { label: "Discount", value: `−₱${DISCOUNT}`, green: true },
-                ].map(({ label, value, muted, green }) => (
-                    <div key={label} style={{ display: "flex", justifyContent: "space-between", marginBottom: 12, fontSize: 14 }}>
-                        <span style={{ color: muted ? "#6B7280" : undefined }}>{label}</span>
-                        <span style={{ color: green ? "#10B981" : muted ? "#6B7280" : undefined }}>{value}</span>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                            {[
+                                { label: "City",     value: address.city },
+                                { label: "ZIP Code", value: address.zip  },
+                            ].map(({ label, value }) => (
+                                <div key={label}>
+                                    <label style={{ fontSize: 11, fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                        {label}
+                                    </label>
+                                    <input defaultValue={value}
+                                           style={{
+                                               border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
+                                               fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                               width: "100%", boxSizing: "border-box", color: "#2d2d2d", fontWeight: 500,
+                                               transition: "border-color 0.15s",
+                                           }}
+                                           onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
+                                           onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        <div>
+                            <label style={{ fontSize: 11, fontWeight: 700, color: "#9CA3AF", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                Phone Number
+                            </label>
+                            <input defaultValue={address.phone}
+                                   style={{
+                                       border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
+                                       fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                       width: "100%", boxSizing: "border-box", color: "#2d2d2d", fontWeight: 500,
+                                       transition: "border-color 0.15s",
+                                   }}
+                                   onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
+                                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
+                            />
+                        </div>
                     </div>
-                ))}
 
-                <div style={{ display: "flex", justifyContent: "space-between", borderTop: "2px solid #E5E7EB", paddingTop: 14, marginTop: 4, fontSize: 17, fontWeight: 700 }}>
-                    <span>Total</span>
-                    <span style={{ color: "#1D546D" }}>₱{total.toLocaleString()}</span>
+                    {/* Payment Method */}
+                    <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+                            Payment Method
+                        </h3>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                            {(Object.entries(PAYMENT_META) as [PaymentMethod, { label: string; icon: string }][]).map(([key, meta]) => (
+                                <div key={key} onClick={() => setPayment(key)}
+                                     style={{
+                                         border: `1.5px solid ${payment === key ? "#427b77" : "#EAEFEE"}`,
+                                         background: payment === key ? "rgba(66,123,119,0.05)" : "#fff",
+                                         borderRadius: 14, padding: "16px 18px", cursor: "pointer",
+                                         display: "flex", alignItems: "center", gap: 14,
+                                         transition: "all 0.18s",
+                                     }}
+                                >
+                                    <div style={{
+                                        width: 18, height: 18, borderRadius: "50%",
+                                        border: `2px solid ${payment === key ? "#427b77" : "#D1D5DB"}`,
+                                        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                                        transition: "border-color 0.15s",
+                                    }}>
+                                        {payment === key && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#427b77" }} />}
+                                    </div>
+                                    <span style={{ fontSize: 22 }}>{meta.icon}</span>
+                                    <div>
+                                        <div style={{ fontSize: 14, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>{meta.label}</div>
+                                        <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2, fontFamily: "'Epilogue', sans-serif" }}>
+                                            {key === "cod"         && "Pay when your order arrives"}
+                                            {key === "gcash"       && "Pay via GCash e-wallet"}
+                                            {key === "maya"        && "Pay via Maya e-wallet"}
+                                            {key === "credit_card" && "Visa, Mastercard, JCB"}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
                 </div>
 
-                <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder} style={{ marginTop: 16 }}>
-                    🎉 Place Order
-                </Btn>
-                <div style={{ textAlign: "center", marginTop: 8, fontSize: 11, color: "#6B7280" }}>
-                    🔒 Your data is encrypted and secure
+                {/* ── Order Summary ── */}
+                <div style={{
+                    background: "#fff", border: "1px solid #EAEFEE",
+                    borderRadius: 20, padding: 24, position: "sticky", top: 96,
+                    boxShadow: "0 2px 20px rgba(45,45,45,0.06)",
+                }}>
+                    <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#2d2d2d", marginBottom: 20, letterSpacing: "-0.01em" }}>
+                        Order Summary
+                    </h3>
+
+                    {/* Items */}
+                    <div style={{ background: "#F7FAF9", borderRadius: 14, padding: 14, marginBottom: 18 }}>
+                        <div style={{ fontSize: 11, color: "#9CA3AF", fontFamily: "'Epilogue', sans-serif", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                            {cartItems.length} items
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                            {cartItems.map((item) => (
+                                <div key={item.product.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+                                        <div style={{
+                                            width: 36, height: 36, borderRadius: 8, background: "#fff",
+                                            overflow: "hidden", flexShrink: 0, border: "1px solid #EAEFEE",
+                                        }}>
+                                            <img src={item.product.image} alt={item.product.brandName}
+                                                 style={{ width: "100%", height: "100%", objectFit: "contain", padding: 4 }}
+                                                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                                            />
+                                        </div>
+                                        <span style={{ fontSize: 13, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                            {item.product.brandName} ×{item.quantity}
+                                        </span>
+                                    </div>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif", flexShrink: 0, marginLeft: 8 }}>
+                                        ₱{(item.product.price * item.quantity).toLocaleString()}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Rows */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
+                        {[
+                            { label: "Subtotal",  value: `₱${cartTotal.toLocaleString()}`, color: "#2d2d2d" },
+                            { label: "Delivery",  value: `₱${DELIVERY_FEE}`, color: "#9CA3AF" },
+                            { label: "Discount",  value: `−₱${DISCOUNT}`,    color: "#22C55E" },
+                        ].map(({ label, value, color }) => (
+                            <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+                                <span style={{ color: "#6B7280", fontFamily: "'Epilogue', sans-serif" }}>{label}</span>
+                                <span style={{ color, fontWeight: 600, fontFamily: "'Epilogue', sans-serif" }}>{value}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div style={{ height: 1, background: "#F0F3F2", marginBottom: 16 }} />
+
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 17, fontWeight: 800, marginBottom: 20 }}>
+                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#2d2d2d" }}>Total</span>
+                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
+                    </div>
+
+                    <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder}>
+                        Place Order
+                    </Btn>
+
+                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "#C4CBCA", fontFamily: "'Epilogue', sans-serif" }}>
+                        Your data is encrypted and secure
+                    </div>
                 </div>
             </div>
         </div>
