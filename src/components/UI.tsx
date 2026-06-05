@@ -235,7 +235,6 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
             onClick={onView}
             style={{
                 background: "#fff",
-                border: "1px solid #EAEFEE",
                 borderRadius: 18,
                 overflow: "hidden",
                 cursor: "pointer",
@@ -253,7 +252,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
             }}
         >
             {/* Image area */}
-            <div style={{ background: "#F7FAF9", position: "relative" }}>
+            <div style={{ background: "#F7FAF9", position: "relative", borderRadius: 18, overflow: "hidden" }}>
                 <ProductImage src={product.image} alt={product.brandName} size={148} />
                 <div style={{ position: "absolute", top: 10, left: 10 }}>
                     <StockBadge status={product.stockStatus} />
@@ -268,6 +267,31 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                         SALE
                     </div>
                 )}
+                {/* Foodpanda-style floating + button */}
+                <button
+                    onClick={(e) => { e.stopPropagation(); onAdd(); }}
+                    disabled={isOOS}
+                    style={{
+                        position: "absolute", bottom: 10, right: 10,
+                        width: 34, height: 34,
+                        background: isOOS ? "#E5E7EB" : "#2d2d2d",
+                        color: isOOS ? "#9CA3AF" : "#fff",
+                        border: "none",
+                        borderRadius: 10,
+                        fontSize: 22,
+                        fontWeight: 300,
+                        cursor: isOOS ? "not-allowed" : "pointer",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        lineHeight: 1,
+                        transition: "background 0.2s, transform 0.15s",
+                        boxShadow: isOOS ? "none" : "0 2px 8px rgba(45,45,45,0.18)",
+                        fontFamily: "'Epilogue', sans-serif",
+                    }}
+                    onMouseEnter={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#427b77"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}}
+                    onMouseLeave={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}}
+                >
+                    +
+                </button>
             </div>
 
             {/* Info */}
@@ -282,15 +306,14 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                     {product.strength} · {product.dosageForm}
                 </div>
 
-                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 12, marginTop: "auto" }}>
+                <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8, marginTop: "auto" }}>
                     <span style={{ fontSize: 17, fontWeight: 800, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>₱{product.price}</span>
                     {product.originalPrice && (
                         <span style={{ fontSize: 12, color: "#C4CBCA", textDecoration: "line-through", fontFamily: "'Epilogue', sans-serif" }}>₱{product.originalPrice}</span>
                     )}
                 </div>
 
-                {/* Star rating */}
-                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                     <div style={{ display: "flex", gap: 1 }}>
                         {[1,2,3,4,5].map(i => (
                             <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill={i <= Math.round(product.rating) ? "#F59E0B" : "#E5E7EB"} stroke="none">
@@ -300,34 +323,10 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                     </div>
                     <span style={{ fontSize: 11, color: "#9CA3AF", fontFamily: "'Epilogue', sans-serif" }}>({product.reviewCount})</span>
                 </div>
-
-                <button
-                    onClick={(e) => { e.stopPropagation(); onAdd(); }}
-                    disabled={isOOS}
-                    style={{
-                        width: "100%",
-                        background: isOOS ? "#F3F4F6" : "#2d2d2d",
-                        color: isOOS ? "#9CA3AF" : "#fff",
-                        border: "none",
-                        borderRadius: 10,
-                        padding: "10px 0",
-                        fontSize: 12,
-                        fontWeight: 700,
-                        cursor: isOOS ? "not-allowed" : "pointer",
-                        fontFamily: "'Epilogue', sans-serif",
-                        letterSpacing: "0.03em",
-                        transition: "background 0.2s",
-                    }}
-                    onMouseEnter={e => { if (!isOOS) (e.currentTarget as HTMLButtonElement).style.background = "#427b77"; }}
-                    onMouseLeave={e => { if (!isOOS) (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"; }}
-                >
-                    {isOOS ? "Out of Stock" : "Add to Cart"}
-                </button>
             </div>
         </div>
     );
 }
-
 // ─── Category Card ────────────────────────────────────────────────────────────
 interface CatCardProps {
     icon: string;
