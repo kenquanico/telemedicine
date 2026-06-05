@@ -40,7 +40,7 @@ function AppShell() {
     return (
         <div className="min-h-screen bg-white font-['Geist']">
             <Navbar />
-            <main className="px-24 py-8">
+            <main>
                 <PageRouter />
             </main>
             <NotificationModal />
