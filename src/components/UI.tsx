@@ -195,7 +195,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
 export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 20, fontWeight: 700, color: "#2d2d2d", letterSpacing: "-0.01em" }}>
+            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 28, fontWeight: 500, color: "#2d2d2d", letterSpacing: "-0.01em" }}>
                 {title}
             </h2>
             {onSeeAll && (
