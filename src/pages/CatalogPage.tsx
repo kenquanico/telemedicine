@@ -318,40 +318,13 @@ export default function CatalogPage() {
         <>
             <div className="flex items-start gap-7 px-16 relative">
                 <main className="min-w-0 flex-1">
-                    <div className="my-10 flex flex-wrap items-end justify-between gap-5 border-b border-[#F0F3F2] pb-7">
-                        <div>
-                            <p className="mb-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-gray-400 epilogue-header">
-                                Medicine Catalog · Cebu City
-                            </p>
-                            <h1 className="text-[34px] font-medium leading-tight tracking-[-0.01em] text-[#2d2d2d] epilogue-header">
-                                Browse medicines
-                            </h1>
-                        </div>
 
-                        <div className="relative flex h-12 w-full max-w-[420px] items-center rounded-xl border border-[#EAEFEE] bg-white px-4 transition-colors duration-150 focus-within:border-[#427b77]">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-gray-400" aria-hidden="true">
-                                <path
-                                    d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
-                            </svg>
-                            <input
-                                value={filters.searchQuery}
-                                onChange={(e) => setFilters((f) => ({ ...f, searchQuery: e.target.value }))}
-                                placeholder="Search medicines, brands, or manufacturers"
-                                className="h-full min-w-0 flex-1 bg-transparent px-3 text-[13px] font-medium text-[#2d2d2d] placeholder:text-gray-400 focus:outline-none epilogue-regular"
-                            />
-                        </div>
-                    </div>
 
-                    <section className="mb-12">
+                    <section className="mt-14 mb-12">
                         <div className="mb-5 flex items-center justify-between">
                             <h2
                                 id="medicine-categories-swimlane-title"
-                                className="text-[28px] font-medium tracking-[-0.01em] text-[#2d2d2d] epilogue-header"
+                                className="text-[28px] font-medium tracking-[-0.01em] text-[#2d2d2d] epilogue-regular"
                             >
                                 Shop by Category
                             </h2>
@@ -391,7 +364,7 @@ export default function CatalogPage() {
                             <p className="mb-1 text-xs font-medium text-gray-400 epilogue-regular">
                                 {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
                             </p>
-                            <h2 className="text-[28px] font-medium tracking-[-0.01em] text-[#2d2d2d] epilogue-header">
+                            <h2 className="text-[28px] font-medium tracking-[-0.01em] text-[#2d2d2d] epilogue-regular">
                                 Shop Medicines
                             </h2>
                         </div>
