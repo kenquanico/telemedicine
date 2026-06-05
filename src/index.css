@@ -1,41 +1,46 @@
-@import "tailwindcss";
+/* ① Google Fonts MUST be first */
 @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,200..800;1,200..800&family=Boldonse&family=Epilogue:ital,wght@0,100..900;1,100..900&family=Gentium+Plus:ital,wght@0,400;0,700;1,400;1,700&family=Great+Vibes&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&family=Livvic:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,900&family=Manrope:wght@200..800&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Petrona:ital,wght@0,100..900;1,100..900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap');
 
+/* ② Tailwind AFTER font imports */
+@import "tailwindcss";
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Geist', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif; /* ③ Inter as the base body font */
 }
 
 #root {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
-
+/* ④ Epilogue utility classes — use !important to win over Tailwind's reset */
 .epilogue-header {
-             font-family: "Epilogue", sans-serif;
-             font-optical-sizing: auto;
-             font-weight: 700;
-             font-style: normal;
-           }
+    font-family: "Epilogue", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 700;
+    font-style: normal;
+}
+
 .epilogue-subheader {
-  font-family: "Epilogue", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 600;
-  font-style: normal;
+    font-family: "Epilogue", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-style: normal;
 }
 
 .epilogue-regular {
-    font-family: "Epilogue", sans-serif;
+    font-family: "Epilogue", sans-serif !important;
     font-optical-sizing: auto;
     font-weight: 500;
     font-style: normal;
 }
 
+/* ⑤ Inter utility class */
 .inter-paragraph {
-          font-family: "Inter", sans-serif;
-          font-optical-sizing: auto;
-          font-weight: 500;
-          font-style: normal;
-        }
+    font-family: "Inter", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
