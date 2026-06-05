@@ -24,26 +24,22 @@ function VendorMedicineCard({
         >
             {/* ── Image block ── */}
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-[#F0F5F4] mb-3">
-                {/* Emoji / product image */}
                 <div className="w-full h-full flex items-center justify-center text-5xl select-none transition-transform duration-300 group-hover:scale-105">
                     {product.image}
                 </div>
 
-                {/* Discount badge — top left */}
                 {product.discount && (
                     <div className="absolute top-2.5 left-2.5 bg-[#427b77] text-white text-[10px] font-bold px-2 py-0.5 rounded-lg epilogue-header tracking-wide">
                         {product.discount}
                     </div>
                 )}
 
-                {/* Ad tag — top right */}
                 {product.sponsored && (
                     <div className="absolute top-2.5 right-2.5 bg-black/40 text-white text-[10px] font-semibold px-2 py-0.5 rounded-lg backdrop-blur-sm epilogue-regular">
                         Ad
                     </div>
                 )}
 
-                {/* Heart button — bottom right */}
                 <button
                     onClick={(e) => { e.stopPropagation(); setHearted((h) => !h); }}
                     aria-label={hearted ? "Remove from favourites" : "Add to favourites"}
@@ -61,7 +57,6 @@ function VendorMedicineCard({
 
             {/* ── Text info ── */}
             <div className="px-0.5">
-                {/* Name + price on same row */}
                 <div className="flex items-start justify-between gap-2 mb-1">
                     <p className="text-[15px] font-bold text-[#2d2d2d] epilogue-header leading-snug flex-1 min-w-0 truncate">
                         {product.brandName}
@@ -71,14 +66,11 @@ function VendorMedicineCard({
                     </span>
                 </div>
 
-                {/* Category */}
                 <p className="text-[13px] text-gray-400 epilogue-regular mb-1.5 truncate">
                     {product.category ?? "Medicine"}
                 </p>
 
-                {/* Rating + delivery row */}
                 <div className="flex items-center gap-2">
-                    {/* Star + rating */}
                     <div className="flex items-center gap-1">
                         <svg width="11" height="11" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <path fillRule="evenodd" clipRule="evenodd" fill="#f59e0b"
@@ -93,14 +85,12 @@ function VendorMedicineCard({
 
                     <span className="text-[12px] text-gray-300">•</span>
 
-                    {/* Delivery time */}
                     <span className="text-[13px] text-gray-400 epilogue-regular">
                         {product.deliveryTime ?? "15"} min
                     </span>
 
                     <span className="text-[12px] text-gray-300">•</span>
 
-                    {/* Delivery fee */}
                     <span className="text-[13px] font-semibold text-[#427b77] epilogue-regular">
                         {product.deliveryFee ?? "Free"}
                     </span>
@@ -132,7 +122,8 @@ export default function HomePage() {
 
     return (
         <>
-            <div className="flex items-start gap-7 px-16">
+            {/* ── Outer wrapper: positions filter alongside content ── */}
+            <div className="flex items-start gap-7 px-16 relative">
 
                 {/* ── Main content ── */}
                 <div className="flex-1 min-w-0">
@@ -258,10 +249,23 @@ export default function HomePage() {
 
                 </div>
 
-                {/* ── Filter panel ── */}
+                {/* ── Filter panel — sticky, scrollable, offset below navbar ── */}
                 {filterOpen && (
-                    <div className="pt-10 sticky top-[120px] self-start">
-                        <FilterPanel />
+                    <div
+                        className="shrink-0 w-[260px] sticky top-[120px] self-start"
+                        style={{
+                            height: "calc(100vh - 120px)",
+                            overflowY: "auto",
+                            overflowX: "hidden",
+                            scrollbarWidth: "none",
+                        }}
+                    >
+                        <style>{`
+                            .filter-scroll-wrap::-webkit-scrollbar { display: none; }
+                        `}</style>
+                        <div className="filter-scroll-wrap pt-10 pb-10">
+                            <FilterPanel />
+                        </div>
                     </div>
                 )}
 
