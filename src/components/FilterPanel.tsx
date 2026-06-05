@@ -18,14 +18,14 @@ export const DEFAULT_FILTERS: FilterState = {
 };
 
 const CATEGORIES = [
-    { key: "pain-relief",  label: "Pain Relief"      },
-    { key: "antibiotics",  label: "Antibiotics"      },
-    { key: "vitamins",     label: "Vitamins"         },
-    { key: "heart-health", label: "Heart Health"     },
-    { key: "cold-flu",     label: "Cold & Flu"       },
-    { key: "diabetes",     label: "Diabetes"         },
-    { key: "skin-care",    label: "Skin Care"        },
-    { key: "digestive",    label: "Digestive"        },
+    { key: "pain-relief",  label: "Pain Relief"    },
+    { key: "antibiotics",  label: "Antibiotics"    },
+    { key: "vitamins",     label: "Vitamins"       },
+    { key: "heart-health", label: "Heart Health"   },
+    { key: "cold-flu",     label: "Cold & Flu"     },
+    { key: "diabetes",     label: "Diabetes"       },
+    { key: "skin-care",    label: "Skin Care"      },
+    { key: "digestive",    label: "Digestive"      },
 ];
 
 const SORT_OPTIONS = [
@@ -36,10 +36,10 @@ const SORT_OPTIONS = [
 ];
 
 const AVAILABILITY_OPTIONS = [
-    { value: "all",      label: "All Items"          },
-    { value: "in-stock", label: "In Stock"           },
-    { value: "otc",      label: "Over-the-Counter"   },
-    { value: "rx",       label: "Prescription Only"  },
+    { value: "all",      label: "All Items"         },
+    { value: "in-stock", label: "In Stock"          },
+    { value: "otc",      label: "Over-the-Counter"  },
+    { value: "rx",       label: "Prescription Only" },
 ];
 
 // ─── Price Slider ─────────────────────────────────────────────────────────────
@@ -50,13 +50,13 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
         <div>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
                 <span style={{
-                    fontSize: 12, fontWeight: 700, color: "#2d2d2d",
+                    fontSize: 12, fontWeight: 400, color: "#2d2d2d",
                     fontFamily: "'Epilogue', sans-serif",
                     background: "#F7F9F9", borderRadius: 8, padding: "4px 10px",
                     border: "1px solid #EAEFEE",
                 }}>₱{value[0].toLocaleString()}</span>
                 <span style={{
-                    fontSize: 12, fontWeight: 700, color: "#2d2d2d",
+                    fontSize: 12, fontWeight: 400, color: "#2d2d2d",
                     fontFamily: "'Epilogue', sans-serif",
                     background: "#F7F9F9", borderRadius: 8, padding: "4px 10px",
                     border: "1px solid #EAEFEE",
@@ -88,11 +88,11 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
                     return (
                         <button key={p.label} onClick={() => onChange(p.range)}
                                 style={{
-                                    fontSize: 11, padding: "7px 8px", borderRadius: 8,
+                                    fontSize: 12, padding: "7px 8px", borderRadius: 8,
                                     border: `1.5px solid ${active ? "#427b77" : "#EAEFEE"}`,
                                     background: active ? "rgba(66,123,119,0.07)" : "#fff",
                                     color: active ? "#427b77" : "#9CA3AF",
-                                    fontWeight: active ? 700 : 500,
+                                    fontWeight: 400,
                                     cursor: "pointer",
                                     fontFamily: "'Epilogue', sans-serif",
                                     transition: "all 0.15s",
@@ -111,8 +111,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     return (
         <div>
             <p style={{
-                fontSize: 10, fontWeight: 800, color: "#9CA3AF",
-                textTransform: "uppercase", letterSpacing: "0.1em",
+                fontSize: 13, fontWeight: 500, color: "#6B7280",
                 marginBottom: 10, fontFamily: "'Epilogue', sans-serif",
             }}>{title}</p>
             {children}
@@ -126,10 +125,10 @@ function RadioRow({ active, onClick, children }: { active: boolean; onClick: () 
         <button onClick={onClick}
                 style={{
                     width: "100%", display: "flex", alignItems: "center", gap: 10,
-                    padding: "8px 10px", borderRadius: 10, border: "none",
+                    padding: "7px 10px", borderRadius: 10, border: "none",
                     background: active ? "rgba(66,123,119,0.07)" : "transparent",
                     color: active ? "#427b77" : "#6B7280",
-                    fontWeight: active ? 700 : 500,
+                    fontWeight: 400,
                     fontSize: 13, cursor: "pointer",
                     fontFamily: "'Epilogue', sans-serif",
                     textAlign: "left",
@@ -176,32 +175,28 @@ export default function FilterPanel() {
 
     return (
         <>
-            <div style={{ width: 252, flexShrink: 0, alignSelf: "flex-start", position: "sticky", top: 96 }}>
+            {/* No sticky/fixed positioning here — parent in HomePage handles that */}
+            <div style={{ width: 252, flexShrink: 0 }}>
                 <div style={{
                     background: "#fff",
                     borderRadius: 20,
                     border: "1px solid #EAEFEE",
                     boxShadow: "0 2px 16px rgba(45,45,45,0.05)",
-                    overflow: "hidden",
+                    // No overflow:hidden — let the parent scroll container handle height
                 }}>
                     {/* Header */}
                     <div style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
-                        padding: "18px 20px 16px", borderBottom: "1px solid #F4F6F5",
+                        padding: "16px 18px 14px", borderBottom: "1px solid #F4F6F5",
                     }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <span style={{ fontSize: 14, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+                            <span style={{
+                                fontSize: 14, fontWeight: 400, color: "#2d2d2d",
+                                fontFamily: "'Epilogue', sans-serif",
+                            }}>
                                 Filters
                             </span>
-                            {activeCount > 0 && (
-                                <span style={{
-                                    display: "inline-flex", alignItems: "center", justifyContent: "center",
-                                    minWidth: 20, height: 20, borderRadius: 10,
-                                    background: "#427b77", color: "#fff",
-                                    fontSize: 10, fontWeight: 800,
-                                    fontFamily: "'Epilogue', sans-serif",
-                                }}>{activeCount}</span>
-                            )}
+
                         </div>
                         {activeCount > 0 && (
                             <button onClick={() => setFilters(DEFAULT_FILTERS)}
@@ -210,23 +205,23 @@ export default function FilterPanel() {
                                         fontSize: 12, color: "#9CA3AF", background: "none",
                                         border: "none", cursor: "pointer",
                                         fontFamily: "'Epilogue', sans-serif",
-                                        fontWeight: 500, padding: "4px 8px", borderRadius: 8,
+                                        fontWeight: 400, padding: "4px 8px", borderRadius: 8,
                                         transition: "color 0.15s, background 0.15s",
                                     }}
                                     onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.color = "#427b77"; (e.currentTarget as HTMLButtonElement).style.background = "rgba(66,123,119,0.07)"; }}
                                     onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.color = "#9CA3AF"; (e.currentTarget as HTMLButtonElement).style.background = "transparent"; }}
                             >
-                                <RotateCcw size={11} strokeWidth={2.2} />
-                                Reset
+                                <RotateCcw size={10} strokeWidth={2} />
+                                Clear
                             </button>
                         )}
                     </div>
 
                     {/* Body */}
-                    <div style={{ padding: "20px 20px", display: "flex", flexDirection: "column", gap: 20 }}>
+                    <div style={{ padding: "18px 18px", display: "flex", flexDirection: "column", gap: 18 }}>
 
                         <Section title="Sort By">
-                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                                 {SORT_OPTIONS.map((opt) => (
                                     <RadioRow key={opt.value} active={filters.sortBy === opt.value}
                                               onClick={() => setFilters((f) => ({ ...f, sortBy: opt.value as FilterState["sortBy"] }))}>
@@ -239,17 +234,17 @@ export default function FilterPanel() {
                         <div style={{ height: 1, background: "#F4F6F5" }} />
 
                         <Section title="Category">
-                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                                 {CATEGORIES.map((cat) => {
                                     const active = filters.categories.includes(cat.key);
                                     return (
                                         <button key={cat.key} onClick={() => toggleCategory(cat.key)}
                                                 style={{
                                                     width: "100%", display: "flex", alignItems: "center", gap: 10,
-                                                    padding: "8px 10px", borderRadius: 10, border: "none",
+                                                    padding: "7px 10px", borderRadius: 10, border: "none",
                                                     background: active ? "rgba(66,123,119,0.07)" : "transparent",
                                                     color: active ? "#427b77" : "#6B7280",
-                                                    fontWeight: active ? 700 : 500,
+                                                    fontWeight: 400,
                                                     fontSize: 13, cursor: "pointer",
                                                     fontFamily: "'Epilogue', sans-serif",
                                                     textAlign: "left",
@@ -290,7 +285,7 @@ export default function FilterPanel() {
                         <div style={{ height: 1, background: "#F4F6F5" }} />
 
                         <Section title="Availability">
-                            <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                            <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
                                 {AVAILABILITY_OPTIONS.map((opt) => (
                                     <RadioRow key={opt.value} active={filters.availability === opt.value}
                                               onClick={() => setFilters((f) => ({ ...f, availability: opt.value as FilterState["availability"] }))}>
@@ -303,12 +298,12 @@ export default function FilterPanel() {
                     </div>
 
                     {/* Footer */}
-                    <div style={{ padding: "0 20px 20px" }}>
+                    <div style={{ padding: "0 18px 18px" }}>
                         <button
                             style={{
                                 width: "100%", background: "#2d2d2d", color: "#fff",
-                                border: "none", borderRadius: 12, padding: "13px 0",
-                                fontSize: 13, fontWeight: 700, cursor: "pointer",
+                                border: "none", borderRadius: 12, padding: "12px 0",
+                                fontSize: 13, fontWeight: 400, cursor: "pointer",
                                 fontFamily: "'Epilogue', sans-serif",
                                 letterSpacing: "0.03em",
                                 transition: "background 0.2s",
@@ -316,7 +311,7 @@ export default function FilterPanel() {
                             onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#427b77"}
                             onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"}
                         >
-                            {activeCount > 0 ? `Apply Filters (${activeCount})` : "Apply Filters"}
+                            Apply Filters
                         </button>
                     </div>
                 </div>
