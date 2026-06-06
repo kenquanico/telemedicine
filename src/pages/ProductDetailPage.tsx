@@ -90,6 +90,18 @@ function AssuranceItem({
     );
 }
 
+function ProductVisual({ image, name, className = "" }: { image: string; name: string; className?: string }) {
+    if (image.startsWith("http")) {
+        return <img src={image} alt={name} className={`select-none object-contain ${className}`} />;
+    }
+
+    return (
+        <span className={`select-none leading-none ${className}`} aria-hidden="true">
+            {image}
+        </span>
+    );
+}
+
 export default function ProductDetailPage() {
     const { selectedProductId, navigateTo, addToCart, showModal } = useApp();
     const [qty, setQty] = useState(1);
@@ -138,8 +150,8 @@ export default function ProductDetailPage() {
     };
 
     return (
-        <main className="min-h-screen bg-[#F7FAF9]">
-            <div className="mx-auto max-w-[1180px] px-5 py-6 sm:px-8 lg:px-10 lg:py-10">
+        <main className="min-h-screen bg-white">
+            <div className="px-16 py-10">
                 <button
                     type="button"
                     onClick={() => navigateTo("catalog")}
@@ -149,9 +161,9 @@ export default function ProductDetailPage() {
                     Back to Catalog
                 </button>
 
-                <section className="grid gap-8 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)] lg:items-start">
+                <section className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
                     <div className="space-y-5">
-                        <div className="overflow-hidden rounded-[28px] border border-[#E4ECEA] bg-white shadow-sm">
+                        <div className="overflow-hidden rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
                             <div className="relative flex min-h-[360px] items-center justify-center bg-[#EEF6F4] p-10 sm:min-h-[460px]">
                                 <div className="absolute left-5 top-5 rounded-full bg-[#1D546D] px-3 py-1 text-[11px] font-extrabold uppercase text-white epilogue-header">
                                     {product.packSize}
@@ -159,9 +171,11 @@ export default function ProductDetailPage() {
                                 <div className="absolute right-5 top-5 rounded-full border border-white/70 bg-white/85 px-3 py-1 text-[11px] font-bold text-[#427b77] shadow-sm backdrop-blur epilogue-header">
                                     Authentic
                                 </div>
-                                <div className="text-[132px] leading-none drop-shadow-sm sm:text-[168px]" aria-hidden="true">
-                                    {product.image}
-                                </div>
+                                <ProductVisual
+                                    image={product.image}
+                                    name={product.brandName}
+                                    className="max-h-[300px] w-full max-w-[420px] drop-shadow-sm sm:max-h-[360px]"
+                                />
                             </div>
 
                             <div className="grid grid-cols-3 gap-3 border-t border-[#E4ECEA] bg-white p-4">
@@ -175,11 +189,15 @@ export default function ProductDetailPage() {
                                         type="button"
                                         className={`flex min-h-[74px] flex-col items-center justify-center rounded-2xl border px-3 py-2 text-center transition ${
                                             index === 0
-                                                ? "border-[#427b77] bg-[#F0F7F6]"
+                                                ? "border-[#427b77] bg-white"
                                                 : "border-[#E6ECEB] bg-white hover:border-[#BFD4D1] hover:bg-[#F8FBFA]"
                                         }`}
                                     >
-                                        <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
+                                        {String(item.icon).startsWith("http") ? (
+                                            <img src={item.icon} alt="" className="h-8 w-8 object-contain" />
+                                        ) : (
+                                            <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
+                                        )}
                                         <span className="mt-2 max-w-full truncate text-[11px] font-bold text-[#6B7C80] epilogue-header">{item.label}</span>
                                     </button>
                                 ))}
@@ -193,121 +211,126 @@ export default function ProductDetailPage() {
                         </div>
                     </div>
 
-                    <aside className="rounded-[28px] border border-[#E4ECEA] bg-white p-6 shadow-sm lg:sticky lg:top-8 lg:p-7">
-                        <div className="mb-5 flex flex-wrap items-center gap-2">
-                            <span className="rounded-full bg-[#EFF7F6] px-3 py-1 text-[11px] font-extrabold uppercase text-[#427b77] epilogue-header">
-                                {product.manufacturer}
-                            </span>
-                            <span className="rounded-full bg-[#F7F2E8] px-3 py-1 text-[11px] font-bold text-[#9A6619] epilogue-header">
-                                {product.dosageForm}
-                            </span>
+                    <aside className="overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)] lg:sticky lg:top-[120px]">
+                        <div className="border-b border-[#F4F6F5] px-5 py-4">
+                            <p className="text-sm font-bold text-[#2d2d2d] epilogue-header">Add to cart</p>
+                            <p className="mt-0.5 text-[11px] text-gray-400 epilogue-regular">Same-day Cebu delivery</p>
                         </div>
 
-                        <h1 className="text-[30px] font-extrabold leading-tight text-[#182C32] epilogue-header sm:text-[36px]">
-                            {product.brandName} {product.strength}
-                        </h1>
-                        <p className="mt-3 text-[15px] leading-relaxed text-[#6B7C80] epilogue-regular">
-                            Generic: <span className="font-semibold text-[#33464C]">{product.genericName}</span>
-                        </p>
-
-                        <div className="mt-5 flex flex-wrap items-center gap-3">
-                            <Stars rating={product.rating} />
-                            <span className="text-[13px] font-semibold text-[#33464C] epilogue-header">
-                                {product.rating} rating
-                            </span>
-                            <span className="text-[13px] text-[#8B989B] epilogue-regular">
-                                {reviewCount} reviews
-                            </span>
-                        </div>
-
-                        <div className="my-7 h-px bg-[#E6ECEB]" />
-
-                        <div className="flex flex-wrap items-end justify-between gap-4">
+                        <div className="grid gap-5 px-5 py-5">
                             <div>
-                                <p className="text-[12px] font-bold uppercase text-[#8B989B] epilogue-header">Price</p>
-                                <div className="mt-1 flex items-baseline gap-3">
-                                    <span className="text-[38px] font-extrabold leading-none text-[#1D546D] epilogue-header">
+                                <div className="mb-3 flex items-start justify-between gap-3">
+                                    <div className="min-w-0">
+                                        <h1 className="truncate text-[18px] font-extrabold leading-tight text-[#2d2d2d] epilogue-header">
+                                            {product.brandName}
+                                        </h1>
+                                        <p className="mt-1 text-[12px] leading-relaxed text-gray-400 epilogue-regular">
+                                            {product.strength} · {product.dosageForm}
+                                        </p>
+                                    </div>
+                                    <StockBadge status={product.stockStatus} />
+                                </div>
+
+                                <p className="line-clamp-2 text-[12px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                    {product.genericName}
+                                </p>
+                            </div>
+
+                            <div className="h-px bg-[#F4F6F5]" />
+
+                            <div>
+                                <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-gray-400 epilogue-header">Price</p>
+                                <div className="mt-2 flex items-baseline gap-2">
+                                    <span className="text-[28px] font-extrabold leading-none text-[#2d2d2d] epilogue-header">
                                         {formatPeso(product.price)}
                                     </span>
                                     {product.originalPrice && (
-                                        <span className="text-[15px] font-semibold text-[#9CA3AF] line-through epilogue-regular">
+                                        <span className="text-[13px] font-semibold text-gray-400 line-through epilogue-regular">
                                             {formatPeso(product.originalPrice)}
                                         </span>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="text-right">
-                                <StockBadge status={product.stockStatus} />
-                                {!isOutOfStock && (
-                                    <p className="mt-1 text-[12px] text-[#7A878A] epilogue-regular">
-                                        {product.stockCount}+ available
-                                    </p>
-                                )}
-                            </div>
-                        </div>
+                            <div className="h-px bg-[#F4F6F5]" />
 
-                        <div className="mt-7 rounded-2xl border border-[#E6ECEB] bg-[#F8FBFA] p-4">
-                            <div className="flex items-center justify-between gap-4">
+                            <div className="grid gap-3">
                                 <div>
-                                    <p className="text-[13px] font-bold text-[#22343A] epilogue-header">Quantity</p>
-                                    <p className="mt-1 text-[12px] text-[#7A878A] epilogue-regular">Select the amount to add</p>
+                                    <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-gray-400 epilogue-header">Quantity</p>
+                                    {!isOutOfStock && (
+                                        <p className="mt-1 text-[12px] text-gray-400 epilogue-regular">{product.stockCount}+ available</p>
+                                    )}
                                 </div>
                                 <QtySelector value={qty} onChange={setQty} />
                             </div>
-                        </div>
 
-                        <Btn
-                            variant="primary"
-                            size="lg"
-                            fullWidth
-                            disabled={isOutOfStock}
-                            onClick={handleAddToCart}
-                            style={{
-                                marginTop: 18,
-                                minHeight: 54,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: 8,
-                            }}
-                        >
-                            <CartIcon />
-                            {isOutOfStock ? "Out of Stock" : "Add to Cart"}
-                        </Btn>
+                            <Btn
+                                variant="primary"
+                                size="lg"
+                                fullWidth
+                                disabled={isOutOfStock}
+                                onClick={handleAddToCart}
+                                style={{
+                                    minHeight: 50,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    gap: 8,
+                                }}
+                            >
+                                <CartIcon />
+                                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                            </Btn>
 
-                        <div className="mt-5 rounded-2xl bg-[#FFF7E6] px-4 py-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
-                            Please follow the dosage and warning information provided. For prescription medicines, prepare a valid prescription during order confirmation.
+                            <div className="rounded-2xl border border-[#F4C971] bg-white px-4 py-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                                Please follow dosage guidance. Prescription medicines may require validation.
+                            </div>
                         </div>
                     </aside>
                 </section>
 
-                <section className="mt-10 rounded-[28px] border border-[#E4ECEA] bg-white shadow-sm">
-                    <div className="overflow-x-auto border-b border-[#E4ECEA] px-4 sm:px-6">
-                        <div className="flex min-w-max gap-2" role="tablist" aria-label="Product information">
+                <section className="mt-10 rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
+                    <div className="bds-c-tabs__container overflow-x-auto border-b border-[#E4ECEA] px-4 sm:px-6" data-testid="tabs__tabs-container">
+                        <ul
+                            className="bds-c-tabs__list flex min-w-max gap-6"
+                            aria-orientation="horizontal"
+                            id="tabs__tablist"
+                            role="tablist"
+                            aria-label="Product information"
+                        >
                             {tabs.map((tab) => {
                                 const isActive = activeTab === tab.key;
                                 return (
-                                    <button
+                                    <li
                                         key={tab.key}
-                                        type="button"
-                                        role="tab"
-                                        aria-selected={isActive}
-                                        onClick={() => setActiveTab(tab.key)}
-                                        className={`relative px-4 py-5 text-[14px] font-bold transition epilogue-header ${
-                                            isActive ? "text-[#1D546D]" : "text-[#7A878A] hover:text-[#33464C]"
-                                        }`}
+                                        className={`bds-c-tab relative ${isActive ? "is-selected" : ""}`}
+                                        id={`tabs__tab-${tab.key}`}
+                                        role="presentation"
                                     >
-                                        {tab.label}
-                                        <span
-                                            className={`absolute bottom-0 left-4 right-4 h-[3px] rounded-t-full transition ${
-                                                isActive ? "bg-[#1D546D]" : "bg-transparent"
+                                        <button
+                                            type="button"
+                                            aria-labelledby={`tabs__tab-${tab.key}-label`}
+                                            aria-selected={isActive}
+                                            role="tab"
+                                            tabIndex={isActive ? 0 : -1}
+                                            onClick={() => setActiveTab(tab.key)}
+                                            className={`relative py-5 text-[14px] font-bold transition epilogue-header ${
+                                                isActive ? "text-[#2d2d2d]" : "text-[#7A878A] hover:text-[#33464C]"
                                             }`}
-                                        />
-                                    </button>
+                                        >
+                                            <span className="bds-c-tab__label" id={`tabs__tab-${tab.key}-label`}>
+                                                {tab.label}
+                                            </span>
+                                            <span
+                                                className={`absolute bottom-0 left-0 right-0 h-[3px] rounded-t-full transition ${
+                                                    isActive ? "bg-[#2d2d2d]" : "bg-transparent"
+                                                }`}
+                                            />
+                                        </button>
+                                    </li>
                                 );
                             })}
-                        </div>
+                        </ul>
                     </div>
 
                     <div className="p-5 sm:p-7">
