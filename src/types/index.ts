@@ -123,7 +123,7 @@ export interface Notification {
 }
 
 // ─── App Page Keys ────────────────────────────────────────────────────────────
-export type PageKey =a
+export type PageKey =
     | "home"
     | "catalog"
     | "product"
