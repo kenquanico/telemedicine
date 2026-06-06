@@ -92,12 +92,12 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
         .replace(/"/g, "&quot;");
 
     let iconPath: string;
-    let iconScale = 0.58;
+    let iconScale = 0.64;
     const iconOffsetX = 12;
 
     if (pharmacy.hasFreeDelivery) {
         iconPath = TRUCK_PATH;
-        iconScale = 0.52;
+        iconScale = 0.58;
     } else if (pharmacy.openNow === true) {
         iconPath = "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
     } else if (pharmacy.openNow === false) {
@@ -106,7 +106,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
         iconPath = "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z";
     }
 
-    const iconSize = 12;
+    const iconSize = 14;
     const iconSvg = `<g transform="translate(${iconOffsetX}, ${(34 - iconSize) / 2 + 2}) scale(${iconScale})">
         <path d="${iconPath}" fill="${statusColor}"/>
     </g>`;
@@ -123,7 +123,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
                 <path d="M${x - 7} 35L${x} 44L${x + 7} 35Z" fill="white" stroke="#E4ECEA" stroke-width="1.25" stroke-linejoin="round"/>
             </g>
             ${iconSvg}
-            <text x="${iconOffsetX + iconSize + 8}" y="23" text-anchor="start" font-family="Epilogue, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2d2d2d">${escapedLabel}</text>
+            <text x="${iconOffsetX + iconSize + 9}" y="23" text-anchor="start" font-family="Epilogue, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2d2d2d">${escapedLabel}</text>
             <path d="M${x} 47C${x - 7.5} 47 ${x - 13.5} 53 ${x - 13.5} 60.5c0 9.5 13.5 17.5 13.5 17.5s13.5-8 13.5-17.5C${x + 13.5} 53 ${x + 7.5} 47 ${x} 47z" fill="${pinColor}" fill-opacity="0.58" stroke="white" stroke-width="2"/>
             <circle cx="${x}" cy="60.5" r="4.5" fill="white" fill-opacity="0.92"/>
             <circle cx="${x}" cy="60.5" r="2.4" fill="${pinColor}" fill-opacity="0.58"/>
@@ -365,33 +365,33 @@ export default function PickupPage() {
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />
 
             {/* ── Top overlay: search + filter pills in one row ── */}
-            <div className="absolute top-4 left-4 z-20 flex items-center gap-2.5 max-w-[calc(100vw-32px)]">
+            <div className="absolute top-5 left-5 z-20 flex items-center gap-3 max-w-[calc(100vw-40px)]">
                 {/* Search */}
                 <div className="relative flex items-center flex-shrink-0">
                     <Search
-                        size={14}
+                        size={17}
                         strokeWidth={2}
-                        className="absolute left-3 text-[#427b77] opacity-70 pointer-events-none"
+                        className="absolute left-3.5 text-[#427b77] opacity-70 pointer-events-none"
                     />
                     <input
                         type="text"
                         value={searchValue}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                         placeholder="Search pharmacies..."
-                        className="w-64 pl-[34px] pr-9 py-2.5 rounded-full border border-[#E4ECEA] bg-white text-[13px] text-[#2d2d2d] placeholder-[#2d2d2d]/40 outline-none shadow-[0_4px_18px_rgba(6,30,41,0.10)] focus:border-[#427b77]/50 focus:shadow-[0_4px_24px_rgba(66,123,119,0.20)] transition-all epilogue-regular"
+                        className="w-72 pl-10 pr-10 py-3 rounded-full border border-[#E4ECEA] bg-white text-[13px] text-[#2d2d2d] placeholder-[#2d2d2d]/40 outline-none shadow-[0_4px_18px_rgba(6,30,41,0.10)] focus:border-[#427b77]/50 focus:shadow-[0_4px_24px_rgba(66,123,119,0.20)] transition-all epilogue-regular"
                     />
                     {searchValue && (
                         <button
                             onClick={() => setSearchValue("")}
-                            className="absolute right-2.5 w-[18px] h-[18px] rounded-full bg-[#427b77]/10 border-none cursor-pointer flex items-center justify-center text-[#427b77] hover:bg-[#427b77]/20 transition-colors"
+                            className="absolute right-3 w-5 h-5 rounded-full bg-[#427b77]/10 border-none cursor-pointer flex items-center justify-center text-[#427b77] hover:bg-[#427b77]/20 transition-colors"
                         >
-                            <X size={9} strokeWidth={2.5} />
+                            <X size={12} strokeWidth={2.5} />
                         </button>
                     )}
                 </div>
 
                 {/* Filter pills — same row, scrollable */}
-                <div className="flex gap-2 overflow-x-auto scrollbar-none flex-nowrap pb-0.5">
+                <div className="flex gap-2.5 overflow-x-auto scrollbar-none flex-nowrap pb-1">
                     {FILTERS.map((f) => {
                         const Icon = FILTER_ICONS[f];
                         const isActive = activeFilters.includes(f);
@@ -399,13 +399,13 @@ export default function PickupPage() {
                             <button
                                 key={f}
                                 onClick={() => toggleFilter(f)}
-                                className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border text-[12px] font-semibold cursor-pointer whitespace-nowrap transition-all shadow-[0_2px_10px_rgba(6,30,41,0.08)] epilogue-regular ${
+                                className={`inline-flex items-center gap-2 px-4 py-3 rounded-full border text-[12.5px] font-semibold cursor-pointer whitespace-nowrap transition-all shadow-[0_2px_10px_rgba(6,30,41,0.08)] epilogue-regular ${
                                     isActive
                                         ? "border-[#2d2d2d] bg-[#2d2d2d] text-white shadow-[0_3px_14px_rgba(45,45,45,0.22)]"
                                         : "border-[#E4ECEA] bg-white text-[#6b7280] hover:border-[#427b77]/40 hover:text-[#427b77] hover:shadow-[0_3px_16px_rgba(66,123,119,0.14)]"
                                 }`}
                             >
-                                <Icon size={13} strokeWidth={2.2} />
+                                <Icon size={16} strokeWidth={2.2} />
                                 {f}
                             </button>
                         );
