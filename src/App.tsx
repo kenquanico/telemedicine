@@ -23,7 +23,7 @@ function PageRouter() {
     const { currentPage } = useApp();
 
     const pages: Record<string, React.ReactNode> = {
-        home: <HomePage />,
+        home: homeRendersPickupExperience ? <PickupPage /> : <HomePage />,
         catalog: <CatalogPage />,
         product: <ProductDetailPage />,
         pickup: <PickupPage />,
