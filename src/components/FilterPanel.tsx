@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { RotateCcw } from "lucide-react";
 
 export interface FilterState {
     categories: string[];

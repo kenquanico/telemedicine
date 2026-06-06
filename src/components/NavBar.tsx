@@ -126,6 +126,7 @@ const NAV_TABS: {
 export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
     const hideSecondaryNav = compact || currentPage === "pickup" || currentPage === "pharmacies";
+    const isPickupPage = currentPage === "pickup";
     const [cartOpen,    setCartOpen]    = useState(false);
     const [accountOpen, setAccountOpen] = useState(false);
     const [langOpen,    setLangOpen]    = useState(false);
@@ -149,11 +150,11 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
         <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
 
             {/* ── Top row ── */}
-            <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
+            <div className={hideSecondaryNav ? `px-12 ${isPickupPage ? "py-2" : "py-4"} flex items-center gap-5` : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
 
                 {/* Logo */}
                 <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
-                    <img src={Logo} className="h-12 w-auto" alt="Dosely logo" />
+                    <img src={Logo} className={`${isPickupPage ? "h-10" : "h-12"} w-auto`} alt="Dosely logo" />
                 </button>
 
                 {/* Location */}
@@ -273,7 +274,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 key={tab.label}
                                 onClick={() => navigateTo(tab.navigatesTo)}
                                 className={[
-                                    "nav-tab flex items-center py-2 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular",
+                                    "nav-tab flex items-center py-2 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none epilogue-regular",
                                     index === 0 ? "pl-0 pr-6" : "px-6",
                                     isActive ? "nav-tab--active" : "",
                                 ].join(" ")}
@@ -298,7 +299,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
                                 placeholder="Search medicines..."
-                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#2d2d2d] placeholder:text-[#2d2d2d]/35 font-['Geist'] outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
+                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#2d2d2d] placeholder:text-[#2d2d2d]/35 outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
                             />
                             {searchValue && (
                                 <button

@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, useRef } from "react";
 import {
     MapPin, Search, Star, X, ChevronRight, Clock,
-    Truck, CircleParking, Car, Navigation, Phone,
+    Truck, CircleParking, Car, Phone,
     Globe, ExternalLink, ChevronLeft, Locate,
 } from "lucide-react";
 
@@ -118,7 +118,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
                 <path d="M${x - 6} 33L${x} 42L${x + 6} 33Z" fill="white" stroke="#e2ecea" stroke-width="1" stroke-linejoin="round"/>
             </g>
             ${iconSvg}
-            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, Arial, sans-serif" font-size="10" font-weight="600" fill="#1a1a1a">${escapedLabel}</text>
+            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, sans-serif" font-size="10" font-weight="600" fill="#1a1a1a">${escapedLabel}</text>
             <path d="M${x} 45C${x - 7} 45 ${x - 12.5} 51 ${x - 12.5} 58c0 9 12.5 17 12.5 17s12.5-8 12.5-17C${x + 12.5} 51 ${x + 7} 45 ${x} 45z" fill="${pinColor}" fill-opacity="0.82" stroke="white" stroke-width="1.75"/>
             <circle cx="${x}" cy="58" r="4" fill="white" fill-opacity="0.9"/>
             <circle cx="${x}" cy="58" r="2.1" fill="${pinColor}" fill-opacity="0.82"/>
@@ -169,7 +169,7 @@ function StatusPill({ openNow }: { openNow: boolean | null }) {
             : { dot: "#9ca3af", text: "text-gray-500",    bg: "bg-gray-100",   label: "Hours vary" };
 
     return (
-        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium ${cfg.bg} ${cfg.text}`}>
+        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium epilogue-regular ${cfg.bg} ${cfg.text}`}>
             <span className="w-[5px] h-[5px] rounded-full flex-shrink-0" style={{ background: cfg.dot }} />
             {cfg.label}
         </span>
@@ -197,13 +197,11 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                             className="w-full h-full flex items-center justify-center"
                             style={{ background: `linear-gradient(140deg, ${color}14 0%, ${color}28 100%)` }}
                         >
-                            <span className="text-[56px] font-black tracking-tight select-none" style={{ color, opacity: 0.22 }}>
+                            <span className="text-[56px] font-black tracking-tight select-none epilogue-header" style={{ color, opacity: 0.22 }}>
                                 {pharmacy ? getInitials(pharmacy.name) : ""}
                             </span>
                         </div>
                     )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-
                     {/* Back */}
                     <button
                         onClick={onClose}
@@ -212,20 +210,6 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                         <ChevronLeft size={15} strokeWidth={2} className="text-[#1a1a1a]" />
                     </button>
 
-                    {/* Delivery badge */}
-                    {pharmacy?.hasFreeDelivery && (
-                        <span className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold bg-blue-600 text-white shadow-sm">
-                            <Truck size={10} strokeWidth={2} className="text-blue-200" />
-                            Free Delivery
-                        </span>
-                    )}
-
-                    {/* Status */}
-                    {pharmacy && (
-                        <div className="absolute bottom-4 left-4">
-                            <StatusPill openNow={pharmacy.openNow} />
-                        </div>
-                    )}
                 </div>
 
                 {/* Scrollable body */}
@@ -241,10 +225,10 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 {pharmacy ? getInitials(pharmacy.name) : ""}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h2 className="text-[16px] font-extrabold text-[#1a1a1a] leading-snug tracking-[-0.025em] mb-0.5" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                                <h2 className="text-[16px] font-extrabold text-[#1a1a1a] leading-snug tracking-[-0.025em] mb-0.5 epilogue-header">
                                     {pharmacy?.name}
                                 </h2>
-                                <p className="flex items-start gap-1 text-[11.5px] text-gray-400 leading-relaxed">
+                                <p className="flex items-start gap-1 text-[11.5px] text-gray-400 leading-relaxed epilogue-regular">
                                     <MapPin size={10} strokeWidth={2} className="flex-shrink-0 mt-0.5 text-gray-400" />
                                     {pharmacy?.address || "See on map"}
                                 </p>
@@ -253,9 +237,9 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
 
                         {pharmacy?.rating && (
                             <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#f2f5f4]">
-                                <span className="text-[14px] font-bold text-[#1a1a1a] tracking-tight">{pharmacy.rating}</span>
+                                <span className="text-[14px] font-bold text-[#1a1a1a] tracking-tight epilogue-header">{pharmacy.rating}</span>
                                 <StarRating rating={pharmacy.rating} />
-                                <span className="text-[11px] text-gray-400">
+                                <span className="text-[11px] text-gray-400 epilogue-regular">
                                     {pharmacy.userRatingsTotal.toLocaleString()}+ reviews
                                 </span>
                             </div>
@@ -274,7 +258,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 className="flex-1 flex flex-col items-center gap-1.5 py-2.5 rounded-xl border border-[#edf0ef] bg-[#fafbfb] cursor-pointer hover:border-[#d4e4e2] hover:bg-[#f3f8f7] transition-all"
                             >
                                 <Icon size={15} strokeWidth={1.75} style={{ color: ic }} />
-                                <span className="text-[10px] font-medium text-gray-500" style={{ fontFamily: "Epilogue, sans-serif" }}>{label}</span>
+                                <span className="text-[10px] font-medium text-gray-500 epilogue-regular">{label}</span>
                             </button>
                         ))}
                     </div>
@@ -287,11 +271,11 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 <Clock size={13} strokeWidth={1.75} className="text-emerald-600" />
                             </div>
                             <div className="pt-0.5">
-                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Hours</p>
+                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Hours</p>
                                 <p className={`text-[12.5px] font-semibold ${
                                     pharmacy?.openNow === true ? "text-emerald-700" :
                                         pharmacy?.openNow === false ? "text-red-600" : "text-gray-500"
-                                }`}>
+                                } epilogue-subheader`}>
                                     {pharmacy?.openNow === true ? "Open now" : pharmacy?.openNow === false ? "Closed" : "Hours vary"}
                                 </p>
                             </div>
@@ -303,8 +287,8 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 <MapPin size={13} strokeWidth={1.75} className="text-violet-500" />
                             </div>
                             <div className="pt-0.5">
-                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Address</p>
-                                <p className="text-[12.5px] font-medium text-[#1a1a1a] leading-snug">
+                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Address</p>
+                                <p className="text-[12.5px] font-medium text-[#1a1a1a] leading-snug epilogue-regular">
                                     {pharmacy?.address || "Not available"}
                                 </p>
                             </div>
@@ -317,8 +301,8 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                     <Truck size={13} strokeWidth={1.75} className="text-blue-500" />
                                 </div>
                                 <div className="pt-0.5">
-                                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Delivery</p>
-                                    <p className="text-[12.5px] font-semibold text-blue-600">Free delivery available</p>
+                                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Delivery</p>
+                                    <p className="text-[12.5px] font-semibold text-blue-600 epilogue-subheader">Free delivery available</p>
                                 </div>
                             </div>
                         )}
@@ -327,10 +311,10 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                     {/* Tags */}
                     {pharmacy?.types && pharmacy.types.length > 0 && (
                         <div className="px-5 py-4 border-b border-[#f2f5f4]">
-                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2.5">Category</p>
+                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2.5 epilogue-subheader">Category</p>
                             <div className="flex flex-wrap gap-1.5">
                                 {pharmacy.types.slice(0, 5).map((t) => (
-                                    <span key={t} className="px-2.5 py-[3px] rounded-full text-[10.5px] font-medium bg-[#f2f5f4] text-gray-500 capitalize">
+                                    <span key={t} className="px-2.5 py-[3px] rounded-full text-[10.5px] font-medium bg-[#f2f5f4] text-gray-500 capitalize epilogue-regular">
                                         {t.replace(/_/g, " ")}
                                     </span>
                                 ))}
@@ -344,11 +328,10 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                 {/* CTA */}
                 <div className="flex-shrink-0 px-5 py-4 border-t border-[#f2f5f4] bg-white">
                     <button
-                        className="w-full rounded-xl py-3 px-4 text-[13px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all tracking-[-0.01em]"
+                        className="w-full rounded-xl py-3 px-4 text-[13px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all tracking-[-0.01em] epilogue-header"
                         style={{
                             background: color,
                             color: "white",
-                            fontFamily: "Epilogue, sans-serif",
                             boxShadow: `0 4px 16px ${color}38`,
                         }}
                     >
@@ -377,36 +360,28 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
             style={{ scrollSnapAlign: "start" }}
         >
             {/* Thumbnail */}
-            <div className={`relative w-full rounded-2xl overflow-hidden bg-[#f0f5f4] mb-2.5 ${isSelected ? "ring-2 ring-offset-1" : ""}`}
-                 style={{ height: "116px", ...(isSelected ? { "--tw-ring-color": color + "50" } as React.CSSProperties : {}) }}
+            <div className="relative w-full rounded-2xl overflow-hidden bg-[#f0f5f4] mb-2.5"
+                 style={{ height: "116px" }}
             >
                 {photoUrl ? (
                     <img src={photoUrl} alt={pharmacy.name} className="w-full h-full object-cover" />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center" style={{ background: color + "1c" }}>
-                        <span className="text-[20px] font-black tracking-tight" style={{ color, opacity: 0.7, fontFamily: "Epilogue, sans-serif" }}>
+                        <span className="text-[20px] font-black tracking-tight epilogue-header" style={{ color, opacity: 0.7 }}>
                             {getInitials(pharmacy.name)}
                         </span>
                     </div>
                 )}
-                {pharmacy.hasFreeDelivery && (
-                    <span className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-semibold bg-white/90 text-blue-600 shadow-sm">
-                        <Truck size={9} strokeWidth={2} className="text-blue-500" />
-                        Free
-                    </span>
-                )}
-                {/* Subtle gradient at bottom */}
-                <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             </div>
 
             {/* Info */}
             <div className="px-0.5">
-                <p className="text-[12.5px] font-bold text-[#1a1a1a] mb-1 truncate" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                <p className="text-[12.5px] font-bold text-[#1a1a1a] mb-1 truncate epilogue-header">
                     {pharmacy.name}
                 </p>
                 <div className="flex items-center gap-1.5 mb-1.5">
                     {pharmacy.rating && (
-                        <span className="flex items-center gap-[3px] text-[10.5px] font-semibold text-amber-600" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                        <span className="flex items-center gap-[3px] text-[10.5px] font-semibold text-amber-600 epilogue-subheader">
                             <Star size={9} fill="currentColor" strokeWidth={0} className="text-amber-500" />
                             {pharmacy.rating}
                             <span className="font-normal text-gray-400 text-[10px]">({pharmacy.userRatingsTotal}+)</span>
@@ -415,7 +390,7 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
                     <span className="text-gray-200 text-[10px]">·</span>
                     <StatusPill openNow={pharmacy.openNow} />
                 </div>
-                <p className="flex items-center gap-1 text-[10px] text-gray-400 truncate" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                <p className="flex items-center gap-1 text-[10px] text-gray-400 truncate epilogue-regular">
                     <MapPin size={9} strokeWidth={1.75} className="text-gray-300 flex-shrink-0" />
                     {pharmacy.address || "See on map"}
                 </p>
@@ -552,7 +527,7 @@ export default function PickupPage() {
     const sidebarOpen = !!selectedPharmacy;
 
     return (
-        <div className="relative w-full overflow-hidden" style={{ height: "calc(100vh - 76px)" }}>
+        <div className="relative w-full overflow-hidden epilogue-regular" style={{ height: "calc(100vh - 56px)" }}>
 
             {/* Map */}
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />
@@ -579,8 +554,7 @@ export default function PickupPage() {
                         value={searchValue}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                         placeholder="Search pharmacies…"
-                        className="w-64 pl-9 pr-9 py-[10px] rounded-full border border-[#e8edec] bg-white text-[12.5px] text-[#1a1a1a] placeholder-[#1a1a1a]/35 outline-none shadow-[0_2px_16px_rgba(10,31,30,0.09)] focus:border-[#3d7a75]/40 focus:shadow-[0_2px_20px_rgba(61,122,117,0.16)] transition-all"
-                        style={{ fontFamily: "Epilogue, sans-serif" }}
+                        className="w-64 pl-9 pr-9 py-[10px] rounded-full border border-[#e8edec] bg-white text-[12.5px] text-[#1a1a1a] placeholder-[#1a1a1a]/35 outline-none shadow-[0_2px_16px_rgba(10,31,30,0.09)] focus:border-[#3d7a75]/40 focus:shadow-[0_2px_20px_rgba(61,122,117,0.16)] transition-all epilogue-regular"
                     />
                     {searchValue && (
                         <button
@@ -603,12 +577,11 @@ export default function PickupPage() {
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-1.5 px-3 py-[9px] rounded-full border text-[11.5px] font-medium cursor-pointer whitespace-nowrap transition-all shadow-[0_1px_8px_rgba(10,31,30,0.07)] ${
+                                    className={`inline-flex items-center gap-1.5 px-3 py-[9px] rounded-full border text-[11.5px] font-medium cursor-pointer whitespace-nowrap transition-all shadow-[0_1px_8px_rgba(10,31,30,0.07)] epilogue-regular ${
                                         isActive
                                             ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-[0_2px_12px_rgba(26,26,26,0.20)]"
                                             : "border-[#e8edec] bg-white text-gray-500 hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
                                     }`}
-                                    style={{ fontFamily: "Epilogue, sans-serif" }}
                                 >
                                     <Icon
                                         size={12}
@@ -635,19 +608,18 @@ export default function PickupPage() {
                     {/* Strip header */}
                     <div className="flex items-center justify-between px-6 pt-4 pb-2">
                         <div>
-                            <p className="text-[12px] font-bold text-[#1a1a1a] tracking-[-0.01em]" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                            <p className="text-[12px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
                                 {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
                             </p>
                             {!loading && (
-                                <p className="text-[10.5px] text-gray-400 mt-0.5" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                                <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
                                     Tap a card or map pin for details
                                 </p>
                             )}
                         </div>
                         {!loading && (
                             <span
-                                className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full"
-                                style={{ fontFamily: "Epilogue, sans-serif" }}
+                                className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full epilogue-regular"
                             >
                                 <span className="w-[5px] h-[5px] rounded-full bg-emerald-500 flex-shrink-0" />
                                 {pharmacies.filter((p) => p.openNow).length} open
@@ -670,7 +642,7 @@ export default function PickupPage() {
                                 />
                             ))
                         ) : filtered.length === 0 ? (
-                            <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px]" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                            <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px] epilogue-regular">
                                 <MapPin size={18} strokeWidth={1.5} />
                                 <span>No results found</span>
                             </div>
