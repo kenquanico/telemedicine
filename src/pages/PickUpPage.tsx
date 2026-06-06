@@ -167,137 +167,19 @@ function StarRating({ rating }: { rating: number }) {
 // ── Detail Sidebar ─────────────────────────────────────────────────────────────
 function PharmacySidebar({
                              pharmacy,
-                             pharmacies,
-                             loading,
-                             selectedId,
-                             onSelect,
                              onClose,
                          }: {
     pharmacy: Pharmacy | null;
-    pharmacies: Pharmacy[];
-    loading: boolean;
-    selectedId: string | null;
-    onSelect: (pharmacy: Pharmacy) => void;
     onClose: () => void;
 }) {
     const color = pharmacy ? getBrandColor(pharmacy.name) : "#427b77";
     const photoUrl = pharmacy?.photos?.[0]?.getUrl({ maxWidth: 800, maxHeight: 400 });
 
-    if (!pharmacy) {
-        return (
-            <aside
-                className="absolute top-0 left-0 h-full z-30 bg-white shadow-[4px_0_32px_rgba(6,30,41,0.13)] border-r border-[#E4ECEA] flex flex-col overflow-hidden"
-                style={{ width: "380px", maxWidth: "calc(100vw - 48px)" }}
-            >
-                <div className="px-5 py-5 border-b border-[#f0f4f3]">
-                    <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#427b77] epilogue-header mb-1">
-                        Nearby Pharmacies
-                    </p>
-                    <h2 className="text-[22px] font-black text-[#2d2d2d] tracking-[-0.03em] epilogue-header leading-tight">
-                        Pick up at a store
-                    </h2>
-                    <p className="mt-2 text-[13px] text-gray-400 epilogue-regular leading-relaxed">
-                        Select a pharmacy to view store details, hours, and pickup options.
-                    </p>
-                </div>
-
-                <div className="px-5 py-3 border-b border-[#f0f4f3] flex items-center justify-between">
-                    <span className="text-[13px] font-bold text-[#2d2d2d] epilogue-header">
-                        {loading ? "Finding stores..." : `${pharmacies.length} stores nearby`}
-                    </span>
-                    {!loading && (
-                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                            {pharmacies.filter((p) => p.openNow).length} open
-                        </span>
-                    )}
-                </div>
-
-                <div className="flex-1 overflow-y-auto scrollbar-none px-3 py-3">
-                    {loading ? (
-                        <div className="space-y-3">
-                            {[...Array(5)].map((_, i) => (
-                                <div
-                                    key={i}
-                                    className="h-[86px] rounded-2xl bg-gradient-to-r from-[#f0f4f3] via-[#e5ecea] to-[#f0f4f3] bg-[length:200%_100%] animate-[shimmer_1.5s_infinite]"
-                                    style={{ animationDelay: `${i * 0.08}s` }}
-                                />
-                            ))}
-                        </div>
-                    ) : pharmacies.length === 0 ? (
-                        <div className="h-full flex flex-col items-center justify-center text-center px-6 text-gray-400">
-                            <MapPin size={30} strokeWidth={1.6} className="mb-3" />
-                            <p className="text-[14px] font-bold text-[#2d2d2d] epilogue-header">No pharmacies found</p>
-                            <span className="mt-1 text-[12px] epilogue-regular">Try a different search or filter.</span>
-                        </div>
-                    ) : (
-                        <div className="space-y-1.5">
-                            {pharmacies.map((item) => {
-                                const itemColor = getBrandColor(item.name);
-                                const isActive = selectedId === item.id;
-
-                                return (
-                                    <button
-                                        key={item.id}
-                                        onClick={() => onSelect(item)}
-                                        className={`w-full flex items-start gap-3 rounded-2xl px-3 py-3 text-left cursor-pointer transition-all border ${
-                                            isActive
-                                                ? "bg-[#f0f7f6] border-[#427b77]/35"
-                                                : "bg-white border-transparent hover:bg-[#f8fafa] hover:border-[#E4ECEA]"
-                                        }`}
-                                    >
-                                        <span
-                                            className="w-11 h-11 rounded-xl flex items-center justify-center text-[12px] font-black shrink-0"
-                                            style={{ background: itemColor + "18", color: itemColor }}
-                                        >
-                                            {getInitials(item.name)}
-                                        </span>
-                                        <span className="min-w-0 flex-1">
-                                            <span className="block text-[13px] font-bold text-[#2d2d2d] epilogue-header truncate">
-                                                {item.name}
-                                            </span>
-                                            <span className="mt-1 flex items-center gap-1 text-[11px] text-gray-400 epilogue-regular truncate">
-                                                <MapPin size={10} strokeWidth={2} className="shrink-0" />
-                                                {item.address || "See on map"}
-                                            </span>
-                                            <span className="mt-2 flex items-center gap-1.5 flex-wrap">
-                                                {item.rating && (
-                                                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700">
-                                                        <Star size={10} fill="currentColor" strokeWidth={0} />
-                                                        {item.rating}
-                                                    </span>
-                                                )}
-                                                <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${
-                                                    item.openNow === true
-                                                        ? "text-emerald-700"
-                                                        : item.openNow === false
-                                                            ? "text-red-700"
-                                                            : "text-gray-500"
-                                                }`}>
-                                                    <span className="w-[5px] h-[5px] rounded-full bg-current opacity-80" />
-                                                    {item.openNow === true ? "Open" : item.openNow === false ? "Closed" : "Hrs vary"}
-                                                </span>
-                                                {item.hasFreeDelivery && (
-                                                    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600">
-                                                        <Truck size={10} strokeWidth={2.2} />
-                                                        Free
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </span>
-                                        <ChevronRight size={15} strokeWidth={2.4} className="mt-3 text-gray-300 shrink-0" />
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
-            </aside>
-        );
-    }
-
     return (
         <div
-            className="absolute top-0 left-0 h-full z-30 flex transition-all duration-300 ease-in-out"
+            className={`absolute top-0 left-0 h-full z-30 flex transition-all duration-300 ease-in-out ${
+                pharmacy ? "translate-x-0" : "-translate-x-full"
+            }`}
             style={{ width: "380px", maxWidth: "calc(100vw - 48px)" }}
         >
             <div className="w-full h-full bg-white shadow-[4px_0_32px_rgba(6,30,41,0.13)] flex flex-col overflow-hidden">
@@ -709,7 +591,8 @@ export default function PickupPage() {
         }
     }
 
-    const sidebarOffset = "min(380px, calc(100vw - 48px))";
+    // Sidebar open pushes bottom strip right-padding on desktop
+    const sidebarOpen = !!selectedPharmacy;
 
     return (
         <div className="relative w-full overflow-hidden" style={{ height: "calc(100vh - 76px)" }}>
@@ -720,10 +603,6 @@ export default function PickupPage() {
             {/* ── Detail Sidebar ── */}
             <PharmacySidebar
                 pharmacy={selectedPharmacy}
-                pharmacies={filtered}
-                loading={loading}
-                selectedId={selectedPharmacy?.id ?? null}
-                onSelect={handleSelectPharmacy}
                 onClose={() => setSelectedPharmacy(null)}
             />
 
@@ -731,8 +610,10 @@ export default function PickupPage() {
             <div
                 className="absolute top-5 z-20 flex items-center gap-3 transition-all duration-300 ease-in-out"
                 style={{
-                    left: `calc(${sidebarOffset} + 16px)`,
-                    maxWidth: `calc(100vw - ${sidebarOffset} - 36px)`,
+                    left: sidebarOpen ? "calc(min(380px, calc(100vw - 48px)) + 16px)" : "20px",
+                    maxWidth: sidebarOpen
+                        ? "calc(100vw - min(380px, calc(100vw - 48px)) - 36px)"
+                        : "calc(100vw - 40px)",
                     overflow: "hidden",
                 }}
             >
@@ -761,33 +642,35 @@ export default function PickupPage() {
                 </div>
 
                 {/* Filter pills */}
-                <div className="flex gap-2.5 overflow-x-auto scrollbar-none flex-nowrap pb-1">
-                    {FILTERS.map((f) => {
-                        const Icon = FILTER_ICONS[f];
-                        const isActive = activeFilters.includes(f);
-                        return (
-                            <button
-                                key={f}
-                                onClick={() => toggleFilter(f)}
-                                className={`inline-flex items-center gap-2 px-4 py-3 rounded-full border text-[12.5px] font-semibold cursor-pointer whitespace-nowrap transition-all shadow-[0_2px_10px_rgba(6,30,41,0.08)] epilogue-regular ${
-                                    isActive
-                                        ? "border-[#2d2d2d] bg-[#2d2d2d] text-white shadow-[0_3px_14px_rgba(45,45,45,0.22)]"
-                                        : "border-[#E4ECEA] bg-white text-[#6b7280] hover:border-[#427b77]/40 hover:text-[#427b77] hover:shadow-[0_3px_16px_rgba(66,123,119,0.14)]"
-                                }`}
-                            >
-                                <Icon size={16} strokeWidth={2.2} />
-                                {f}
-                            </button>
-                        );
-                    })}
-                </div>
+                {!sidebarOpen && (
+                    <div className="flex gap-2.5 overflow-x-auto scrollbar-none flex-nowrap pb-1">
+                        {FILTERS.map((f) => {
+                            const Icon = FILTER_ICONS[f];
+                            const isActive = activeFilters.includes(f);
+                            return (
+                                <button
+                                    key={f}
+                                    onClick={() => toggleFilter(f)}
+                                    className={`inline-flex items-center gap-2 px-4 py-3 rounded-full border text-[12.5px] font-semibold cursor-pointer whitespace-nowrap transition-all shadow-[0_2px_10px_rgba(6,30,41,0.08)] epilogue-regular ${
+                                        isActive
+                                            ? "border-[#2d2d2d] bg-[#2d2d2d] text-white shadow-[0_3px_14px_rgba(45,45,45,0.22)]"
+                                            : "border-[#E4ECEA] bg-white text-[#6b7280] hover:border-[#427b77]/40 hover:text-[#427b77] hover:shadow-[0_3px_16px_rgba(66,123,119,0.14)]"
+                                    }`}
+                                >
+                                    <Icon size={16} strokeWidth={2.2} />
+                                    {f}
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
 
             {/* ── Bottom card strip ── */}
             <div
                 className="absolute bottom-0 right-0 z-20 pb-[18px] bg-gradient-to-t from-white/97 via-white/80 to-transparent pointer-events-none transition-all duration-300 ease-in-out"
                 style={{
-                    left: sidebarOffset,
+                    left: sidebarOpen ? "min(380px, calc(100vw - 48px))" : "0px",
                 }}
             >
                 <div className="pointer-events-auto">
