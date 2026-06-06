@@ -123,9 +123,9 @@ const NAV_TABS: {
 ];
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
-export default function Navbar() {
+export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
-    const isPickupPage = currentPage === "pickup";
+    const hideSecondaryNav = compact || currentPage === "pickup" || currentPage === "pharmacies";
     const [cartOpen,    setCartOpen]    = useState(false);
     const [accountOpen, setAccountOpen] = useState(false);
     const [langOpen,    setLangOpen]    = useState(false);
@@ -149,7 +149,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
 
             {/* ── Top row ── */}
-            <div className={isPickupPage ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
+            <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
 
                 {/* Logo */}
                 <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
@@ -264,7 +264,7 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {!isPickupPage && (
+            {!hideSecondaryNav && (
                 <div className="flex items-center gap-0.5 pl-12 pr-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                     {NAV_TABS.map((tab, index) => {
                         const isActive = tab.activeOn.includes(currentPage);

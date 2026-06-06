@@ -16,6 +16,8 @@ import {
     AccountPage,
 } from "./pages/OtherPages";
 
+const homeRendersPickupExperience = HomePage.name === "PickupPage";
+
 // ─── Page Router ──────────────────────────────────────────────────────────────
 function PageRouter() {
     const { currentPage } = useApp();
@@ -39,9 +41,15 @@ function PageRouter() {
 
 // ─── App Shell ────────────────────────────────────────────────────────────────
 function AppShell() {
+    const { currentPage } = useApp();
+    const compactNav =
+        currentPage === "pickup" ||
+        currentPage === "pharmacies" ||
+        (currentPage === "home" && homeRendersPickupExperience);
+
     return (
         <div className="min-h-screen bg-white font-['Geist']">
-            <Navbar />
+            <Navbar compact={compactNav} />
             <main>
                 <PageRouter />
             </main>
