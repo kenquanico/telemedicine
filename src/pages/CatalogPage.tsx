@@ -21,13 +21,9 @@ const BRANDS = [
     "Watsons",
 ];
 
-const CATEGORY_TILE_IMAGES: Record<Category, string> = {
-    pain_relief: "https://images.deliveryhero.io/image/foodpanda/cuisine-images/ph/79.png",
-    cold_flu: "https://images.deliveryhero.io/image/foodpanda/cuisine-images/ph/52.png",
-    vitamins: "https://images.deliveryhero.io/image/foodpanda/cuisine-images/ph/1101.png",
-    first_aid: "https://images.deliveryhero.io/image/foodpanda/cuisine-images/ph/1107.png",
-    personal_care: "https://images.deliveryhero.io/image/foodpanda/cuisine-images/ph/164.png",
-};
+function getCategoryImage(category: Category) {
+    return PRODUCTS.find((product) => product.category === category)?.image ?? "";
+}
 
 function CheckRow({
     active,
@@ -43,20 +39,20 @@ function CheckRow({
             onClick={onClick}
             className={`group flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
                 active
-                    ? "bg-[#F0F7F6] font-bold text-[#427b77]"
-                    : "bg-transparent font-medium text-gray-500 hover:bg-[#F7F9F9]"
+                    ? "bg-transparent font-bold text-[#427b77]"
+                    : "bg-transparent font-medium text-gray-500 hover:text-[#2d2d2d]"
             }`}
         >
             <span
                 className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-[4px] border-2 transition-colors duration-150 ${
-                    active ? "border-[#427b77] bg-[#427b77]" : "border-gray-300 bg-transparent"
+                    active ? "border-[#427b77] bg-transparent" : "border-gray-300 bg-transparent"
                 }`}
             >
                 {active && (
                     <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
                         <path
                             d="M1.5 4L3.2 5.7L6.5 2.5"
-                            stroke="white"
+                            stroke="#427b77"
                             strokeWidth="1.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -90,6 +86,7 @@ function CategoryCuisineTile({
     onClick: () => void;
 }) {
     const meta = CATEGORY_META[category];
+    const image = getCategoryImage(category);
 
     return (
         <button
@@ -100,16 +97,22 @@ function CategoryCuisineTile({
             <div
                 className={`cuisine-tile__image common-tile-image relative mb-2 aspect-square overflow-hidden rounded-2xl border transition-all duration-200 ${
                     active
-                        ? "border-[#427b77] bg-[#F0F7F6] shadow-[0_8px_20px_rgba(66,123,119,0.14)]"
+                        ? "border-[#427b77] bg-[#F7F9F9] shadow-[0_8px_20px_rgba(66,123,119,0.10)]"
                         : "border-[#EAEFEE] bg-[#F7F9F9] group-hover:border-[#427b77]"
                 }`}
             >
                 <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-5">
-                    <img
-                        alt=""
-                        className="common-tile-image__logo h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                        src={CATEGORY_TILE_IMAGES[category]}
-                    />
+                    {image.startsWith("http") ? (
+                        <img
+                            alt=""
+                            className="common-tile-image__logo h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                            src={image}
+                        />
+                    ) : (
+                        <span className="text-4xl leading-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
+                            {meta.icon}
+                        </span>
+                    )}
                 </div>
             </div>
             <span className="bds-u-focus-outline__focus-rings" />
