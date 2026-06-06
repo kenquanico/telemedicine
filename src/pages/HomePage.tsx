@@ -1,9 +1,58 @@
 import { useState } from "react";
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
-import { CategoryCard, SectionHeader } from "../components/UI";
+import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
 import FilterPanel from "../components/FilterPanel";
+import type { Category } from "../types";
+
+function getCategoryImage(category: Category) {
+    return PRODUCTS.find((product) => product.category === category)?.image ?? "";
+}
+
+function CategoryImageTile({
+                               category,
+                               onClick,
+                           }: {
+    category: Category;
+    onClick: () => void;
+}) {
+    const meta = CATEGORY_META[category];
+    const image = getCategoryImage(category);
+
+    return (
+        <button
+            onClick={onClick}
+            className="box-flex bds-u-focus-outline cuisine-tile br-base ma-xs group w-[128px] shrink-0 cursor-pointer text-left"
+            data-testid={`home-cuisine-tile-${category}`}
+        >
+            <div className="cuisine-tile__image common-tile-image relative mb-2 aspect-square overflow-hidden rounded-2xl border border-[#EAEFEE] bg-[#F7F9F9] transition-colors duration-200 group-hover:border-[#427b77]">
+                <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-5">
+                    {image.startsWith("http") ? (
+                        <img
+                            alt=""
+                            className="common-tile-image__logo h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                            src={image}
+                        />
+                    ) : (
+                        <span className="text-4xl leading-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
+                            {meta.icon}
+                        </span>
+                    )}
+                </div>
+            </div>
+            <span className="bds-u-focus-outline__focus-rings" />
+            <h4
+                className="cuisine-tile__title mt-xs truncate text-center text-[13px] font-bold text-[#2d2d2d] epilogue-header"
+                id={meta.label}
+                data-testid={`home-cuisine-tile-${category}-title`}
+                title={meta.label}
+            >
+                {meta.label}
+            </h4>
+        </button>
+    );
+}
 
 // ── Medicine Card ────────────────────────────────────────────────────────────
 function VendorMedicineCard({
@@ -24,9 +73,17 @@ function VendorMedicineCard({
         >
             {/* ── Image block ── */}
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-[#F0F5F4] mb-3">
-                <div className="w-full h-full flex items-center justify-center text-5xl select-none transition-transform duration-300 group-hover:scale-105">
-                    {product.image}
-                </div>
+                {typeof product.image === "string" && product.image.startsWith("http") ? (
+                    <img
+                        src={product.image}
+                        alt={product.brandName}
+                        className="h-full w-full select-none object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center text-5xl select-none transition-transform duration-300 group-hover:scale-105">
+                        {product.image}
+                    </div>
+                )}
 
                 {product.discount && (
                     <div className="absolute top-2.5 left-2.5 bg-[#427b77] text-white text-[10px] font-bold px-2 py-0.5 rounded-lg epilogue-header tracking-wide">
@@ -43,7 +100,7 @@ function VendorMedicineCard({
                 <button
                     onClick={(e) => { e.stopPropagation(); setHearted((h) => !h); }}
                     aria-label={hearted ? "Remove from favourites" : "Add to favourites"}
-                    className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center transition-transform duration-150 active:scale-90 hover:scale-110"
+                    className="absolute bottom-2.5 right-[46px] w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm shadow-sm flex items-center justify-center transition-transform duration-150 active:scale-90 hover:scale-110"
                 >
                     <svg width="15" height="15" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -52,6 +109,17 @@ function VendorMedicineCard({
                             d="M12.6217 2.82875C14.6366 3.8152 15.5488 6.39602 14.6592 8.59316C13.5308 11.0256 11.4249 12.9696 8.3415 14.4254C8.15614 14.5107 7.94533 14.5229 7.75273 14.4618L7.65776 14.425C4.57478 12.9693 2.46912 11.0254 1.34078 8.59316C0.451161 6.39602 1.36338 3.8152 3.37828 2.82875C4.83682 2.11468 6.33306 2.64718 7.49473 3.62706C7.55809 3.68051 7.63615 3.75107 7.72889 3.83874L7.72892 3.83871C7.88199 3.98341 8.11731 3.98336 8.27032 3.8386C8.34183 3.77095 8.40276 3.71543 8.45314 3.67203C9.62526 2.66225 11.1429 2.10474 12.6217 2.82875ZM11.8696 4.45404C11.1697 4.11137 10.2881 4.36724 9.41854 5.19403L9.24485 5.36699L8.28326 6.36823C8.12801 6.52989 7.87475 6.53148 7.71758 6.37179C7.71631 6.3705 7.71504 6.36919 7.71378 6.36787L6.75338 5.36542C5.83294 4.40468 4.87775 4.08814 4.13039 4.45404C2.96994 5.02217 2.42026 6.5773 2.92018 7.81797C3.76446 9.63786 5.30414 11.1633 7.59598 12.391L7.82073 12.5071C7.93328 12.5652 8.06585 12.5655 8.17856 12.5077C8.30589 12.4425 8.40456 12.391 8.47457 12.353C10.6006 11.2014 12.0681 9.79624 12.9017 8.18989L13.0437 7.90114C13.5554 6.63747 13.0778 5.16307 12.024 4.53751L11.8696 4.45404Z"
                         />
                     </svg>
+                </button>
+
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onAdd();
+                    }}
+                    aria-label={`Add ${product.brandName} to cart`}
+                    className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-xl leading-none text-[#2d2d2d] shadow-sm backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
+                >
+                    +
                 </button>
             </div>
 
@@ -102,7 +170,7 @@ function VendorMedicineCard({
 
 // ── HomePage ─────────────────────────────────────────────────────────────────
 export default function HomePage() {
-    const { navigateTo, addToCart, showModal, filterOpen } = useApp();
+    const { navigateTo, addToCart, showModal } = useApp();
 
     const handleAddToCart = (productId: string) => {
         const product = PRODUCTS.find((p) => p.id === productId);
@@ -117,8 +185,6 @@ export default function HomePage() {
             onAction: () => navigateTo("cart"),
         });
     };
-
-    const productGridCols = filterOpen ? "grid-cols-3" : "grid-cols-4";
 
     return (
         <>
@@ -176,23 +242,28 @@ export default function HomePage() {
                     {/* ── Categories ── */}
                     <div className="mb-12">
                         <SectionHeader title="Shop by Category" onSeeAll={() => navigateTo("catalog")} />
-                        <div className={`mt-5 grid gap-3.5 ${filterOpen ? "grid-cols-3" : "grid-cols-5"}`}>
-                            {(Object.entries(CATEGORY_META) as [string, { label: string; icon: string; color: string }][]).map(
-                                ([key, meta]) => (
-                                    <CategoryCard
-                                        key={key}
-                                        icon={meta.icon}
-                                        label={meta.label}
-                                        color={meta.color}
-                                        onClick={() => navigateTo("catalog")}
-                                    />
-                                )
-                            )}
+                        <div className="lane-component webrefresh mt-5" data-testid="home-refresh-swimlane">
+                            <div className="lane-wrapper overflow-x-auto pb-1">
+                                <ul
+                                    data-testid="home-cuisine-lane"
+                                    className="cuisine-lane flex gap-3"
+                                    aria-label="Shop by medicine category"
+                                >
+                                    {(Object.keys(CATEGORY_META) as Category[]).map((category) => (
+                                        <li key={category} className="shrink-0">
+                                            <CategoryImageTile
+                                                category={category}
+                                                onClick={() => navigateTo("catalog")}
+                                            />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
                     {/* ── Promo Banners ── */}
-                    <div className={`grid gap-[18px] mb-[52px] ${filterOpen ? "grid-cols-1" : "grid-cols-2"}`}>
+                    <div className="grid grid-cols-1 gap-[18px] mb-[52px]">
                         <div className="relative min-h-[150px] overflow-hidden rounded-[20px] bg-gradient-to-br from-[#1D546D] to-[#427b77] p-8">
                             <div className="absolute -right-7.5 -top-7.5 w-40 h-40 rounded-full bg-white/[0.06]" />
                             <p className="text-[10px] font-extrabold tracking-[0.12em] text-white/50 uppercase mb-2 epilogue-header">Limited Offer</p>
@@ -220,7 +291,7 @@ export default function HomePage() {
                     {/* ── Featured Products ── */}
                     <div className="mb-[52px]">
                         <SectionHeader title="Featured Products" onSeeAll={() => navigateTo("catalog")} />
-                        <div className={`mt-5 grid gap-x-5 gap-y-8 ${productGridCols}`}>
+                        <div className="mt-5 grid grid-cols-3 gap-x-5 gap-y-8">
                             {PRODUCTS.slice(0, 4).map((p) => (
                                 <VendorMedicineCard
                                     key={p.id}
@@ -235,7 +306,7 @@ export default function HomePage() {
                     {/* ── Best Sellers ── */}
                     <div className="mb-16">
                         <SectionHeader title="Best Sellers" onSeeAll={() => navigateTo("catalog")} />
-                        <div className={`mt-5 grid gap-x-5 gap-y-8 ${productGridCols}`}>
+                        <div className="mt-5 grid grid-cols-3 gap-x-5 gap-y-8">
                             {PRODUCTS.slice(4).map((p) => (
                                 <VendorMedicineCard
                                     key={p.id}
@@ -250,24 +321,22 @@ export default function HomePage() {
                 </div>
 
                 {/* ── Filter panel — sticky, scrollable, offset below navbar ── */}
-                {filterOpen && (
-                    <div
-                        className="shrink-0 w-[260px] sticky top-[120px] self-start"
-                        style={{
-                            height: "calc(100vh - 120px)",
-                            overflowY: "auto",
-                            overflowX: "hidden",
-                            scrollbarWidth: "none",
-                        }}
-                    >
-                        <style>{`
-                            .filter-scroll-wrap::-webkit-scrollbar { display: none; }
-                        `}</style>
-                        <div className="filter-scroll-wrap pt-10 pb-10">
-                            <FilterPanel />
-                        </div>
+                <div
+                    className="filter-scroll-wrap shrink-0 w-[260px] sticky top-[120px] self-start"
+                    style={{
+                        height: "calc(100vh - 120px)",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                        scrollbarWidth: "none",
+                    }}
+                >
+                    <style>{`
+                        .filter-scroll-wrap::-webkit-scrollbar { display: none; }
+                    `}</style>
+                    <div className="pt-10 pb-10">
+                        <FilterPanel />
                     </div>
-                )}
+                </div>
 
             </div>
 
