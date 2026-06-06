@@ -126,7 +126,6 @@ const NAV_TABS: {
 export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
     const hideSecondaryNav = compact || currentPage === "pickup" || currentPage === "pharmacies";
-    const isPickupPage = currentPage === "pickup";
     const [cartOpen,    setCartOpen]    = useState(false);
     const [accountOpen, setAccountOpen] = useState(false);
     const [langOpen,    setLangOpen]    = useState(false);
@@ -150,11 +149,11 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
         <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
 
             {/* ── Top row ── */}
-            <div className={hideSecondaryNav ? `px-12 ${isPickupPage ? "py-2" : "py-4"} flex items-center gap-5` : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
+            <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
 
                 {/* Logo */}
                 <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
-                    <img src={Logo} className={`${isPickupPage ? "h-10" : "h-12"} w-auto`} alt="Dosely logo" />
+                    <img src={Logo} className="h-12 w-auto" alt="Dosely logo" />
                 </button>
 
                 {/* Location */}

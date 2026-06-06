@@ -2,14 +2,13 @@ import { useCallback, useState, useEffect, useRef } from "react";
 import {
     MapPin, Search, Star, X, ChevronRight, Clock,
     Truck, CircleParking, Car, Phone,
-    Globe, ExternalLink, ChevronLeft, Locate,
+    Globe, ExternalLink, ChevronLeft, Locate, ChevronDown,
 } from "lucide-react";
 
 const API_KEY = "AIzaSyATaHhW1zDWipZm7SgzjAFNS5j0ta3zDmA";
 
 const FILTERS = ["Open Now", "24 Hours", "Has Parking", "Drive-Through", "Near Me"] as const;
 
-// Semantic icon colors — each color communicates the filter's idea
 const FILTER_META: Record<string, { icon: React.ElementType; color: string; activeColor: string }> = {
     "Open Now":      { icon: Clock,          color: "#059669", activeColor: "#059669" },
     "24 Hours":      { icon: Clock,          color: "#d97706", activeColor: "#d97706" },
@@ -132,7 +131,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
 }
 
 // ── Star rating ───────────────────────────────────────────────────────────────
-function StarRating({ rating, size = 10 }: { rating: number; size?: number }) {
+function StarRating({ rating, size = 11 }: { rating: number; size?: number }) {
     return (
         <div className="flex items-center gap-[2px]">
             {[1, 2, 3, 4, 5].map((i) => {
@@ -160,7 +159,7 @@ function StarRating({ rating, size = 10 }: { rating: number; size?: number }) {
     );
 }
 
-// ── Status indicator — refined, lightweight ───────────────────────────────────
+// ── Status indicator ──────────────────────────────────────────────────────────
 function StatusPill({ openNow }: { openNow: boolean | null }) {
     const cfg = openNow === true
         ? { dot: "#059669", text: "text-emerald-700", bg: "bg-emerald-50", label: "Open now" }
@@ -202,14 +201,12 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                             </span>
                         </div>
                     )}
-                    {/* Back */}
                     <button
                         onClick={onClose}
                         className="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/88 backdrop-blur-sm flex items-center justify-center shadow-sm cursor-pointer hover:bg-white transition-colors border border-black/5"
                     >
                         <ChevronLeft size={15} strokeWidth={2} className="text-[#1a1a1a]" />
                     </button>
-
                 </div>
 
                 {/* Scrollable body */}
@@ -265,7 +262,6 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
 
                     {/* Info rows */}
                     <div className="px-5 py-4 space-y-4 border-b border-[#f2f5f4]">
-                        {/* Hours */}
                         <div className="flex items-start gap-3">
                             <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <Clock size={13} strokeWidth={1.75} className="text-emerald-600" />
@@ -281,7 +277,6 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                             </div>
                         </div>
 
-                        {/* Address */}
                         <div className="flex items-start gap-3">
                             <div className="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                                 <MapPin size={13} strokeWidth={1.75} className="text-violet-500" />
@@ -294,7 +289,6 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                             </div>
                         </div>
 
-                        {/* Delivery */}
                         {pharmacy?.hasFreeDelivery && (
                             <div className="flex items-start gap-3">
                                 <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -308,7 +302,6 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                         )}
                     </div>
 
-                    {/* Tags */}
                     {pharmacy?.types && pharmacy.types.length > 0 && (
                         <div className="px-5 py-4 border-b border-[#f2f5f4]">
                             <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2.5 epilogue-subheader">Category</p>
@@ -356,18 +349,19 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
     return (
         <div
             onClick={onClick}
-            className={`flex-shrink-0 w-[208px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-0.5 ${isSelected ? "-translate-y-1" : ""}`}
+            className={`flex-shrink-0 w-[228px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-0.5 ${isSelected ? "-translate-y-1" : ""}`}
             style={{ scrollSnapAlign: "start" }}
         >
             {/* Thumbnail */}
-            <div className="relative w-full rounded-2xl overflow-hidden bg-[#f0f5f4] mb-2.5"
-                 style={{ height: "116px" }}
+            <div
+                className="relative w-full rounded-2xl overflow-hidden bg-[#f0f5f4] mb-3"
+                style={{ height: "130px" }}
             >
                 {photoUrl ? (
                     <img src={photoUrl} alt={pharmacy.name} className="w-full h-full object-cover" />
                 ) : (
                     <div className="w-full h-full flex items-center justify-center" style={{ background: color + "1c" }}>
-                        <span className="text-[20px] font-black tracking-tight epilogue-header" style={{ color, opacity: 0.7 }}>
+                        <span className="text-[22px] font-black tracking-tight epilogue-header" style={{ color, opacity: 0.7 }}>
                             {getInitials(pharmacy.name)}
                         </span>
                     </div>
@@ -376,21 +370,21 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
 
             {/* Info */}
             <div className="px-0.5">
-                <p className="text-[12.5px] font-bold text-[#1a1a1a] mb-1 truncate epilogue-header">
+                <p className="text-[13px] font-bold text-[#1a1a1a] mb-1.5 truncate epilogue-header">
                     {pharmacy.name}
                 </p>
-                <div className="flex items-center gap-1.5 mb-1.5">
+                <div className="flex items-center gap-1.5 mb-2">
                     {pharmacy.rating && (
-                        <span className="flex items-center gap-[3px] text-[10.5px] font-semibold text-amber-600 epilogue-subheader">
-                            <Star size={9} fill="currentColor" strokeWidth={0} className="text-amber-500" />
+                        <span className="flex items-center gap-[3px] text-[11px] font-semibold text-amber-600 epilogue-subheader">
+                            <Star size={10} fill="currentColor" strokeWidth={0} className="text-amber-500" />
                             {pharmacy.rating}
-                            <span className="font-normal text-gray-400 text-[10px]">({pharmacy.userRatingsTotal}+)</span>
+                            <span className="font-normal text-gray-400 text-[10.5px]">({pharmacy.userRatingsTotal}+)</span>
                         </span>
                     )}
                     <span className="text-gray-200 text-[10px]">·</span>
                     <StatusPill openNow={pharmacy.openNow} />
                 </div>
-                <p className="flex items-center gap-1 text-[10px] text-gray-400 truncate epilogue-regular">
+                <p className="flex items-center gap-1 text-[10.5px] text-gray-400 truncate epilogue-regular">
                     <MapPin size={9} strokeWidth={1.75} className="text-gray-300 flex-shrink-0" />
                     {pharmacy.address || "See on map"}
                 </p>
@@ -411,6 +405,7 @@ export default function PickupPage() {
     const [pharmacies,       setPharmacies]       = useState<Pharmacy[]>([]);
     const [loading,          setLoading]          = useState<boolean>(true);
     const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(null);
+    const [panelVisible,     setPanelVisible]     = useState<boolean>(true);
     const [userLocation]                          = useState<LatLng>({ lat: 10.3157, lng: 123.8854 });
 
     const placeMarkers = useCallback((places: Pharmacy[], map: google.maps.Map): void => {
@@ -513,6 +508,7 @@ export default function PickupPage() {
 
     function handleSelectPharmacy(pharmacy: Pharmacy): void {
         setSelectedPharmacy(pharmacy);
+        if (!panelVisible) setPanelVisible(true);
         if (mapInstance.current) {
             mapInstance.current.panTo({ lat: pharmacy.lat, lng: pharmacy.lng });
             mapInstance.current.setZoom(17);
@@ -527,7 +523,7 @@ export default function PickupPage() {
     const sidebarOpen = !!selectedPharmacy;
 
     return (
-        <div className="relative w-full overflow-hidden epilogue-regular" style={{ height: "calc(100vh - 56px)" }}>
+        <div className="relative w-full overflow-hidden epilogue-regular" style={{ height: "calc(100vh - 80px)" }}>
 
             {/* Map */}
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />
@@ -598,67 +594,108 @@ export default function PickupPage() {
 
             {/* ── Bottom card strip ── */}
             <div
-                className="absolute bottom-0 right-0 z-20 pb-5 pointer-events-none transition-all duration-300 ease-in-out"
+                className="absolute bottom-0 right-0 z-20 pointer-events-none transition-all duration-300 ease-in-out"
                 style={{
                     left: sidebarOpen ? "min(372px, calc(100vw - 48px))" : "0",
-                    background: "linear-gradient(to top, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.85) 60%, transparent 100%)",
                 }}
             >
-                <div className="pointer-events-auto">
-                    {/* Strip header */}
-                    <div className="flex items-center justify-between px-6 pt-4 pb-2">
-                        <div>
-                            <p className="text-[12px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
-                                {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
-                            </p>
+                {/* Gradient backdrop — only shown when panel is visible */}
+                <div
+                    className="transition-opacity duration-300"
+                    style={{
+                        background: "linear-gradient(to top, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.85) 60%, transparent 100%)",
+                        opacity: panelVisible ? 1 : 0,
+                        paddingBottom: panelVisible ? "20px" : "0",
+                    }}
+                >
+                    <div className="pointer-events-auto">
+
+                        {/* ── Toggle + header row ── */}
+                        <div className="flex items-center justify-between px-6 pt-4 pb-2">
+                            <div className="flex items-center gap-3">
+                                {/* Toggle chevron button */}
+                                <button
+                                    onClick={() => setPanelVisible((v) => !v)}
+                                    className="w-7 h-7 rounded-full bg-white border border-[#e8edec] shadow-[0_1px_6px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] hover:border-[#d0e4e2] transition-all flex-shrink-0"
+                                    aria-label={panelVisible ? "Hide pharmacy list" : "Show pharmacy list"}
+                                >
+                                    <ChevronDown
+                                        size={13}
+                                        strokeWidth={2.25}
+                                        className="text-gray-500 transition-transform duration-300"
+                                        style={{ transform: panelVisible ? "rotate(0deg)" : "rotate(180deg)" }}
+                                    />
+                                </button>
+
+                                <div>
+                                    <p className="text-[12.5px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
+                                        {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
+                                    </p>
+                                    {!loading && panelVisible && (
+                                        <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
+                                            Tap a card or map pin for details
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
                             {!loading && (
-                                <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
-                                    Tap a card or map pin for details
-                                </p>
+                                <span className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full epilogue-regular">
+                                    <span className="w-[5px] h-[5px] rounded-full bg-emerald-500 flex-shrink-0" />
+                                    {pharmacies.filter((p) => p.openNow).length} open
+                                </span>
                             )}
                         </div>
-                        {!loading && (
-                            <span
-                                className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full epilogue-regular"
-                            >
-                                <span className="w-[5px] h-[5px] rounded-full bg-emerald-500 flex-shrink-0" />
-                                {pharmacies.filter((p) => p.openNow).length} open
-                            </span>
-                        )}
-                    </div>
 
-                    {/* Cards */}
-                    <div
-                        ref={cardStripRef}
-                        className="flex gap-5 overflow-x-auto pb-2 px-6 scrollbar-none"
-                        style={{ scrollSnapType: "x mandatory" }}
-                    >
-                        {loading ? (
-                            [...Array(5)].map((_, i) => (
-                                <div
-                                    key={i}
-                                    className="flex-shrink-0 w-[208px] rounded-2xl bg-gradient-to-r from-[#f0f5f4] via-[#e5eeec] to-[#f0f5f4] bg-[length:200%_100%] animate-[shimmer_1.4s_ease-in-out_infinite]"
-                                    style={{ height: "176px", animationDelay: `${i * 0.08}s` }}
-                                />
-                            ))
-                        ) : filtered.length === 0 ? (
-                            <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px] epilogue-regular">
-                                <MapPin size={18} strokeWidth={1.5} />
-                                <span>No results found</span>
+                        {/* Cards — slide in/out */}
+                        <div
+                            className="overflow-hidden transition-all duration-300 ease-in-out"
+                            style={{
+                                maxHeight: panelVisible ? "260px" : "0px",
+                                opacity:   panelVisible ? 1 : 0,
+                            }}
+                        >
+                            <div
+                                ref={cardStripRef}
+                                className="flex gap-5 overflow-x-auto pb-2 px-6 scrollbar-none"
+                                style={{ scrollSnapType: "x mandatory" }}
+                            >
+                                {loading ? (
+                                    [...Array(5)].map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex-shrink-0 w-[228px] rounded-2xl bg-gradient-to-r from-[#f0f5f4] via-[#e5eeec] to-[#f0f5f4] bg-[length:200%_100%] animate-[shimmer_1.4s_ease-in-out_infinite]"
+                                            style={{ height: "196px", animationDelay: `${i * 0.08}s` }}
+                                        />
+                                    ))
+                                ) : filtered.length === 0 ? (
+                                    <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px] epilogue-regular">
+                                        <MapPin size={18} strokeWidth={1.5} />
+                                        <span>No results found</span>
+                                    </div>
+                                ) : (
+                                    filtered.map((pharmacy) => (
+                                        <div key={pharmacy.id} className="pharmacy-card-item flex-shrink-0">
+                                            <PharmacyCard
+                                                pharmacy={pharmacy}
+                                                isSelected={selectedPharmacy?.id === pharmacy.id}
+                                                onClick={() => handleSelectPharmacy(pharmacy)}
+                                            />
+                                        </div>
+                                    ))
+                                )}
                             </div>
-                        ) : (
-                            filtered.map((pharmacy) => (
-                                <div key={pharmacy.id} className="pharmacy-card-item flex-shrink-0">
-                                    <PharmacyCard
-                                        pharmacy={pharmacy}
-                                        isSelected={selectedPharmacy?.id === pharmacy.id}
-                                        onClick={() => handleSelectPharmacy(pharmacy)}
-                                    />
-                                </div>
-                            ))
-                        )}
+                        </div>
+
                     </div>
                 </div>
+
+                {/* Collapsed pill — visible only when hidden, always pointer-events-auto */}
+                {!panelVisible && (
+                    <div className="pointer-events-auto px-6 pb-5">
+                        {/* nothing extra needed — toggle button stays in the header row */}
+                    </div>
+                )}
             </div>
 
             <style>{`
