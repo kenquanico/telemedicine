@@ -2,7 +2,8 @@ import { useCallback, useState, useEffect, useRef } from "react";
 import {
     MapPin, Search, Star, X, ChevronRight, Clock,
     Truck, CircleParking, Car, Phone,
-    Globe, ExternalLink, ChevronLeft, Locate, ChevronDown,
+    Globe, ExternalLink, ChevronLeft, Locate, ChevronDown, ChevronUp,
+    Plus, Minus,
 } from "lucide-react";
 
 const API_KEY = "AIzaSyATaHhW1zDWipZm7SgzjAFNS5j0ta3zDmA";
@@ -172,6 +173,58 @@ function StatusPill({ openNow }: { openNow: boolean | null }) {
             <span className="w-[5px] h-[5px] rounded-full flex-shrink-0" style={{ background: cfg.dot }} />
             {cfg.label}
         </span>
+    );
+}
+
+// ── Custom Map Controls ───────────────────────────────────────────────────────
+function MapControls({
+                         onZoomIn,
+                         onZoomOut,
+                         onLocate,
+                         locating,
+                     }: {
+    onZoomIn: () => void;
+    onZoomOut: () => void;
+    onLocate: () => void;
+    locating: boolean;
+}) {
+    return (
+        <div className="absolute right-4 z-20 flex flex-col gap-2.5" style={{ top: "50%", transform: "translateY(-50%)" }}>
+            {/* Zoom group */}
+            <div className="flex flex-col rounded-full shadow-[0_2px_16px_rgba(10,31,30,0.13)] overflow-hidden border border-[#e8edec]">
+                <button
+                    onClick={onZoomIn}
+                    className="w-10 h-10 bg-white flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] active:bg-[#edf5f4] transition-colors border-b border-[#e8edec]"
+                    aria-label="Zoom in"
+                >
+                    <Plus size={16} strokeWidth={2} className="text-[#3d7a75]" />
+                </button>
+                <button
+                    onClick={onZoomOut}
+                    className="w-10 h-10 bg-white flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] active:bg-[#edf5f4] transition-colors"
+                    aria-label="Zoom out"
+                >
+                    <Minus size={16} strokeWidth={2} className="text-[#3d7a75]" />
+                </button>
+            </div>
+
+            {/* Locate button — separated */}
+            <button
+                onClick={onLocate}
+                className={`w-10 h-10 rounded-full border flex items-center justify-center cursor-pointer shadow-[0_2px_16px_rgba(10,31,30,0.13)] transition-all ${
+                    locating
+                        ? "bg-[#3d7a75] border-[#3d7a75]"
+                        : "bg-white border-[#e8edec] hover:bg-[#f6faf9] active:bg-[#edf5f4]"
+                }`}
+                aria-label="My location"
+            >
+                <Locate
+                    size={15}
+                    strokeWidth={2}
+                    className={`transition-colors ${locating ? "text-white" : "text-[#3d7a75]"}`}
+                />
+            </button>
+        </div>
     );
 }
 
@@ -399,6 +452,7 @@ export default function PickupPage() {
     const mapInstance  = useRef<google.maps.Map | null>(null);
     const markersRef   = useRef<google.maps.Marker[]>([]);
     const cardStripRef = useRef<HTMLDivElement>(null);
+    const userLocRef   = useRef<LatLng>({ lat: 10.3157, lng: 123.8854 });
 
     const [searchValue,      setSearchValue]      = useState<string>("");
     const [activeFilters,    setActiveFilters]    = useState<string[]>([]);
@@ -406,7 +460,7 @@ export default function PickupPage() {
     const [loading,          setLoading]          = useState<boolean>(true);
     const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(null);
     const [panelVisible,     setPanelVisible]     = useState<boolean>(true);
-    const [userLocation]                          = useState<LatLng>({ lat: 10.3157, lng: 123.8854 });
+    const [locating,         setLocating]         = useState<boolean>(false);
 
     const placeMarkers = useCallback((places: Pharmacy[], map: google.maps.Map): void => {
         markersRef.current.forEach((m) => m.setMap(null));
@@ -429,12 +483,11 @@ export default function PickupPage() {
 
     const buildMap = useCallback((center: LatLng): void => {
         if (!mapRef.current) return;
+        userLocRef.current = center;
         const map = new window.google.maps.Map(mapRef.current, {
             center,
             zoom: 15,
-            disableDefaultUI: true,
-            zoomControl: true,
-            zoomControlOptions: { position: window.google.maps.ControlPosition.RIGHT_CENTER },
+            disableDefaultUI: true, // disable ALL default controls including zoom
         });
         mapInstance.current = map;
 
@@ -481,9 +534,9 @@ export default function PickupPage() {
         if (!mapRef.current || mapInstance.current) return;
         navigator.geolocation?.getCurrentPosition(
             (pos: GeolocationPosition) => buildMap({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-            () => buildMap(userLocation)
+            () => buildMap(userLocRef.current)
         );
-    }, [buildMap, userLocation]);
+    }, [buildMap]);
 
     useEffect(() => {
         if (window.google) { initMap(); return; }
@@ -494,6 +547,31 @@ export default function PickupPage() {
         document.head.appendChild(script);
         return () => { try { document.head.removeChild(script); } catch { /**/ } };
     }, [initMap]);
+
+    // Custom control handlers
+    const handleZoomIn = useCallback(() => {
+        if (!mapInstance.current) return;
+        mapInstance.current.setZoom((mapInstance.current.getZoom() ?? 15) + 1);
+    }, []);
+
+    const handleZoomOut = useCallback(() => {
+        if (!mapInstance.current) return;
+        mapInstance.current.setZoom((mapInstance.current.getZoom() ?? 15) - 1);
+    }, []);
+
+    const handleLocate = useCallback(() => {
+        if (!mapInstance.current || locating) return;
+        setLocating(true);
+        navigator.geolocation?.getCurrentPosition(
+            (pos) => {
+                const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                mapInstance.current!.panTo(loc);
+                mapInstance.current!.setZoom(16);
+                setLocating(false);
+            },
+            () => setLocating(false)
+        );
+    }, [locating]);
 
     const toggleFilter = (f: string) =>
         setActiveFilters((prev) => prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]);
@@ -530,6 +608,14 @@ export default function PickupPage() {
 
             {/* Sidebar */}
             <PharmacySidebar pharmacy={selectedPharmacy} onClose={() => setSelectedPharmacy(null)} />
+
+            {/* Custom Map Controls */}
+            <MapControls
+                onZoomIn={handleZoomIn}
+                onZoomOut={handleZoomOut}
+                onLocate={handleLocate}
+                locating={locating}
+            />
 
             {/* ── Top bar: search + filters ── */}
             <div
@@ -604,39 +690,22 @@ export default function PickupPage() {
                     className="transition-opacity duration-300"
                     style={{
                         background: "linear-gradient(to top, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.85) 60%, transparent 100%)",
-                        opacity: panelVisible ? 1 : 0,
                         paddingBottom: panelVisible ? "20px" : "0",
                     }}
                 >
                     <div className="pointer-events-auto">
 
-                        {/* ── Toggle + header row ── */}
+                        {/* ── Header row ── */}
                         <div className="flex items-center justify-between px-6 pt-4 pb-2">
-                            <div className="flex items-center gap-3">
-                                {/* Toggle chevron button */}
-                                <button
-                                    onClick={() => setPanelVisible((v) => !v)}
-                                    className="w-7 h-7 rounded-full bg-white border border-[#e8edec] shadow-[0_1px_6px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] hover:border-[#d0e4e2] transition-all flex-shrink-0"
-                                    aria-label={panelVisible ? "Hide pharmacy list" : "Show pharmacy list"}
-                                >
-                                    <ChevronDown
-                                        size={13}
-                                        strokeWidth={2.25}
-                                        className="text-gray-500 transition-transform duration-300"
-                                        style={{ transform: panelVisible ? "rotate(0deg)" : "rotate(180deg)" }}
-                                    />
-                                </button>
-
-                                <div>
-                                    <p className="text-[12.5px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
-                                        {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
+                            <div>
+                                <p className="text-[12.5px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
+                                    {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
+                                </p>
+                                {!loading && panelVisible && (
+                                    <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
+                                        Tap a card or map pin for details
                                     </p>
-                                    {!loading && panelVisible && (
-                                        <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
-                                            Tap a card or map pin for details
-                                        </p>
-                                    )}
-                                </div>
+                                )}
                             </div>
 
                             {!loading && (
@@ -645,6 +714,20 @@ export default function PickupPage() {
                                     {pharmacies.filter((p) => p.openNow).length} open
                                 </span>
                             )}
+                        </div>
+
+                        <div className="flex justify-center px-6 pb-2">
+                            <button
+                                onClick={() => setPanelVisible((v) => !v)}
+                                className="w-8 h-8 rounded-full bg-white border border-[#e8edec] shadow-[0_1px_6px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] hover:border-[#d0e4e2] transition-all"
+                                aria-label={panelVisible ? "Hide pharmacy list" : "Show pharmacy list"}
+                            >
+                                {panelVisible ? (
+                                    <ChevronDown size={14} strokeWidth={2.25} className="text-gray-500" />
+                                ) : (
+                                    <ChevronUp size={14} strokeWidth={2.25} className="text-gray-500" />
+                                )}
+                            </button>
                         </div>
 
                         {/* Cards — slide in/out */}
@@ -690,12 +773,6 @@ export default function PickupPage() {
                     </div>
                 </div>
 
-                {/* Collapsed pill — visible only when hidden, always pointer-events-auto */}
-                {!panelVisible && (
-                    <div className="pointer-events-auto px-6 pb-5">
-                        {/* nothing extra needed — toggle button stays in the header row */}
-                    </div>
-                )}
             </div>
 
             <style>{`
