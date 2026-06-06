@@ -1,7 +1,7 @@
 import  { useState, useRef, useEffect } from "react";
 import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
-import Logo from "../assets/dosely-4.svg";
+import Logo from "../assets/Dosely-1.svg";
 import {
     MapPin,
     Heart,
