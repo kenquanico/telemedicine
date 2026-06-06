@@ -273,7 +273,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 key={tab.label}
                                 onClick={() => navigateTo(tab.navigatesTo)}
                                 className={[
-                                    "nav-tab flex items-center py-4 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular",
+                                    "nav-tab flex items-center py-2 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular",
                                     index === 0 ? "pl-0 pr-6" : "px-6",
                                     isActive ? "nav-tab--active" : "",
                                 ].join(" ")}

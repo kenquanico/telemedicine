@@ -1,25 +1,31 @@
 import { useCallback, useState, useEffect, useRef } from "react";
-import { MapPin, Search, Star, X, ChevronRight, Clock, Truck, CircleParking, Car, Navigation, Phone, Globe, ExternalLink, ChevronLeft } from "lucide-react";
+import {
+    MapPin, Search, Star, X, ChevronRight, Clock,
+    Truck, CircleParking, Car, Navigation, Phone,
+    Globe, ExternalLink, ChevronLeft, Locate,
+} from "lucide-react";
 
 const API_KEY = "AIzaSyATaHhW1zDWipZm7SgzjAFNS5j0ta3zDmA";
 
 const FILTERS = ["Open Now", "24 Hours", "Has Parking", "Drive-Through", "Near Me"] as const;
-const FILTER_ICONS = {
-    "Open Now": Clock,
-    "24 Hours": Clock,
-    "Has Parking": CircleParking,
-    "Drive-Through": Car,
-    "Near Me": Navigation,
-} as const;
+
+// Semantic icon colors — each color communicates the filter's idea
+const FILTER_META: Record<string, { icon: React.ElementType; color: string; activeColor: string }> = {
+    "Open Now":      { icon: Clock,          color: "#059669", activeColor: "#059669" },
+    "24 Hours":      { icon: Clock,          color: "#d97706", activeColor: "#d97706" },
+    "Has Parking":   { icon: CircleParking,  color: "#2563eb", activeColor: "#2563eb" },
+    "Drive-Through": { icon: Car,            color: "#7c3aed", activeColor: "#7c3aed" },
+    "Near Me":       { icon: Locate,         color: "#e11d48", activeColor: "#e11d48" },
+};
 
 const PHARMACY_COLORS: Record<string, string> = {
-    Rose: "#e11d48",
-    Mercury: "#0f766e",
-    Watsons: "#005baa",
-    Generika: "#16a34a",
-    TGP: "#b45309",
+    Rose:         "#e11d48",
+    Mercury:      "#0f766e",
+    Watsons:      "#005baa",
+    Generika:     "#16a34a",
+    TGP:          "#b45309",
     "St. Luke's": "#6d28d9",
-    Default: "#427b77",
+    Default:      "#3d7a75",
 };
 
 const DELIVERY_BRANDS = ["Watsons", "Mercury", "Rose", "Generika"];
@@ -38,10 +44,7 @@ interface Pharmacy {
     types: string[];
 }
 
-interface LatLng {
-    lat: number;
-    lng: number;
-}
+interface LatLng { lat: number; lng: number }
 
 function getBrandColor(name: string): string {
     for (const key of Object.keys(PHARMACY_COLORS)) {
@@ -51,16 +54,11 @@ function getBrandColor(name: string): string {
 }
 
 function getInitials(name: string): string {
-    return name
-        .split(" ")
-        .slice(0, 2)
-        .map((w) => w[0])
-        .join("")
-        .toUpperCase();
+    return name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
 }
 
 function hasFreeDelivery(name: string): boolean {
-    return DELIVERY_BRANDS.some((brand) => name.toLowerCase().includes(brand.toLowerCase()));
+    return DELIVERY_BRANDS.some((b) => name.toLowerCase().includes(b.toLowerCase()));
 }
 
 function getPinLabel(pharmacy: Pharmacy): string {
@@ -69,34 +67,32 @@ function getPinLabel(pharmacy: Pharmacy): string {
 }
 
 function getStatusColor(pharmacy: Pharmacy): string {
-    if (pharmacy.openNow === true) return "#047857";
-    if (pharmacy.openNow === false) return "#b91c1c";
-    return "#6B7280";
+    if (pharmacy.openNow === true)  return "#059669";
+    if (pharmacy.openNow === false) return "#dc2626";
+    return "#9ca3af";
 }
 
 const TRUCK_PATH =
     "M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z";
 
 function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
-    const pinColor = "#427b77";
+    const pinColor    = getBrandColor(pharmacy.name);
     const statusColor = getStatusColor(pharmacy);
-    const label = getPinLabel(pharmacy);
-    const labelWidth = Math.max(92, Math.min(210, label.length * 7 + 42));
-    const x = labelWidth / 2;
+    const label       = getPinLabel(pharmacy);
+    const labelWidth  = Math.max(88, Math.min(200, label.length * 6.8 + 40));
+    const x           = labelWidth / 2;
 
     const escapedLabel = label
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
     let iconPath: string;
-    let iconScale = 0.64;
-    const iconOffsetX = 12;
+    let iconScale    = 0.56;
+    const iconOffsetX = 11;
 
     if (pharmacy.hasFreeDelivery) {
-        iconPath = TRUCK_PATH;
-        iconScale = 0.58;
+        iconPath  = TRUCK_PATH;
+        iconScale = 0.5;
     } else if (pharmacy.openNow === true) {
         iconPath = "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
     } else if (pharmacy.openNow === false) {
@@ -105,57 +101,57 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
         iconPath = "M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z";
     }
 
-    const iconSize = 14;
-    const iconSvg = `<g transform="translate(${iconOffsetX}, ${(34 - iconSize) / 2 + 2}) scale(${iconScale})">
+    const iconSize = 12;
+    const iconSvg  = `<g transform="translate(${iconOffsetX}, ${(32 - iconSize) / 2 + 2}) scale(${iconScale})">
         <path d="${iconPath}" fill="${statusColor}"/>
     </g>`;
 
     const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="${labelWidth}" height="78" viewBox="0 0 ${labelWidth} 78">
+        <svg xmlns="http://www.w3.org/2000/svg" width="${labelWidth}" height="76" viewBox="0 0 ${labelWidth} 76">
             <defs>
-                <filter id="bubbleShadow" x="-20%" y="-20%" width="140%" height="160%">
-                    <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#061e29" flood-opacity="0.13"/>
+                <filter id="s" x="-20%" y="-20%" width="140%" height="160%">
+                    <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0a1f1e" flood-opacity="0.11"/>
                 </filter>
             </defs>
-            <g filter="url(#bubbleShadow)">
-                <rect x="4" y="2" width="${labelWidth - 8}" height="34" rx="14" fill="white" stroke="#E4ECEA" stroke-width="1.25"/>
-                <path d="M${x - 7} 35L${x} 44L${x + 7} 35Z" fill="white" stroke="#E4ECEA" stroke-width="1.25" stroke-linejoin="round"/>
+            <g filter="url(#s)">
+                <rect x="3" y="2" width="${labelWidth - 6}" height="32" rx="12" fill="white" stroke="#e2ecea" stroke-width="1"/>
+                <path d="M${x - 6} 33L${x} 42L${x + 6} 33Z" fill="white" stroke="#e2ecea" stroke-width="1" stroke-linejoin="round"/>
             </g>
             ${iconSvg}
-            <text x="${iconOffsetX + iconSize + 9}" y="23" text-anchor="start" font-family="Epilogue, Arial, sans-serif" font-size="10.5" font-weight="700" fill="#2d2d2d">${escapedLabel}</text>
-            <path d="M${x} 47C${x - 7.5} 47 ${x - 13.5} 53 ${x - 13.5} 60.5c0 9.5 13.5 17.5 13.5 17.5s13.5-8 13.5-17.5C${x + 13.5} 53 ${x + 7.5} 47 ${x} 47z" fill="${pinColor}" fill-opacity="0.58" stroke="white" stroke-width="2"/>
-            <circle cx="${x}" cy="60.5" r="4.5" fill="white" fill-opacity="0.92"/>
-            <circle cx="${x}" cy="60.5" r="2.4" fill="${pinColor}" fill-opacity="0.58"/>
+            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, Arial, sans-serif" font-size="10" font-weight="600" fill="#1a1a1a">${escapedLabel}</text>
+            <path d="M${x} 45C${x - 7} 45 ${x - 12.5} 51 ${x - 12.5} 58c0 9 12.5 17 12.5 17s12.5-8 12.5-17C${x + 12.5} 51 ${x + 7} 45 ${x} 45z" fill="${pinColor}" fill-opacity="0.82" stroke="white" stroke-width="1.75"/>
+            <circle cx="${x}" cy="58" r="4" fill="white" fill-opacity="0.9"/>
+            <circle cx="${x}" cy="58" r="2.1" fill="${pinColor}" fill-opacity="0.82"/>
         </svg>
     `;
 
     return {
-        url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
-        anchor: new window.google.maps.Point(x, 77),
+        url:    `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`,
+        anchor: new window.google.maps.Point(x, 75),
     };
 }
 
-// ── Star rating renderer ───────────────────────────────────────────────────────
-function StarRating({ rating }: { rating: number }) {
+// ── Star rating ───────────────────────────────────────────────────────────────
+function StarRating({ rating, size = 10 }: { rating: number; size?: number }) {
     return (
-        <div className="flex items-center gap-0.5">
+        <div className="flex items-center gap-[2px]">
             {[1, 2, 3, 4, 5].map((i) => {
                 const filled = rating >= i;
-                const half = !filled && rating >= i - 0.5;
+                const half   = !filled && rating >= i - 0.5;
                 return (
-                    <svg key={i} width="11" height="11" viewBox="0 0 24 24" fill="none">
+                    <svg key={i} width={size} height={size} viewBox="0 0 24 24" fill="none">
                         {half ? (
                             <>
                                 <defs>
-                                    <linearGradient id={`half-${i}`}>
-                                        <stop offset="50%" stopColor="#d97706" />
-                                        <stop offset="50%" stopColor="#d1d5db" />
+                                    <linearGradient id={`h${i}`}>
+                                        <stop offset="50%" stopColor="#f59e0b" />
+                                        <stop offset="50%" stopColor="#e5e7eb" />
                                     </linearGradient>
                                 </defs>
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={`url(#half-${i})`} />
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={`url(#h${i})`} />
                             </>
                         ) : (
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={filled ? "#d97706" : "#e5e7eb"} />
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill={filled ? "#f59e0b" : "#e5e7eb"} />
                         )}
                     </svg>
                 );
@@ -164,191 +160,177 @@ function StarRating({ rating }: { rating: number }) {
     );
 }
 
-// ── Detail Sidebar ─────────────────────────────────────────────────────────────
-function PharmacySidebar({
-                             pharmacy,
-                             onClose,
-                         }: {
-    pharmacy: Pharmacy | null;
-    onClose: () => void;
-}) {
-    const color = pharmacy ? getBrandColor(pharmacy.name) : "#427b77";
+// ── Status indicator — refined, lightweight ───────────────────────────────────
+function StatusPill({ openNow }: { openNow: boolean | null }) {
+    const cfg = openNow === true
+        ? { dot: "#059669", text: "text-emerald-700", bg: "bg-emerald-50", label: "Open now" }
+        : openNow === false
+            ? { dot: "#dc2626", text: "text-red-600",     bg: "bg-red-50",     label: "Closed" }
+            : { dot: "#9ca3af", text: "text-gray-500",    bg: "bg-gray-100",   label: "Hours vary" };
+
+    return (
+        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium ${cfg.bg} ${cfg.text}`}>
+            <span className="w-[5px] h-[5px] rounded-full flex-shrink-0" style={{ background: cfg.dot }} />
+            {cfg.label}
+        </span>
+    );
+}
+
+// ── Detail Sidebar ────────────────────────────────────────────────────────────
+function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onClose: () => void }) {
+    const color    = pharmacy ? getBrandColor(pharmacy.name) : "#3d7a75";
     const photoUrl = pharmacy?.photos?.[0]?.getUrl({ maxWidth: 800, maxHeight: 400 });
 
     return (
         <div
-            className={`absolute top-0 left-0 h-full z-30 flex transition-all duration-300 ease-in-out ${
-                pharmacy ? "translate-x-0" : "-translate-x-full"
-            }`}
-            style={{ width: "380px", maxWidth: "calc(100vw - 48px)" }}
+            className={`absolute top-0 left-0 h-full z-30 flex transition-all duration-300 ease-in-out ${pharmacy ? "translate-x-0" : "-translate-x-full"}`}
+            style={{ width: "372px", maxWidth: "calc(100vw - 48px)" }}
         >
-            <div className="w-full h-full bg-white shadow-[4px_0_32px_rgba(6,30,41,0.13)] flex flex-col overflow-hidden">
+            <div className="w-full h-full bg-white shadow-[6px_0_40px_rgba(10,31,30,0.10)] flex flex-col overflow-hidden">
 
-                {/* ── Hero image ── */}
-                <div className="relative flex-shrink-0" style={{ height: "200px" }}>
+                {/* Hero */}
+                <div className="relative flex-shrink-0" style={{ height: "196px" }}>
                     {photoUrl ? (
-                        <img
-                            src={photoUrl}
-                            alt={pharmacy?.name}
-                            className="w-full h-full object-cover"
-                        />
+                        <img src={photoUrl} alt={pharmacy?.name} className="w-full h-full object-cover" />
                     ) : (
                         <div
                             className="w-full h-full flex items-center justify-center"
-                            style={{ background: `linear-gradient(135deg, ${color}18 0%, ${color}30 100%)` }}
+                            style={{ background: `linear-gradient(140deg, ${color}14 0%, ${color}28 100%)` }}
                         >
-                            <span
-                                className="text-[52px] font-black tracking-tight select-none"
-                                style={{ color, opacity: 0.35 }}
-                            >
+                            <span className="text-[56px] font-black tracking-tight select-none" style={{ color, opacity: 0.22 }}>
                                 {pharmacy ? getInitials(pharmacy.name) : ""}
                             </span>
                         </div>
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
 
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-                    {/* Close button */}
+                    {/* Back */}
                     <button
                         onClick={onClose}
-                        className="absolute top-3.5 left-3.5 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm border border-white/50 flex items-center justify-center shadow-md cursor-pointer hover:bg-white transition-colors"
+                        className="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/88 backdrop-blur-sm flex items-center justify-center shadow-sm cursor-pointer hover:bg-white transition-colors border border-black/5"
                     >
-                        <ChevronLeft size={16} strokeWidth={2.5} className="text-[#2d2d2d]" />
+                        <ChevronLeft size={15} strokeWidth={2} className="text-[#1a1a1a]" />
                     </button>
 
-                    {/* Free delivery badge */}
+                    {/* Delivery badge */}
                     {pharmacy?.hasFreeDelivery && (
-                        <span className="absolute top-3.5 right-3.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-blue-600 text-white shadow-md">
-                            <Truck size={11} strokeWidth={2.5} />
+                        <span className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10.5px] font-semibold bg-blue-600 text-white shadow-sm">
+                            <Truck size={10} strokeWidth={2} className="text-blue-200" />
                             Free Delivery
                         </span>
                     )}
 
-                    {/* Status badge bottom-left on hero */}
+                    {/* Status */}
                     {pharmacy && (
-                        <span
-                            className={`absolute bottom-3.5 left-3.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold backdrop-blur-sm shadow-sm ${
-                                pharmacy.openNow === true
-                                    ? "bg-emerald-500/90 text-white"
-                                    : pharmacy.openNow === false
-                                        ? "bg-red-500/90 text-white"
-                                        : "bg-white/80 text-gray-600"
-                            }`}
-                        >
-                            <span className="w-[5px] h-[5px] rounded-full bg-current opacity-90" />
-                            {pharmacy.openNow === true ? "Open Now" : pharmacy.openNow === false ? "Closed" : "Hours Vary"}
-                        </span>
+                        <div className="absolute bottom-4 left-4">
+                            <StatusPill openNow={pharmacy.openNow} />
+                        </div>
                     )}
                 </div>
 
-                {/* ── Scrollable body ── */}
+                {/* Scrollable body */}
                 <div className="flex-1 overflow-y-auto scrollbar-none">
 
-                    {/* Name + rating block */}
-                    <div className="px-5 pt-5 pb-4 border-b border-[#f0f4f3]">
+                    {/* Name block */}
+                    <div className="px-5 pt-5 pb-4 border-b border-[#f2f5f4]">
                         <div className="flex items-start gap-3 mb-3">
-                            {/* Brand avatar */}
                             <div
-                                className="w-11 h-11 rounded-[13px] flex items-center justify-center text-[13px] font-extrabold flex-shrink-0 mt-0.5"
-                                style={{ background: color + "18", color }}
+                                className="w-10 h-10 rounded-[11px] flex items-center justify-center text-[12px] font-bold flex-shrink-0 mt-0.5"
+                                style={{ background: color + "14", color }}
                             >
                                 {pharmacy ? getInitials(pharmacy.name) : ""}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h2 className="text-[17px] font-black text-[#2d2d2d] leading-snug tracking-[-0.02em] epilogue-header mb-0.5">
+                                <h2 className="text-[16px] font-extrabold text-[#1a1a1a] leading-snug tracking-[-0.025em] mb-0.5" style={{ fontFamily: "Epilogue, sans-serif" }}>
                                     {pharmacy?.name}
                                 </h2>
-                                <p className="flex items-start gap-1 text-[12px] text-gray-400 leading-relaxed">
-                                    <MapPin size={11} strokeWidth={2} className="flex-shrink-0 mt-0.5" />
+                                <p className="flex items-start gap-1 text-[11.5px] text-gray-400 leading-relaxed">
+                                    <MapPin size={10} strokeWidth={2} className="flex-shrink-0 mt-0.5 text-gray-400" />
                                     {pharmacy?.address || "See on map"}
                                 </p>
                             </div>
                         </div>
 
-                        {/* Rating row */}
                         {pharmacy?.rating && (
-                            <div className="flex items-center gap-2 mt-3">
-                                <span className="text-[15px] font-black text-[#2d2d2d] tracking-tight">
-                                    {pharmacy.rating}
-                                </span>
+                            <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#f2f5f4]">
+                                <span className="text-[14px] font-bold text-[#1a1a1a] tracking-tight">{pharmacy.rating}</span>
                                 <StarRating rating={pharmacy.rating} />
-                                <span className="text-[12px] text-gray-400">
-                                    ({pharmacy.userRatingsTotal.toLocaleString()}+ reviews)
+                                <span className="text-[11px] text-gray-400">
+                                    {pharmacy.userRatingsTotal.toLocaleString()}+ reviews
                                 </span>
                             </div>
                         )}
                     </div>
 
-                    {/* Quick action chips */}
-                    <div className="px-5 py-4 flex gap-2.5 border-b border-[#f0f4f3]">
+                    {/* Quick actions */}
+                    <div className="px-5 py-4 flex gap-2 border-b border-[#f2f5f4]">
                         {[
-                            { icon: Phone, label: "Call" },
-                            { icon: Globe, label: "Website" },
-                            { icon: ExternalLink, label: "Directions" },
-                        ].map(({ icon: Icon, label }) => (
+                            { icon: Phone,       label: "Call",       color: "#059669" },
+                            { icon: Globe,       label: "Website",    color: "#2563eb" },
+                            { icon: ExternalLink,label: "Directions", color: "#7c3aed" },
+                        ].map(({ icon: Icon, label, color: ic }) => (
                             <button
                                 key={label}
-                                className="flex-1 flex flex-col items-center gap-1.5 py-2.5 rounded-xl border border-[#E4ECEA] bg-[#f8fafa] cursor-pointer hover:border-[#427b77]/30 hover:bg-[#f0f9f8] transition-all group"
+                                className="flex-1 flex flex-col items-center gap-1.5 py-2.5 rounded-xl border border-[#edf0ef] bg-[#fafbfb] cursor-pointer hover:border-[#d4e4e2] hover:bg-[#f3f8f7] transition-all"
                             >
-                                <Icon size={16} strokeWidth={2} className="text-[#427b77] group-hover:scale-110 transition-transform" />
-                                <span className="text-[10.5px] font-semibold text-gray-500 epilogue-regular">{label}</span>
+                                <Icon size={15} strokeWidth={1.75} style={{ color: ic }} />
+                                <span className="text-[10px] font-medium text-gray-500" style={{ fontFamily: "Epilogue, sans-serif" }}>{label}</span>
                             </button>
                         ))}
                     </div>
 
                     {/* Info rows */}
-                    <div className="px-5 py-4 space-y-3.5 border-b border-[#f0f4f3]">
+                    <div className="px-5 py-4 space-y-4 border-b border-[#f2f5f4]">
+                        {/* Hours */}
                         <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[#f0f4f3] flex items-center justify-center flex-shrink-0">
-                                <Clock size={14} strokeWidth={2} className="text-[#427b77]" />
+                            <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <Clock size={13} strokeWidth={1.75} className="text-emerald-600" />
                             </div>
-                            <div className="flex-1 min-w-0 pt-1">
-                                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Hours</p>
-                                <p className={`text-[13px] font-semibold ${
+                            <div className="pt-0.5">
+                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Hours</p>
+                                <p className={`text-[12.5px] font-semibold ${
                                     pharmacy?.openNow === true ? "text-emerald-700" :
                                         pharmacy?.openNow === false ? "text-red-600" : "text-gray-500"
                                 }`}>
-                                    {pharmacy?.openNow === true ? "Open Now" : pharmacy?.openNow === false ? "Closed" : "Hours vary"}
+                                    {pharmacy?.openNow === true ? "Open now" : pharmacy?.openNow === false ? "Closed" : "Hours vary"}
                                 </p>
                             </div>
                         </div>
 
+                        {/* Address */}
                         <div className="flex items-start gap-3">
-                            <div className="w-8 h-8 rounded-lg bg-[#f0f4f3] flex items-center justify-center flex-shrink-0">
-                                <MapPin size={14} strokeWidth={2} className="text-[#427b77]" />
+                            <div className="w-7 h-7 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <MapPin size={13} strokeWidth={1.75} className="text-violet-500" />
                             </div>
-                            <div className="flex-1 min-w-0 pt-1">
-                                <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Address</p>
-                                <p className="text-[13px] font-medium text-[#2d2d2d] leading-snug">
+                            <div className="pt-0.5">
+                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Address</p>
+                                <p className="text-[12.5px] font-medium text-[#1a1a1a] leading-snug">
                                     {pharmacy?.address || "Not available"}
                                 </p>
                             </div>
                         </div>
 
+                        {/* Delivery */}
                         {pharmacy?.hasFreeDelivery && (
                             <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                    <Truck size={14} strokeWidth={2} className="text-blue-600" />
+                                <div className="w-7 h-7 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <Truck size={13} strokeWidth={1.75} className="text-blue-500" />
                                 </div>
-                                <div className="flex-1 min-w-0 pt-1">
-                                    <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-0.5">Delivery</p>
-                                    <p className="text-[13px] font-semibold text-blue-600">Free delivery available</p>
+                                <div className="pt-0.5">
+                                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Delivery</p>
+                                    <p className="text-[12.5px] font-semibold text-blue-600">Free delivery available</p>
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    {/* Tags / types */}
+                    {/* Tags */}
                     {pharmacy?.types && pharmacy.types.length > 0 && (
-                        <div className="px-5 py-4 border-b border-[#f0f4f3]">
-                            <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-2.5">Category</p>
+                        <div className="px-5 py-4 border-b border-[#f2f5f4]">
+                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2.5">Category</p>
                             <div className="flex flex-wrap gap-1.5">
                                 {pharmacy.types.slice(0, 5).map((t) => (
-                                    <span
-                                        key={t}
-                                        className="px-2.5 py-1 rounded-full text-[11px] font-medium bg-[#f0f4f3] text-gray-500 capitalize"
-                                    >
+                                    <span key={t} className="px-2.5 py-[3px] rounded-full text-[10.5px] font-medium bg-[#f2f5f4] text-gray-500 capitalize">
                                         {t.replace(/_/g, " ")}
                                     </span>
                                 ))}
@@ -356,15 +338,22 @@ function PharmacySidebar({
                         </div>
                     )}
 
-                    {/* Spacer so CTA doesn't overlap content */}
                     <div className="h-4" />
                 </div>
 
-                {/* ── Sticky CTA ── */}
-                <div className="flex-shrink-0 px-5 py-4 border-t border-[#f0f4f3] bg-white">
-                    <button className="w-full bg-[#2d2d2d] text-white border-none rounded-xl py-3.5 px-4 text-[13px] font-bold cursor-pointer flex items-center justify-center gap-2 hover:bg-[#427b77] transition-colors font-[inherit] tracking-[-0.01em]">
+                {/* CTA */}
+                <div className="flex-shrink-0 px-5 py-4 border-t border-[#f2f5f4] bg-white">
+                    <button
+                        className="w-full rounded-xl py-3 px-4 text-[13px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all tracking-[-0.01em]"
+                        style={{
+                            background: color,
+                            color: "white",
+                            fontFamily: "Epilogue, sans-serif",
+                            boxShadow: `0 4px 16px ${color}38`,
+                        }}
+                    >
                         Reserve for Pickup
-                        <ChevronRight size={15} strokeWidth={2.5} />
+                        <ChevronRight size={14} strokeWidth={2.5} />
                     </button>
                 </div>
             </div>
@@ -372,71 +361,62 @@ function PharmacySidebar({
     );
 }
 
-// ── Pharmacy card ─────────────────────────────────────────────────────────────
-function PharmacyCard({
-                          pharmacy,
-                          isSelected,
-                          onClick,
-                      }: {
+// ── Pharmacy Card ─────────────────────────────────────────────────────────────
+function PharmacyCard({ pharmacy, isSelected, onClick }: {
     pharmacy: Pharmacy;
     isSelected: boolean;
     onClick: () => void;
 }) {
-    const color = getBrandColor(pharmacy.name);
+    const color    = getBrandColor(pharmacy.name);
     const photoUrl = pharmacy.photos?.[0]?.getUrl({ maxWidth: 400, maxHeight: 225 });
 
     return (
         <div
             onClick={onClick}
-            className={`flex-shrink-0 w-[214px] cursor-pointer scroll-snap-start transition-transform duration-200 ease-out hover:-translate-y-0.5 ${isSelected ? "-translate-y-1" : ""}`}
+            className={`flex-shrink-0 w-[208px] cursor-pointer transition-transform duration-200 ease-out hover:-translate-y-0.5 ${isSelected ? "-translate-y-1" : ""}`}
+            style={{ scrollSnapAlign: "start" }}
         >
-            <div
-                className={`relative w-full h-[122px] rounded-2xl overflow-hidden bg-[#f0f4f3] mb-2.5 ${
-                    isSelected ? "ring-2 ring-[#427b77]/30" : ""
-                }`}
+            {/* Thumbnail */}
+            <div className={`relative w-full rounded-2xl overflow-hidden bg-[#f0f5f4] mb-2.5 ${isSelected ? "ring-2 ring-offset-1" : ""}`}
+                 style={{ height: "116px", ...(isSelected ? { "--tw-ring-color": color + "50" } as React.CSSProperties : {}) }}
             >
                 {photoUrl ? (
                     <img src={photoUrl} alt={pharmacy.name} className="w-full h-full object-cover" />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center" style={{ background: color + "22" }}>
-                        <span className="text-[22px] font-black tracking-tight" style={{ color }}>
+                    <div className="w-full h-full flex items-center justify-center" style={{ background: color + "1c" }}>
+                        <span className="text-[20px] font-black tracking-tight" style={{ color, opacity: 0.7, fontFamily: "Epilogue, sans-serif" }}>
                             {getInitials(pharmacy.name)}
                         </span>
                     </div>
                 )}
                 {pharmacy.hasFreeDelivery && (
-                    <span className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-600">
-                        <Truck size={10} strokeWidth={2.5} /> Free
+                    <span className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9.5px] font-semibold bg-white/90 text-blue-600 shadow-sm">
+                        <Truck size={9} strokeWidth={2} className="text-blue-500" />
+                        Free
                     </span>
                 )}
+                {/* Subtle gradient at bottom */}
+                <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
             </div>
 
+            {/* Info */}
             <div className="px-0.5">
-                <p className="text-[13px] font-bold text-[#2d2d2d] mb-1 truncate">{pharmacy.name}</p>
+                <p className="text-[12.5px] font-bold text-[#1a1a1a] mb-1 truncate" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                    {pharmacy.name}
+                </p>
                 <div className="flex items-center gap-1.5 mb-1.5">
                     {pharmacy.rating && (
-                        <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-700">
-                            <Star size={10} fill="currentColor" strokeWidth={0} />
+                        <span className="flex items-center gap-[3px] text-[10.5px] font-semibold text-amber-600" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                            <Star size={9} fill="currentColor" strokeWidth={0} className="text-amber-500" />
                             {pharmacy.rating}
                             <span className="font-normal text-gray-400 text-[10px]">({pharmacy.userRatingsTotal}+)</span>
                         </span>
                     )}
-                    <span className="text-gray-300 text-[10px]">•</span>
-                    <span
-                        className={`flex items-center gap-1 text-[11px] font-medium ${
-                            pharmacy.openNow === true
-                                ? "text-emerald-700"
-                                : pharmacy.openNow === false
-                                    ? "text-red-700"
-                                    : "text-gray-500"
-                        }`}
-                    >
-                        <Clock size={9} strokeWidth={2.5} />
-                        {pharmacy.openNow === true ? "Open" : pharmacy.openNow === false ? "Closed" : "Hours vary"}
-                    </span>
+                    <span className="text-gray-200 text-[10px]">·</span>
+                    <StatusPill openNow={pharmacy.openNow} />
                 </div>
-                <p className="flex items-center gap-1 text-[10.5px] text-gray-400 truncate">
-                    <MapPin size={10} strokeWidth={2} />
+                <p className="flex items-center gap-1 text-[10px] text-gray-400 truncate" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                    <MapPin size={9} strokeWidth={1.75} className="text-gray-300 flex-shrink-0" />
                     {pharmacy.address || "See on map"}
                 </p>
             </div>
@@ -444,134 +424,112 @@ function PharmacyCard({
     );
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 export default function PickupPage() {
-    const mapRef = useRef<HTMLDivElement>(null);
-    const mapInstance = useRef<google.maps.Map | null>(null);
-    const markersRef = useRef<google.maps.Marker[]>([]);
+    const mapRef       = useRef<HTMLDivElement>(null);
+    const mapInstance  = useRef<google.maps.Map | null>(null);
+    const markersRef   = useRef<google.maps.Marker[]>([]);
     const cardStripRef = useRef<HTMLDivElement>(null);
 
-    const [searchValue, setSearchValue] = useState<string>("");
-    const [activeFilters, setActiveFilters] = useState<string[]>([]);
-    const [pharmacies, setPharmacies] = useState<Pharmacy[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [searchValue,      setSearchValue]      = useState<string>("");
+    const [activeFilters,    setActiveFilters]    = useState<string[]>([]);
+    const [pharmacies,       setPharmacies]       = useState<Pharmacy[]>([]);
+    const [loading,          setLoading]          = useState<boolean>(true);
     const [selectedPharmacy, setSelectedPharmacy] = useState<Pharmacy | null>(null);
-    const [userLocation] = useState<LatLng>({ lat: 10.3157, lng: 123.8854 });
+    const [userLocation]                          = useState<LatLng>({ lat: 10.3157, lng: 123.8854 });
 
     const placeMarkers = useCallback((places: Pharmacy[], map: google.maps.Map): void => {
         markersRef.current.forEach((m) => m.setMap(null));
         markersRef.current = [];
-
         places.forEach((place) => {
             const marker = new window.google.maps.Marker({
                 position: { lat: place.lat, lng: place.lng },
                 map,
-                icon: getMarkerIcon(place),
-                title: place.name,
+                icon:   getMarkerIcon(place),
+                title:  place.name,
                 zIndex: 100,
             });
-
             marker.addListener("click", () => {
                 setSelectedPharmacy(place);
                 map.panTo({ lat: place.lat, lng: place.lng });
             });
-
             markersRef.current.push(marker);
         });
     }, []);
 
-    const buildMap = useCallback(
-        (center: LatLng): void => {
-            if (!mapRef.current) return;
+    const buildMap = useCallback((center: LatLng): void => {
+        if (!mapRef.current) return;
+        const map = new window.google.maps.Map(mapRef.current, {
+            center,
+            zoom: 15,
+            disableDefaultUI: true,
+            zoomControl: true,
+            zoomControlOptions: { position: window.google.maps.ControlPosition.RIGHT_CENTER },
+        });
+        mapInstance.current = map;
 
-            const map = new window.google.maps.Map(mapRef.current, {
-                center,
-                zoom: 15,
-                disableDefaultUI: true,
-                zoomControl: true,
-                zoomControlOptions: { position: window.google.maps.ControlPosition.RIGHT_CENTER },
-            });
-
-            mapInstance.current = map;
-
-            const service = new window.google.maps.places.PlacesService(map);
-            service.nearbySearch(
-                { location: center, radius: 2000, keyword: "pharmacy drugstore" },
-                (
-                    results: google.maps.places.PlaceResult[] | null,
-                    status: google.maps.places.PlacesServiceStatus
-                ) => {
-                    if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
-                        const formatted: Pharmacy[] = results.map((p) => ({
-                            id: p.place_id!,
-                            name: p.name!,
-                            address: p.vicinity!,
-                            lat: p.geometry!.location!.lat(),
-                            lng: p.geometry!.location!.lng(),
-                            rating: p.rating ?? null,
-                            userRatingsTotal: p.user_ratings_total ?? 0,
-                            openNow: p.opening_hours?.open_now ?? null,
-                            hasFreeDelivery: hasFreeDelivery(p.name!),
-                            photos: p.photos,
-                            types: p.types ?? [],
-                        }));
-                        setPharmacies(formatted);
-                        placeMarkers(formatted, map);
-                    }
-                    setLoading(false);
+        const service = new window.google.maps.places.PlacesService(map);
+        service.nearbySearch(
+            { location: center, radius: 2000, keyword: "pharmacy drugstore" },
+            (results: google.maps.places.PlaceResult[] | null, status: google.maps.places.PlacesServiceStatus) => {
+                if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
+                    const formatted: Pharmacy[] = results.map((p) => ({
+                        id:               p.place_id!,
+                        name:             p.name!,
+                        address:          p.vicinity!,
+                        lat:              p.geometry!.location!.lat(),
+                        lng:              p.geometry!.location!.lng(),
+                        rating:           p.rating ?? null,
+                        userRatingsTotal: p.user_ratings_total ?? 0,
+                        openNow:          p.opening_hours?.open_now ?? null,
+                        hasFreeDelivery:  hasFreeDelivery(p.name!),
+                        photos:           p.photos,
+                        types:            p.types ?? [],
+                    }));
+                    setPharmacies(formatted);
+                    placeMarkers(formatted, map);
                 }
-            );
+                setLoading(false);
+            }
+        );
 
-            new window.google.maps.Marker({
-                position: center,
-                map,
-                icon: {
-                    path: window.google.maps.SymbolPath.CIRCLE,
-                    scale: 10,
-                    fillColor: "#427b77",
-                    fillOpacity: 1,
-                    strokeColor: "#ffffff",
-                    strokeWeight: 3,
-                },
-                zIndex: 999,
-            });
-        },
-        [placeMarkers]
-    );
+        new window.google.maps.Marker({
+            position: center, map,
+            icon: {
+                path:         window.google.maps.SymbolPath.CIRCLE,
+                scale:        9,
+                fillColor:    "#3d7a75",
+                fillOpacity:  1,
+                strokeColor:  "#ffffff",
+                strokeWeight: 2.5,
+            },
+            zIndex: 999,
+        });
+    }, [placeMarkers]);
 
     const initMap = useCallback((): void => {
         if (!mapRef.current || mapInstance.current) return;
-
         navigator.geolocation?.getCurrentPosition(
-            (pos: GeolocationPosition) => {
-                buildMap({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-            },
+            (pos: GeolocationPosition) => buildMap({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
             () => buildMap(userLocation)
         );
     }, [buildMap, userLocation]);
 
     useEffect(() => {
-        if (window.google) {
-            initMap();
-            return;
-        }
-        const script = document.createElement("script");
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
-        script.async = true;
-        script.onload = initMap;
+        if (window.google) { initMap(); return; }
+        const script    = document.createElement("script");
+        script.src      = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
+        script.async    = true;
+        script.onload   = initMap;
         document.head.appendChild(script);
-        return () => {
-            try { document.head.removeChild(script); } catch { /* already removed */ }
-        };
+        return () => { try { document.head.removeChild(script); } catch { /**/ } };
     }, [initMap]);
 
-    const toggleFilter = (f: string) => {
-        setActiveFilters((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
-    };
+    const toggleFilter = (f: string) =>
+        setActiveFilters((prev) => prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]);
 
     const filtered = pharmacies.filter((p) => {
-        const matchSearch =
-            !searchValue ||
+        const matchSearch = !searchValue ||
             p.name.toLowerCase().includes(searchValue.toLowerCase()) ||
             p.address?.toLowerCase().includes(searchValue.toLowerCase());
         const matchOpen = !activeFilters.includes("Open Now") || p.openNow === true;
@@ -591,73 +549,72 @@ export default function PickupPage() {
         }
     }
 
-    // Sidebar open pushes bottom strip right-padding on desktop
     const sidebarOpen = !!selectedPharmacy;
 
     return (
         <div className="relative w-full overflow-hidden" style={{ height: "calc(100vh - 76px)" }}>
 
-            {/* ── Full-screen map ── */}
+            {/* Map */}
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />
 
-            {/* ── Detail Sidebar ── */}
-            <PharmacySidebar
-                pharmacy={selectedPharmacy}
-                onClose={() => setSelectedPharmacy(null)}
-            />
+            {/* Sidebar */}
+            <PharmacySidebar pharmacy={selectedPharmacy} onClose={() => setSelectedPharmacy(null)} />
 
-            {/* ── Top overlay: search + filter pills ── */}
+            {/* ── Top bar: search + filters ── */}
             <div
-                className="absolute top-5 z-20 flex items-center gap-3 transition-all duration-300 ease-in-out"
+                className="absolute top-5 z-20 flex items-center gap-2.5 transition-all duration-300 ease-in-out"
                 style={{
-                    left: sidebarOpen ? "calc(min(380px, calc(100vw - 48px)) + 16px)" : "20px",
+                    left: sidebarOpen ? "calc(min(372px, calc(100vw - 48px)) + 16px)" : "20px",
                     maxWidth: sidebarOpen
-                        ? "calc(100vw - min(380px, calc(100vw - 48px)) - 36px)"
+                        ? "calc(100vw - min(372px, calc(100vw - 48px)) - 36px)"
                         : "calc(100vw - 40px)",
                     overflow: "hidden",
                 }}
             >
-                {/* Search */}
+                {/* Search bar */}
                 <div className="relative flex items-center flex-shrink-0">
-                    <Search
-                        size={17}
-                        strokeWidth={2}
-                        className="absolute left-3.5 text-[#427b77] opacity-70 pointer-events-none"
-                    />
+                    <Search size={14} strokeWidth={1.75} className="absolute left-3.5 pointer-events-none" style={{ color: "#3d7a75", opacity: 0.65 }} />
                     <input
                         type="text"
                         value={searchValue}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
-                        placeholder="Search pharmacies..."
-                        className="w-72 pl-10 pr-10 py-3 rounded-full border border-[#E4ECEA] bg-white text-[13px] text-[#2d2d2d] placeholder-[#2d2d2d]/40 outline-none shadow-[0_4px_18px_rgba(6,30,41,0.10)] focus:border-[#427b77]/50 focus:shadow-[0_4px_24px_rgba(66,123,119,0.20)] transition-all epilogue-regular"
+                        placeholder="Search pharmacies…"
+                        className="w-64 pl-9 pr-9 py-[10px] rounded-full border border-[#e8edec] bg-white text-[12.5px] text-[#1a1a1a] placeholder-[#1a1a1a]/35 outline-none shadow-[0_2px_16px_rgba(10,31,30,0.09)] focus:border-[#3d7a75]/40 focus:shadow-[0_2px_20px_rgba(61,122,117,0.16)] transition-all"
+                        style={{ fontFamily: "Epilogue, sans-serif" }}
                     />
                     {searchValue && (
                         <button
                             onClick={() => setSearchValue("")}
-                            className="absolute right-3 w-5 h-5 rounded-full bg-[#427b77]/10 border-none cursor-pointer flex items-center justify-center text-[#427b77] hover:bg-[#427b77]/20 transition-colors"
+                            className="absolute right-3 w-[18px] h-[18px] rounded-full border-none cursor-pointer flex items-center justify-center transition-colors"
+                            style={{ background: "rgba(61,122,117,0.10)", color: "#3d7a75" }}
                         >
-                            <X size={12} strokeWidth={2.5} />
+                            <X size={10} strokeWidth={2} />
                         </button>
                     )}
                 </div>
 
                 {/* Filter pills */}
                 {!sidebarOpen && (
-                    <div className="flex gap-2.5 overflow-x-auto scrollbar-none flex-nowrap pb-1">
+                    <div className="flex gap-2 overflow-x-auto scrollbar-none flex-nowrap">
                         {FILTERS.map((f) => {
-                            const Icon = FILTER_ICONS[f];
+                            const { icon: Icon, color: ic } = FILTER_META[f];
                             const isActive = activeFilters.includes(f);
                             return (
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-2 px-4 py-3 rounded-full border text-[12.5px] font-semibold cursor-pointer whitespace-nowrap transition-all shadow-[0_2px_10px_rgba(6,30,41,0.08)] epilogue-regular ${
+                                    className={`inline-flex items-center gap-1.5 px-3 py-[9px] rounded-full border text-[11.5px] font-medium cursor-pointer whitespace-nowrap transition-all shadow-[0_1px_8px_rgba(10,31,30,0.07)] ${
                                         isActive
-                                            ? "border-[#2d2d2d] bg-[#2d2d2d] text-white shadow-[0_3px_14px_rgba(45,45,45,0.22)]"
-                                            : "border-[#E4ECEA] bg-white text-[#6b7280] hover:border-[#427b77]/40 hover:text-[#427b77] hover:shadow-[0_3px_16px_rgba(66,123,119,0.14)]"
+                                            ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-[0_2px_12px_rgba(26,26,26,0.20)]"
+                                            : "border-[#e8edec] bg-white text-gray-500 hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
                                     }`}
+                                    style={{ fontFamily: "Epilogue, sans-serif" }}
                                 >
-                                    <Icon size={16} strokeWidth={2.2} />
+                                    <Icon
+                                        size={12}
+                                        strokeWidth={1.75}
+                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic }}
+                                    />
                                     {f}
                                 </button>
                             );
@@ -668,46 +625,58 @@ export default function PickupPage() {
 
             {/* ── Bottom card strip ── */}
             <div
-                className="absolute bottom-0 right-0 z-20 pb-[18px] bg-gradient-to-t from-white/97 via-white/80 to-transparent pointer-events-none transition-all duration-300 ease-in-out"
+                className="absolute bottom-0 right-0 z-20 pb-5 pointer-events-none transition-all duration-300 ease-in-out"
                 style={{
-                    left: sidebarOpen ? "min(380px, calc(100vw - 48px))" : "0px",
+                    left: sidebarOpen ? "min(372px, calc(100vw - 48px))" : "0",
+                    background: "linear-gradient(to top, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.85) 60%, transparent 100%)",
                 }}
             >
                 <div className="pointer-events-auto">
-                    {/* Header */}
-                    <div className="flex items-center justify-between px-6 py-3">
-                        <p className="text-[13px] font-bold text-[#2d2d2d] tracking-[-0.01em] epilogue-header">
-                            {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
-                        </p>
+                    {/* Strip header */}
+                    <div className="flex items-center justify-between px-6 pt-4 pb-2">
+                        <div>
+                            <p className="text-[12px] font-bold text-[#1a1a1a] tracking-[-0.01em]" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                                {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
+                            </p>
+                            {!loading && (
+                                <p className="text-[10.5px] text-gray-400 mt-0.5" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                                    Tap a card or map pin for details
+                                </p>
+                            )}
+                        </div>
                         {!loading && (
-                            <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                                {pharmacies.filter((p) => p.openNow).length} open now
+                            <span
+                                className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full"
+                                style={{ fontFamily: "Epilogue, sans-serif" }}
+                            >
+                                <span className="w-[5px] h-[5px] rounded-full bg-emerald-500 flex-shrink-0" />
+                                {pharmacies.filter((p) => p.openNow).length} open
                             </span>
                         )}
                     </div>
 
-                    {/* Card scroll track */}
+                    {/* Cards */}
                     <div
                         ref={cardStripRef}
-                        className="flex gap-[22px] overflow-x-auto pb-2.5 px-6 scrollbar-none scroll-snap-x-mandatory"
+                        className="flex gap-5 overflow-x-auto pb-2 px-6 scrollbar-none"
                         style={{ scrollSnapType: "x mandatory" }}
                     >
                         {loading ? (
                             [...Array(5)].map((_, i) => (
                                 <div
                                     key={i}
-                                    className="flex-shrink-0 w-[214px] h-[185px] rounded-2xl bg-gradient-to-r from-[#f0f4f3] via-[#e5ecea] to-[#f0f4f3] bg-[length:200%_100%] animate-[shimmer_1.5s_infinite]"
-                                    style={{ animationDelay: `${i * 0.08}s` }}
+                                    className="flex-shrink-0 w-[208px] rounded-2xl bg-gradient-to-r from-[#f0f5f4] via-[#e5eeec] to-[#f0f5f4] bg-[length:200%_100%] animate-[shimmer_1.4s_ease-in-out_infinite]"
+                                    style={{ height: "176px", animationDelay: `${i * 0.08}s` }}
                                 />
                             ))
                         ) : filtered.length === 0 ? (
-                            <div className="flex items-center gap-2 px-5 py-4 text-gray-400 text-[13px]">
-                                <MapPin size={22} strokeWidth={1.5} />
+                            <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px]" style={{ fontFamily: "Epilogue, sans-serif" }}>
+                                <MapPin size={18} strokeWidth={1.5} />
                                 <span>No results found</span>
                             </div>
                         ) : (
                             filtered.map((pharmacy) => (
-                                <div key={pharmacy.id} className="pharmacy-card-item" style={{ scrollSnapAlign: "start" }}>
+                                <div key={pharmacy.id} className="pharmacy-card-item flex-shrink-0">
                                     <PharmacyCard
                                         pharmacy={pharmacy}
                                         isSelected={selectedPharmacy?.id === pharmacy.id}
@@ -722,7 +691,7 @@ export default function PickupPage() {
 
             <style>{`
                 @keyframes shimmer {
-                    0% { background-position: 200% 0; }
+                    0%   { background-position:  200% 0; }
                     100% { background-position: -200% 0; }
                 }
                 .scrollbar-none { scrollbar-width: none; }
