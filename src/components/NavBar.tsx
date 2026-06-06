@@ -13,12 +13,10 @@ import {
     Store,
     Building2,
     Search,
-    ListFilter,
     LogOut,
     Settings,
     ClipboardList,
     X,
-    SlidersHorizontal,
 } from "lucide-react";
 
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
@@ -126,7 +124,7 @@ const NAV_TABS: {
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 export default function Navbar() {
-    const { currentPage, navigateTo, cartCount, filterOpen, setFilterOpen } = useApp();
+    const { currentPage, navigateTo, cartCount } = useApp();
     const [cartOpen,    setCartOpen]    = useState(false);
     const [accountOpen, setAccountOpen] = useState(false);
     const [langOpen,    setLangOpen]    = useState(false);
@@ -287,7 +285,7 @@ export default function Navbar() {
                     );
                 })}
 
-                {/* ── Search + Filter ── */}
+                {/* ── Search ── */}
                 <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
                     <div className="relative flex items-center">
                         <Search
@@ -312,19 +310,6 @@ export default function Navbar() {
                         )}
                     </div>
 
-                    {/* Filter button */}
-                    <button
-                        onClick={() => setFilterOpen((o: boolean) => !o)}
-                        className={[
-                            "flex items-center justify-center w-9 h-9 rounded-full cursor-pointer shrink-0 border transition-all duration-200",
-                            filterOpen
-                                ? "bg-[#427b77] border-[#427b77] text-white shadow-[0_0_0_4px_rgba(66,123,119,0.18)]"
-                                : "bg-white border-gray-200 shadow-[0_0_0_3px_rgba(66,123,119,0.08)] text-[#427b77] hover:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]",
-                        ].join(" ")}
-                        title="Filter"
-                    >
-                        <SlidersHorizontal size={15} strokeWidth={2} />
-                    </button>
                 </div>
             </div>
 
