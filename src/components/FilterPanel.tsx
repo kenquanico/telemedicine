@@ -43,7 +43,7 @@ const AVAILABILITY_OPTIONS = [
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
     return (
         <section className="grid gap-3">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-gray-400 epilogue-header">
+            <p className="text-[14px] text-[#262626]/70 epilogue-regular">
                 {title}
             </p>
             {children}
@@ -55,8 +55,8 @@ function RadioRow({ active, onClick, children }: { active: boolean; onClick: () 
     return (
         <button
             onClick={onClick}
-            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
-                active ? "font-bold text-[#427b77]" : "font-medium text-gray-500 hover:text-[#2d2d2d]"
+            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[15px] transition-colors duration-150 epilogue-regular ${
+                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
             }`}
         >
             <span
@@ -75,8 +75,8 @@ function CheckRow({ active, onClick, children }: { active: boolean; onClick: () 
     return (
         <button
             onClick={onClick}
-            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
-                active ? "font-bold text-[#427b77]" : "font-medium text-gray-500 hover:text-[#2d2d2d]"
+            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[15px] transition-colors duration-150 epilogue-regular ${
+                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
             }`}
         >
             <span
@@ -197,15 +197,12 @@ export default function FilterPanel() {
             <div className="w-[252px] shrink-0 overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)]">
                 <div className="flex items-center justify-between border-b border-[#F4F6F5] px-5 py-4">
                     <div>
-                        <p className="text-sm font-bold text-[#2d2d2d] epilogue-header">Filters</p>
-                        <p className="mt-0.5 text-[11px] text-gray-400 epilogue-regular">Applies automatically</p>
-                    </div>
+                        <p className="text-base font-bold text-[#2d2d2d] epilogue-regular">Filters</p></div>
                     {activeCount > 0 && (
                         <button
                             onClick={() => setFilters(DEFAULT_FILTERS)}
-                            className="flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-semibold text-gray-400 transition-colors duration-150 hover:text-[#427b77] epilogue-regular"
+                            className="flex items-center gap-1 rounded-lg px-2 py-1 text-[14px] font-semibold text-[#262626]/50 transition-colors duration-150 hover:text-[#427b77] epilogue-regular"
                         >
-                            <RotateCcw size={11} strokeWidth={2} />
                             Clear
                         </button>
                     )}

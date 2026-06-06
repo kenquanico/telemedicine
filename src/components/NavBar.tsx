@@ -148,7 +148,7 @@ export default function Navbar() {
         <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
 
             {/* ── Top row ── */}
-            <div className="px-12 pt-3.5 pb-0 flex items-center gap-5">
+            <div className={currentPage === "pickup" ? "px-12 py-3.5 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
 
                 {/* Logo */}
                 <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
@@ -263,55 +263,54 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {/* ── Tab row ── */}
-            <div className="flex items-center gap-0.5 pl-12 pr-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {NAV_TABS.map((tab, index) => {
-                    const isActive = tab.activeOn.includes(currentPage);
-                    return (
-                        <button
-                            key={tab.label}
-                            onClick={() => navigateTo(tab.navigatesTo)}
-                            className={[
-                                "nav-tab flex items-center py-4 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular",
-                                index === 0 ? "pl-0 pr-6" : "px-6",
-                                isActive ? "nav-tab--active" : "",
-                            ].join(" ")}
-                        >
-                                <span className="nav-tab-inner">
-                                    <tab.Icon size={18} className="nav-tab-icon" />
-                                    <span className="nav-tab-label">{tab.label}</span>
-                                </span>
-                        </button>
-                    );
-                })}
-
-                {/* ── Search ── */}
-                <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
-                    <div className="relative flex items-center">
-                        <Search
-                            size={14}
-                            strokeWidth={2}
-                            className="absolute left-3.5 pointer-events-none text-[#427b77]/60 z-10"
-                        />
-                        <input
-                            type="text"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            placeholder="Search medicines..."
-                            className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#2d2d2d] placeholder:text-[#2d2d2d]/35 font-['Geist'] outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
-                        />
-                        {searchValue && (
+            {currentPage !== "pickup" && (
+                <div className="flex items-center gap-0.5 pl-12 pr-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {NAV_TABS.map((tab, index) => {
+                        const isActive = tab.activeOn.includes(currentPage);
+                        return (
                             <button
-                                onClick={() => setSearchValue("")}
-                                className="absolute right-3 flex items-center justify-center w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 text-[#427b77] transition-colors duration-150 cursor-pointer"
+                                key={tab.label}
+                                onClick={() => navigateTo(tab.navigatesTo)}
+                                className={[
+                                    "nav-tab flex items-center py-4 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none font-['Geist'] epilogue-regular",
+                                    index === 0 ? "pl-0 pr-6" : "px-6",
+                                    isActive ? "nav-tab--active" : "",
+                                ].join(" ")}
                             >
-                                <X size={9} strokeWidth={2.5} />
+                                    <span className="nav-tab-inner">
+                                        <tab.Icon size={18} className="nav-tab-icon" />
+                                        <span className="nav-tab-label">{tab.label}</span>
+                                    </span>
                             </button>
-                        )}
-                    </div>
+                        );
+                    })}
 
+                    <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
+                        <div className="relative flex items-center">
+                            <Search
+                                size={14}
+                                strokeWidth={2}
+                                className="absolute left-3.5 pointer-events-none text-[#427b77]/60 z-10"
+                            />
+                            <input
+                                type="text"
+                                value={searchValue}
+                                onChange={(e) => setSearchValue(e.target.value)}
+                                placeholder="Search medicines..."
+                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#2d2d2d] placeholder:text-[#2d2d2d]/35 font-['Geist'] outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
+                            />
+                            {searchValue && (
+                                <button
+                                    onClick={() => setSearchValue("")}
+                                    className="absolute right-3 flex items-center justify-center w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 text-[#427b77] transition-colors duration-150 cursor-pointer"
+                                >
+                                    <X size={9} strokeWidth={2.5} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
 
             <style>{`
                     @keyframes slideDown {

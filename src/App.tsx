@@ -5,6 +5,7 @@ import { NotificationModal } from "./components/UI";
 import HomePage from "./pages/HomePage";
 import CatalogPage from "./pages/CatalogPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
+import PickupPage from "./pages/PickUpPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import {
@@ -23,6 +24,7 @@ function PageRouter() {
         home: <HomePage />,
         catalog: <CatalogPage />,
         product: <ProductDetailPage />,
+        pickup: <PickupPage />,
         cart: <CartPage />,
         checkout: <CheckoutPage />,
         orders: <OrdersPage />,
