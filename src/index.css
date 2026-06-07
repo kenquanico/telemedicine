@@ -36,6 +36,12 @@ body {
     font-weight: 500;
     font-style: normal;
 }
+.epilogue-thin {
+    font-family: "Epilogue", sans-serif !important;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+}
 
 /* ⑤ Inter utility class */
 .inter-paragraph {

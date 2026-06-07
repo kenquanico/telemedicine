@@ -629,26 +629,32 @@ export default function PickupPage() {
                 }}
             >
                 {/* Search bar */}
-                <div className="relative flex items-center flex-shrink-0">
-                    <Search size={14} strokeWidth={1.75} className="absolute left-3.5 pointer-events-none" style={{ color: "#3d7a75", opacity: 0.65 }} />
+                <div className="relative inline-flex items-center">
+                    <Search
+                        size={20}
+                        strokeWidth={2}
+                        className="absolute left-3.5 pointer-events-none z-10"
+                        style={{ color: "#3d7a75", opacity: 0.7, display: "block" }}
+                    />
                     <input
                         type="text"
                         value={searchValue}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                         placeholder="Search pharmacies…"
-                        className="w-64 pl-9 pr-9 py-[10px] rounded-full border border-[#e8edec] bg-white text-[12.5px] text-[#1a1a1a] placeholder-[#1a1a1a]/35 outline-none shadow-[0_2px_16px_rgba(10,31,30,0.09)] focus:border-[#3d7a75]/40 focus:shadow-[0_2px_20px_rgba(61,122,117,0.16)] transition-all epilogue-regular"
+                        autoComplete="off"
+                        className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-[#262626]/20 bg-white text-sm  text-[#1a1a1a] placeholder-[#262626]/30 outline-none  focus:border-[#3d7a75]/45  transition-all duration-200 epilogue-thin"
                     />
                     {searchValue && (
                         <button
                             onClick={() => setSearchValue("")}
-                            className="absolute right-3 w-[18px] h-[18px] rounded-full border-none cursor-pointer flex items-center justify-center transition-colors"
+                            aria-label="Clear search"
+                            className="absolute right-[10px] w-5 h-5 rounded-full border-none cursor-pointer flex items-center justify-center transition-colors duration-150"
                             style={{ background: "rgba(61,122,117,0.10)", color: "#3d7a75" }}
                         >
-                            <X size={10} strokeWidth={2} />
+                            <X size={10} strokeWidth={2.5} style={{ display: "block" }} />
                         </button>
                     )}
                 </div>
-
                 {/* Filter pills */}
                 {!sidebarOpen && (
                     <div className="flex gap-2 overflow-x-auto scrollbar-none flex-nowrap">
@@ -659,16 +665,16 @@ export default function PickupPage() {
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer  epilogue-regular ${
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer epilogue-regular ${
                                         isActive
                                             ? "border-[#1a1a1a] bg-[#1a1a1a]"
                                             : "border-[#262626]/20 bg-white text-[#262626] hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
                                     }`}
                                 >
                                     <Icon
-                                        size={15}
+                                        size={16}
                                         strokeWidth={2.5}
-                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic }}
+                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic, verticalAlign: 'middle' }}
                                     />
                                     {f}
                                 </button>
