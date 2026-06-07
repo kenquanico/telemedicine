@@ -3,8 +3,9 @@ import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
-import FilterPanel from "../components/FilterPanel";
-import type { Category } from "../types";
+import FilterPanel, { getDefaultFilters } from "../components/FilterPanel";
+import type { Category, Product } from "../types";
+import { applyProductFilters } from "../utils/productFilters";
 
 function getCategoryImage(category: Category) {
     return PRODUCTS.find((product) => product.category === category)?.image ?? "";
@@ -60,11 +61,12 @@ function VendorMedicineCard({
                                 onView,
                                 onAdd,
                             }: {
-    product: any;
+    product: Product;
     onView: () => void;
     onAdd: () => void;
 }) {
     const [hearted, setHearted] = useState(false);
+    const isOutOfStock = product.stockStatus === "out_of_stock";
 
     return (
         <div
@@ -85,15 +87,9 @@ function VendorMedicineCard({
                     </div>
                 )}
 
-                {product.discount && (
+                {product.originalPrice && (
                     <div className="absolute top-2.5 left-2.5 bg-[#427b77] text-white text-[10px] font-bold px-2 py-0.5 rounded-lg epilogue-header tracking-wide">
-                        {product.discount}
-                    </div>
-                )}
-
-                {product.sponsored && (
-                    <div className="absolute top-2.5 right-2.5 bg-black/40 text-white text-[10px] font-semibold px-2 py-0.5 rounded-lg backdrop-blur-sm epilogue-regular">
-                        Ad
+                        Sale
                     </div>
                 )}
 
@@ -116,8 +112,13 @@ function VendorMedicineCard({
                         e.stopPropagation();
                         onAdd();
                     }}
+                    disabled={isOutOfStock}
                     aria-label={`Add ${product.brandName} to cart`}
-                    className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-xl leading-none text-[#2d2d2d] shadow-sm backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
+                    className={`absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full text-xl leading-none shadow-sm transition-transform duration-150 active:scale-90 ${
+                        isOutOfStock
+                            ? "cursor-not-allowed bg-white/80 text-gray-300"
+                            : "bg-white/90 text-[#2d2d2d] backdrop-blur-sm hover:scale-110"
+                    }`}
                 >
                     +
                 </button>
@@ -135,7 +136,7 @@ function VendorMedicineCard({
                 </div>
 
                 <p className="text-[13px] text-gray-400 epilogue-regular mb-1.5 truncate">
-                    {product.category ?? "Medicine"}
+                    {CATEGORY_META[product.category].label} · {product.strength}
                 </p>
 
                 <div className="flex items-center gap-2">
@@ -147,20 +148,20 @@ function VendorMedicineCard({
                         </svg>
                         <span className="text-[13px] font-semibold text-[#2d2d2d] epilogue-header">{product.rating ?? "4.8"}</span>
                         <span className="text-[13px] text-gray-400 epilogue-regular">
-                            ({Array.isArray(product.reviews) ? `${product.reviews.length}+` : (product.reviews ?? "200+")})
+                            ({product.reviewCount}+)
                         </span>
                     </div>
 
                     <span className="text-[12px] text-gray-300">•</span>
 
                     <span className="text-[13px] text-gray-400 epilogue-regular">
-                        {product.deliveryTime ?? "15"} min
+                        {product.dosageForm}
                     </span>
 
                     <span className="text-[12px] text-gray-300">•</span>
 
                     <span className="text-[13px] font-semibold text-[#427b77] epilogue-regular">
-                        {product.deliveryFee ?? "Free"}
+                        {product.packSize}
                     </span>
                 </div>
             </div>
@@ -171,6 +172,10 @@ function VendorMedicineCard({
 // ── HomePage ─────────────────────────────────────────────────────────────────
 export default function HomePage() {
     const { navigateTo, addToCart, showModal } = useApp();
+    const [filters, setFilters] = useState(getDefaultFilters);
+    const filteredProducts = applyProductFilters(PRODUCTS, filters);
+    const featuredProducts = filteredProducts.slice(0, 4);
+    const bestSellerProducts = filteredProducts.slice(4);
 
     const handleAddToCart = (productId: string) => {
         const product = PRODUCTS.find((p) => p.id === productId);
@@ -189,13 +194,13 @@ export default function HomePage() {
     return (
         <>
             {/* ── Outer wrapper: positions filter alongside content ── */}
-            <div className="flex items-start gap-7 px-16 relative">
+            <div className="relative flex items-start gap-7 px-5 sm:px-8 lg:px-16">
 
                 {/* ── Main content ── */}
                 <div className="flex-1 min-w-0">
 
                     {/* ── Hero banner ── */}
-                    <div className="my-10 rounded-3xl overflow-hidden bg-gradient-to-br from-[#1a3a38] via-[#2d6b66] to-[#427b77] px-14 py-[52px] relative min-h-[200px] flex flex-col justify-center">
+                    <div className="relative my-10 flex min-h-[200px] flex-col justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a3a38] via-[#2d6b66] to-[#427b77] px-7 py-9 sm:px-10 lg:px-14 lg:py-[52px]">
                         <div className="absolute -right-15 -top-15 w-80 h-80 rounded-full bg-white/[0.04] pointer-events-none" />
                         <div className="absolute right-15 -bottom-20 w-[220px] h-[220px] rounded-full bg-white/[0.03] pointer-events-none" />
                         <p className="epilogue-header text-[11px] font-extrabold tracking-[0.14em] text-white/55 uppercase mb-3">
@@ -207,7 +212,7 @@ export default function HomePage() {
                         <p className="epilogue-regular text-sm text-white/65 leading-relaxed max-w-[380px] mb-7">
                             Order from FDA-registered pharmacies in Cebu City and get your medicines within hours.
                         </p>
-                        <div className="flex gap-3">
+                        <div className="flex flex-wrap gap-3">
                             <button
                                 onClick={() => navigateTo("catalog")}
                                 className="bg-white text-[#2d2d2d] border-none rounded-xl px-6 py-3 text-[13px] font-bold cursor-pointer epilogue-header tracking-[0.01em] transition-opacity duration-200 hover:opacity-90"
@@ -221,7 +226,7 @@ export default function HomePage() {
                     </div>
 
                     {/* ── Trust bar ── */}
-                    <div className="grid grid-cols-3 gap-4 mb-12">
+                    <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-3">
                         {[
                             { icon: "🚚", title: "Same-Day Delivery", sub: "Order before 3PM" },
                             { icon: "✅", title: "Authentic Medicines", sub: "FDA-registered sources" },
@@ -262,6 +267,10 @@ export default function HomePage() {
                         </div>
                     </div>
 
+                    <div className="mb-10 lg:hidden">
+                        <FilterPanel filters={filters} onChange={setFilters} />
+                    </div>
+
                     {/* ── Promo Banners ── */}
                     <div className="grid grid-cols-1 gap-[18px] mb-[52px]">
                         <div className="relative min-h-[150px] overflow-hidden rounded-[20px] bg-gradient-to-br from-[#1D546D] to-[#427b77] p-8">
@@ -291,8 +300,22 @@ export default function HomePage() {
                     {/* ── Featured Products ── */}
                     <div className="mb-[52px]">
                         <SectionHeader title="Featured Products" onSeeAll={() => navigateTo("catalog")} />
-                        <div className="mt-5 grid grid-cols-3 gap-x-5 gap-y-8">
-                            {PRODUCTS.slice(0, 4).map((p) => (
+                        {featuredProducts.length === 0 ? (
+                            <div className="mt-5 rounded-[20px] border border-[#EAEFEE] bg-white px-6 py-14 text-center">
+                                <div className="mb-1.5 text-[17px] font-bold text-[#2d2d2d] epilogue-header">
+                                    No medicines match these filters
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setFilters(getDefaultFilters())}
+                                    className="mt-4 rounded-xl border border-[#DCE6E4] px-4 py-2 text-[12px] font-bold text-[#427b77] epilogue-header"
+                                >
+                                    Clear filters
+                                </button>
+                            </div>
+                        ) : (
+                        <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+                            {featuredProducts.map((p) => (
                                 <VendorMedicineCard
                                     key={p.id}
                                     product={p}
@@ -301,13 +324,15 @@ export default function HomePage() {
                                 />
                             ))}
                         </div>
+                        )}
                     </div>
 
                     {/* ── Best Sellers ── */}
+                    {bestSellerProducts.length > 0 && (
                     <div className="mb-16">
                         <SectionHeader title="Best Sellers" onSeeAll={() => navigateTo("catalog")} />
-                        <div className="mt-5 grid grid-cols-3 gap-x-5 gap-y-8">
-                            {PRODUCTS.slice(4).map((p) => (
+                        <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
+                            {bestSellerProducts.map((p) => (
                                 <VendorMedicineCard
                                     key={p.id}
                                     product={p}
@@ -317,12 +342,13 @@ export default function HomePage() {
                             ))}
                         </div>
                     </div>
+                    )}
 
                 </div>
 
                 {/* ── Filter panel — sticky, scrollable, offset below navbar ── */}
                 <div
-                    className="filter-scroll-wrap shrink-0 w-[260px] sticky top-[120px] self-start"
+                    className="filter-scroll-wrap sticky top-[120px] hidden w-[260px] shrink-0 self-start lg:block"
                     style={{
                         height: "calc(100vh - 120px)",
                         overflowY: "auto",
@@ -334,7 +360,7 @@ export default function HomePage() {
                         .filter-scroll-wrap::-webkit-scrollbar { display: none; }
                     `}</style>
                     <div className="pt-10 pb-10">
-                        <FilterPanel />
+                        <FilterPanel filters={filters} onChange={setFilters} />
                     </div>
                 </div>
 

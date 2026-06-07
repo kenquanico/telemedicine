@@ -1,79 +1,13 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import Footer from "../components/Footer";
-import type { Category, CatalogFilters, Product } from "../types";
-
-const PRICE_RANGES = [
-    { label: "Under ₱50", min: 0, max: 50 },
-    { label: "₱50 - ₱200", min: 50, max: 200 },
-    { label: "₱200 - ₱500", min: 200, max: 500 },
-    { label: "₱500+", min: 500, max: Infinity },
-];
-
-const BRANDS = [
-    "Unilab",
-    "Pfizer",
-    "Sanofi",
-    "Johnson & Johnson",
-    "Nature's Bounty",
-    "Mundipharma",
-    "Watsons",
-];
+import FilterPanel, { getActiveFilterCount, getDefaultFilters } from "../components/FilterPanel";
+import type { Category, Product } from "../types";
+import { applyProductFilters } from "../utils/productFilters";
 
 function getCategoryImage(category: Category) {
     return PRODUCTS.find((product) => product.category === category)?.image ?? "";
-}
-
-function CheckRow({
-    active,
-    onClick,
-    children,
-}: {
-    active: boolean;
-    onClick: () => void;
-    children: ReactNode;
-}) {
-    return (
-        <button
-            onClick={onClick}
-            className={`group flex w-full items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
-                active
-                    ? "bg-transparent font-bold text-[#427b77]"
-                    : "bg-transparent font-medium text-gray-500 hover:text-[#2d2d2d]"
-            }`}
-        >
-            <span
-                className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-[4px] border-2 transition-colors duration-150 ${
-                    active ? "border-[#427b77] bg-transparent" : "border-gray-300 bg-transparent"
-                }`}
-            >
-                {active && (
-                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
-                        <path
-                            d="M1.5 4L3.2 5.7L6.5 2.5"
-                            stroke="#427b77"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-                )}
-            </span>
-            <span className="min-w-0 truncate">{children}</span>
-        </button>
-    );
-}
-
-function FilterSection({ title, children }: { title: string; children: ReactNode }) {
-    return (
-        <div className="mb-6">
-            <p className="mb-2.5 text-[10px] font-extrabold uppercase tracking-[0.1em] text-gray-400 epilogue-header">
-                {title}
-            </p>
-            {children}
-        </div>
-    );
 }
 
 function CategoryCuisineTile({
@@ -256,44 +190,17 @@ function CatalogMedicineCard({
 export default function CatalogPage() {
     const { navigateTo, addToCart, showModal } = useApp();
 
-    const [filters, setFilters] = useState<CatalogFilters>({
-        categories: [],
-        priceRanges: [],
-        brands: [],
-        stockOnly: false,
-        searchQuery: "",
-    });
+    const [filters, setFilters] = useState(getDefaultFilters);
 
     const [activeTab, setActiveTab] = useState<Category | "all">("all");
 
-    const filtered = PRODUCTS.filter((p) => {
-        if (activeTab !== "all" && p.category !== activeTab) return false;
-        if (filters.categories.length > 0 && !filters.categories.includes(p.category)) return false;
-        if (filters.brands.length > 0 && !filters.brands.some((b) => p.manufacturer.includes(b))) return false;
-        if (filters.stockOnly && p.stockStatus === "out_of_stock") return false;
-        if (filters.priceRanges.length > 0) {
-            const inRange = filters.priceRanges.some((label) => {
-                const range = PRICE_RANGES.find((x) => x.label === label);
-                return range ? p.price >= range.min && p.price < range.max : false;
-            });
-            if (!inRange) return false;
-        }
-        if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            return (
-                p.brandName.toLowerCase().includes(query) ||
-                p.genericName.toLowerCase().includes(query) ||
-                p.manufacturer.toLowerCase().includes(query)
-            );
-        }
-        return true;
-    });
-
-    const toggleArr = <T,>(arr: T[], val: T): T[] =>
-        arr.includes(val) ? arr.filter((v) => v !== val) : [...arr, val];
+    const filtered = applyProductFilters(
+        activeTab === "all" ? PRODUCTS : PRODUCTS.filter((product) => product.category === activeTab),
+        filters
+    );
 
     const resetFilters = () => {
-        setFilters({ categories: [], priceRanges: [], brands: [], stockOnly: false, searchQuery: "" });
+        setFilters(getDefaultFilters());
         setActiveTab("all");
     };
 
@@ -311,19 +218,15 @@ export default function CatalogPage() {
         });
     };
 
-    const activeFilterCount =
-        filters.categories.length +
-        filters.priceRanges.length +
-        filters.brands.length +
-        (filters.stockOnly ? 1 : 0);
+    const activeFilterCount = getActiveFilterCount(filters);
 
     return (
         <>
-            <div className="flex items-start gap-7 px-16 relative">
+            <div className="relative flex items-start gap-7 px-5 sm:px-8 lg:px-16">
                 <main className="min-w-0 flex-1">
 
 
-                    <section className="mt-14 mb-12">
+                    <section className="mb-12 mt-10 sm:mt-14">
                         <div className="mb-5 flex items-center justify-between">
                             <h2
                                 id="medicine-categories-swimlane-title"
@@ -334,7 +237,7 @@ export default function CatalogPage() {
                             {activeTab !== "all" && (
                                 <button
                                     onClick={() => setActiveTab("all")}
-                                    className="rounded-lg px-3 py-1.5 text-[13px] font-semibold text-[#427b77] transition-colors duration-150 hover:bg-[#F0F7F6] epilogue-regular"
+                                    className="rounded-lg border border-[#DCE6E4] px-3 py-1.5 text-[13px] font-semibold text-[#427b77] transition-colors duration-150 hover:border-[#BFD4D1] epilogue-regular"
                                 >
                                     See all
                                 </button>
@@ -363,7 +266,7 @@ export default function CatalogPage() {
                     </section>
 
                     <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-                        <div>
+                        <div className="min-w-0">
                             <p className="mb-1 text-xs font-medium text-gray-400 epilogue-regular">
                                 {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
                             </p>
@@ -386,7 +289,7 @@ export default function CatalogPage() {
                             </div>
                         </div>
                     ) : (
-                        <div className="mb-16 grid grid-cols-3 gap-x-5 gap-y-8">
+                        <div className="mb-16 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
                             {filtered.map((product) => (
                                 <CatalogMedicineCard
                                     key={product.id}
@@ -400,7 +303,7 @@ export default function CatalogPage() {
                 </main>
 
                 <aside
-                    className="filter-scroll-wrap sticky top-[120px] mt-10 w-[260px] shrink-0 self-start"
+                    className="filter-scroll-wrap sticky top-[120px] mt-10 hidden w-[260px] shrink-0 self-start lg:block"
                     style={{
                         height: "calc(100vh - 120px)",
                         overflowY: "auto",
@@ -412,88 +315,16 @@ export default function CatalogPage() {
                         .filter-scroll-wrap::-webkit-scrollbar { display: none; }
                     `}</style>
                     <div className="pb-10">
-                        <div className="overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)]">
-                            <div className="flex items-center justify-between border-b border-[#F4F6F5] px-5 py-4">
-                                <div className="flex items-center gap-2">
-                                    <span className="text-sm font-bold text-[#2d2d2d] epilogue-header">Filters</span>
-                                    {activeFilterCount > 0 && (
-                                        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#427b77] px-1.5 text-[10px] font-extrabold text-white epilogue-header">
-                                            {activeFilterCount}
-                                        </span>
-                                    )}
-                                </div>
-                                {(activeFilterCount > 0 || activeTab !== "all") && (
-                                    <button
-                                        onClick={resetFilters}
-                                        className="rounded-lg px-2 py-1 text-[11px] font-semibold text-gray-400 transition-colors duration-150 hover:bg-[#F0F7F6] hover:text-[#427b77] epilogue-regular"
-                                    >
-                                        Clear
-                                    </button>
-                                )}
-                            </div>
-
-                            <div className="px-5 py-5">
-                                <FilterSection title="Category">
-                                    <div className="flex flex-col gap-0.5">
-                                        {(Object.entries(CATEGORY_META) as [Category, { label: string; icon: string }][]).map(
-                                            ([key, meta]) => (
-                                                <CheckRow
-                                                    key={key}
-                                                    active={filters.categories.includes(key)}
-                                                    onClick={() =>
-                                                        setFilters((f) => ({ ...f, categories: toggleArr(f.categories, key) }))
-                                                    }
-                                                >
-                                                    {meta.label}
-                                                </CheckRow>
-                                            )
-                                        )}
-                                    </div>
-                                </FilterSection>
-
-                                <FilterSection title="Price Range">
-                                    <div className="flex flex-col gap-0.5">
-                                        {PRICE_RANGES.map((range) => (
-                                            <CheckRow
-                                                key={range.label}
-                                                active={filters.priceRanges.includes(range.label)}
-                                                onClick={() =>
-                                                    setFilters((f) => ({
-                                                        ...f,
-                                                        priceRanges: toggleArr(f.priceRanges, range.label),
-                                                    }))
-                                                }
-                                            >
-                                                {range.label}
-                                            </CheckRow>
-                                        ))}
-                                    </div>
-                                </FilterSection>
-
-                                <FilterSection title="Brand">
-                                    <div className="flex flex-col gap-0.5">
-                                        {BRANDS.map((brand) => (
-                                            <CheckRow
-                                                key={brand}
-                                                active={filters.brands.includes(brand)}
-                                                onClick={() =>
-                                                    setFilters((f) => ({ ...f, brands: toggleArr(f.brands, brand) }))
-                                                }
-                                            >
-                                                {brand}
-                                            </CheckRow>
-                                        ))}
-                                    </div>
-                                </FilterSection>
-
-                                <CheckRow
-                                    active={filters.stockOnly}
-                                    onClick={() => setFilters((f) => ({ ...f, stockOnly: !f.stockOnly }))}
-                                >
-                                    In Stock Only
-                                </CheckRow>
-                            </div>
-                        </div>
+                        <FilterPanel filters={filters} onChange={setFilters} />
+                        {(activeFilterCount > 0 || activeTab !== "all") && (
+                            <button
+                                type="button"
+                                onClick={resetFilters}
+                                className="mt-3 w-full rounded-xl border border-[#EAEFEE] bg-white px-4 py-3 text-[12px] font-bold text-[#427b77] transition-colors duration-150 hover:border-[#BFD4D1] epilogue-header"
+                            >
+                                Reset catalog view
+                            </button>
+                        )}
                     </div>
                 </aside>
             </div>

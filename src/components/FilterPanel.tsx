@@ -1,48 +1,71 @@
-import { useState } from "react";
+import type { ReactNode } from "react";
+import { CATEGORY_META } from "../data/mockData";
+import type { Category } from "../types";
 
 export interface FilterState {
-    categories: string[];
+    categories: Category[];
     priceRange: [number, number];
-    availability: "all" | "in-stock" | "rx" | "otc";
+    brands: string[];
+    availability: "all" | "in-stock" | "low-stock" | "out-of-stock";
     sortBy: "relevance" | "price-asc" | "price-desc" | "name";
 }
 
 export const DEFAULT_FILTERS: FilterState = {
     categories: [],
     priceRange: [0, 5000],
+    brands: [],
     availability: "all",
     sortBy: "relevance",
 };
-
-const CATEGORIES = [
-    { key: "pain-relief", label: "Pain Relief" },
-    { key: "antibiotics", label: "Antibiotics" },
-    { key: "vitamins", label: "Vitamins" },
-    { key: "heart-health", label: "Heart Health" },
-    { key: "cold-flu", label: "Cold & Flu" },
-    { key: "diabetes", label: "Diabetes" },
-    { key: "skin-care", label: "Skin Care" },
-    { key: "digestive", label: "Digestive" },
-];
 
 const SORT_OPTIONS = [
     { value: "relevance", label: "Relevance" },
     { value: "price-asc", label: "Price: Low-High" },
     { value: "price-desc", label: "Price: High-Low" },
     { value: "name", label: "Name A-Z" },
-];
+] as const;
 
 const AVAILABILITY_OPTIONS = [
     { value: "all", label: "All Items" },
     { value: "in-stock", label: "In Stock" },
-    { value: "otc", label: "Over-the-Counter" },
-    { value: "rx", label: "Prescription Only" },
-];
+    { value: "low-stock", label: "Low Stock" },
+    { value: "out-of-stock", label: "Out of Stock" },
+] as const;
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+const BRAND_OPTIONS = [
+    "Unilab",
+    "Pfizer",
+    "Sanofi",
+    "Johnson & Johnson",
+    "Nature's Bounty",
+    "Mundipharma",
+    "Becton Dickinson",
+] as const;
+
+export function getDefaultFilters(): FilterState {
+    return {
+        categories: [],
+        priceRange: [0, 5000],
+        brands: [],
+        availability: "all",
+        sortBy: "relevance",
+    };
+}
+
+export function getActiveFilterCount(filters: FilterState) {
+    return [
+        filters.categories.length > 0,
+        filters.priceRange[0] > 0 || filters.priceRange[1] < 5000,
+        filters.brands.length > 0,
+        filters.availability !== "all",
+        filters.sortBy !== "relevance",
+    ].filter(Boolean).length;
+}
+
+function Section({ title, children }: { title: string; children: ReactNode }) {
     return (
         <section className="grid gap-3">
-            <p className="text-[14px] text-[#262626]/70 epilogue-regular">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-gray-400 epilogue-header">
                 {title}
             </p>
             {children}
@@ -50,11 +73,11 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     );
 }
 
-function RadioRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function RadioRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
     return (
         <button
             onClick={onClick}
-            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[15px] transition-colors duration-150 epilogue-regular ${
+            className={`flex min-h-8 w-full items-center gap-2.5 rounded-[10px] border border-transparent px-2 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
                 active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
             }`}
         >
@@ -70,11 +93,11 @@ function RadioRow({ active, onClick, children }: { active: boolean; onClick: () 
     );
 }
 
-function CheckRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+function CheckRow({ active, onClick, children }: { active: boolean; onClick: () => void; children: ReactNode }) {
     return (
         <button
             onClick={onClick}
-            className={`flex w-full items-center gap-2.5 rounded-[10px] px-1 py-1.5 text-left text-[15px] transition-colors duration-150 epilogue-regular ${
+            className={`flex min-h-8 w-full items-center gap-2.5 rounded-[10px] border border-transparent px-2 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
                 active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
             }`}
         >
@@ -173,34 +196,43 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
     );
 }
 
-export default function FilterPanel() {
-    const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+export default function FilterPanel({
+    filters,
+    onChange,
+}: {
+    filters: FilterState;
+    onChange: (filters: FilterState) => void;
+}) {
+    const activeCount = getActiveFilterCount(filters);
 
-    const activeCount = [
-        filters.categories.length > 0,
-        filters.priceRange[0] > 0 || filters.priceRange[1] < 5000,
-        filters.availability !== "all",
-        filters.sortBy !== "relevance",
-    ].filter(Boolean).length;
-
-    const toggleCategory = (key: string) =>
-        setFilters((f) => ({
-            ...f,
-            categories: f.categories.includes(key)
-                ? f.categories.filter((c) => c !== key)
-                : [...f.categories, key],
-        }));
+    const updateFilters = (next: Partial<FilterState>) => onChange({ ...filters, ...next });
+    const toggleCategory = (key: Category) =>
+        updateFilters({
+            categories: filters.categories.includes(key)
+                ? filters.categories.filter((c) => c !== key)
+                : [...filters.categories, key],
+        });
+    const toggleBrand = (brand: string) =>
+        updateFilters({
+            brands: filters.brands.includes(brand)
+                ? filters.brands.filter((b) => b !== brand)
+                : [...filters.brands, brand],
+        });
 
     return (
         <>
             <div className="w-[252px] shrink-0 overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)]">
                 <div className="flex items-center justify-between border-b border-[#F4F6F5] px-5 py-4">
                     <div>
-                        <p className="text-base font-bold text-[#2d2d2d] epilogue-regular">Filters</p></div>
+                        <p className="text-sm font-bold text-[#2d2d2d] epilogue-header">Filters</p>
+                        <p className="mt-0.5 text-[11px] text-gray-400 epilogue-regular">
+                            {activeCount > 0 ? `${activeCount} active` : "Refine results"}
+                        </p>
+                    </div>
                     {activeCount > 0 && (
                         <button
-                            onClick={() => setFilters(DEFAULT_FILTERS)}
-                            className="flex items-center gap-1 rounded-lg px-2 py-1 text-[14px] font-semibold text-[#262626]/50 transition-colors duration-150 hover:text-[#427b77] epilogue-regular"
+                            onClick={() => onChange(getDefaultFilters())}
+                            className="flex items-center gap-1 rounded-lg px-2 py-1 text-[12px] font-semibold text-[#262626]/50 transition-colors duration-150 hover:text-[#427b77] epilogue-regular"
                         >
                             Clear
                         </button>
@@ -214,7 +246,7 @@ export default function FilterPanel() {
                                 <RadioRow
                                     key={opt.value}
                                     active={filters.sortBy === opt.value}
-                                    onClick={() => setFilters((f) => ({ ...f, sortBy: opt.value as FilterState["sortBy"] }))}
+                                    onClick={() => updateFilters({ sortBy: opt.value })}
                                 >
                                     {opt.label}
                                 </RadioRow>
@@ -226,11 +258,11 @@ export default function FilterPanel() {
 
                     <Section title="Category">
                         <div className="grid gap-0.5">
-                            {CATEGORIES.map((cat) => (
+                            {(Object.entries(CATEGORY_META) as [Category, { label: string }][]).map(([key, cat]) => (
                                 <CheckRow
-                                    key={cat.key}
-                                    active={filters.categories.includes(cat.key)}
-                                    onClick={() => toggleCategory(cat.key)}
+                                    key={key}
+                                    active={filters.categories.includes(key)}
+                                    onClick={() => toggleCategory(key)}
                                 >
                                     {cat.label}
                                 </CheckRow>
@@ -243,7 +275,69 @@ export default function FilterPanel() {
                     <Section title="Price Range">
                         <PriceSlider
                             value={filters.priceRange}
-                            onChange={(v) => setFilters((f) => ({ ...f, priceRange: v }))}
+                            onChange={(priceRange) => updateFilters({ priceRange })}
+                        />
+                    </Section>
+
+                    <div className="h-px bg-[#F4F6F5]" />
+
+                    <Section title="Brand">
+                        <div className="grid gap-0.5">
+                            {BRAND_OPTIONS.map((brand) => (
+                                <CheckRow
+                                    key={brand}
+                                    active={filters.brands.includes(brand)}
+                                    onClick={() => toggleBrand(brand)}
+                                >
+                                    {brand}
+                                </CheckRow>
+                            ))}
+                        </div>
+                    </Section>
+
+                    <div className="h-px bg-[#F4F6F5]" />
+
+                    <Section title="Availability">
+                        <div className="grid gap-0.5">
+                            {AVAILABILITY_OPTIONS.map((opt) => (
+                                <RadioRow
+                                    key={opt.value}
+                                    active={filters.availability === opt.value}
+                                    onClick={() => updateFilters({ availability: opt.value })}
+                                >
+                                    {opt.label}
+                                </RadioRow>
+                            ))}
+                        </div>
+                    </Section>
+                </div>
+            </div>
+
+            <style>{`
+                .price-thumb { -webkit-appearance: none; }
+                .price-thumb::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #fff;
+                    border: 2.5px solid #427b77;
+                    box-shadow: 0 2px 8px rgba(66,123,119,0.25);
+                    cursor: pointer;
+                }
+                .price-thumb::-moz-range-thumb {
+                    width: 18px;
+                    height: 18px;
+                    border-radius: 50%;
+                    background: #fff;
+                    border: 2.5px solid #427b77;
+                    box-shadow: 0 2px 8px rgba(66,123,119,0.25);
+                    cursor: pointer;
+                }
+            `}</style>
+        </>
+    );
+}
                         />
                     </Section>
 
