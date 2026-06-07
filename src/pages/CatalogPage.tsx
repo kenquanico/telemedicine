@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import Footer from "../components/Footer";
-import FilterPanel, { getActiveFilterCount, getDefaultFilters } from "../components/FilterPanel";
+import FilterPanel from "../components/FilterPanel";
 import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
+import { getActiveFilterCount, getDefaultFilters } from "../utils/filterState";
 
 function getCategoryImage(category: Category) {
     return PRODUCTS.find((product) => product.category === category)?.image ?? "";

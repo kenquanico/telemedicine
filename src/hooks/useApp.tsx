@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useCallback } from "react";
 import type { CartItem, Product, Order, Address, PageKey } from "../types";
 import { ORDERS, ADDRESSES } from "../data/mockData";
@@ -16,10 +17,6 @@ interface AppContextValue {
     updateQuantity: (productId: string, qty: number) => void;
     cartTotal: number;
     cartCount: number;
-
-    // Filter panel
-    filterOpen: boolean;
-    setFilterOpen: React.Dispatch<React.SetStateAction<boolean>>;
 
     // Orders
     orders: Order[];
@@ -56,7 +53,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [orders] = useState<Order[]>(ORDERS);
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
     const [addresses] = useState<Address[]>(ADDRESSES);
-    const [filterOpen, setFilterOpen] = useState(false);
     const [selectedAddressId, setSelectedAddressId] = useState<string>(ADDRESSES[0].id);
     const [modal, setModal] = useState<ModalState | null>(null);
 
@@ -126,8 +122,6 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 modal,
                 showModal,
                 closeModal,
-                filterOpen,
-                setFilterOpen,
             }}
         >
             {children}

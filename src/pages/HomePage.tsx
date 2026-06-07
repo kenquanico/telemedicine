@@ -3,9 +3,10 @@ import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
-import FilterPanel, { getDefaultFilters } from "../components/FilterPanel";
+import FilterPanel from "../components/FilterPanel";
 import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
+import { getDefaultFilters } from "../utils/filterState";
 
 function getCategoryImage(category: Category) {
     return PRODUCTS.find((product) => product.category === category)?.image ?? "";
