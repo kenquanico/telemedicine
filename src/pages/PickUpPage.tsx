@@ -659,15 +659,15 @@ export default function PickupPage() {
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-1.5 px-3 py-[9px] rounded-full border text-[11.5px] font-medium cursor-pointer whitespace-nowrap transition-all shadow-[0_1px_8px_rgba(10,31,30,0.07)] epilogue-regular ${
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer  epilogue-regular ${
                                         isActive
-                                            ? "border-[#1a1a1a] bg-[#1a1a1a] text-white shadow-[0_2px_12px_rgba(26,26,26,0.20)]"
-                                            : "border-[#e8edec] bg-white text-gray-500 hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
+                                            ? "border-[#1a1a1a] bg-[#1a1a1a]"
+                                            : "border-[#262626]/20 bg-white text-[#262626] hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
                                     }`}
                                 >
                                     <Icon
-                                        size={12}
-                                        strokeWidth={1.75}
+                                        size={15}
+                                        strokeWidth={2.5}
                                         style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic }}
                                     />
                                     {f}
@@ -695,26 +695,6 @@ export default function PickupPage() {
                 >
                     <div className="pointer-events-auto">
 
-                        {/* ── Header row ── */}
-                        <div className="flex items-center justify-between px-6 pt-4 pb-2">
-                            <div>
-                                <p className="text-[12.5px] font-bold text-[#1a1a1a] tracking-[-0.01em] epilogue-header">
-                                    {loading ? "Finding nearby pharmacies…" : `${filtered.length} pharmacies nearby`}
-                                </p>
-                                {!loading && panelVisible && (
-                                    <p className="text-[10.5px] text-gray-400 mt-0.5 epilogue-regular">
-                                        Tap a card or map pin for details
-                                    </p>
-                                )}
-                            </div>
-
-                            {!loading && (
-                                <span className="inline-flex items-center gap-1.5 text-[10.5px] font-medium text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full epilogue-regular">
-                                    <span className="w-[5px] h-[5px] rounded-full bg-emerald-500 flex-shrink-0" />
-                                    {pharmacies.filter((p) => p.openNow).length} open
-                                </span>
-                            )}
-                        </div>
 
                         <div className="flex justify-center px-6 pb-2">
                             <button
