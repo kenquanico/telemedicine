@@ -32,6 +32,7 @@ declare namespace google.maps {
 
     class Map {
         constructor(mapDiv: HTMLElement, opts?: MapOptions);
+        getZoom(): number | undefined;
         panTo(latLng: LatLngLiteral): void;
         setZoom(zoom: number): void;
     }

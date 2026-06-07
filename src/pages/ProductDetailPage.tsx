@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from "react";
 import { useApp } from "../hooks/useApp";
-import { PRODUCTS } from "../data/mockData";
+import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import { StockBadge, QtySelector, Stars, Btn } from "../components/UI";
 
 type Tab = "details" | "dosage" | "warnings" | "reviews";
@@ -151,7 +151,7 @@ export default function ProductDetailPage() {
 
     return (
         <main className="min-h-screen bg-white">
-            <div className="px-16 py-10">
+            <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
                 <button
                     type="button"
                     onClick={() => navigateTo("catalog")}
@@ -161,7 +161,7 @@ export default function ProductDetailPage() {
                     Back to Catalog
                 </button>
 
-                <section className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_260px] lg:items-start">
+                <section className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
                     <div className="space-y-5">
                         <div className="overflow-hidden rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
                             <div className="relative flex min-h-[360px] items-center justify-center bg-[#EEF6F4] p-10 sm:min-h-[460px]">
@@ -201,6 +201,36 @@ export default function ProductDetailPage() {
                                         <span className="mt-2 max-w-full truncate text-[11px] font-bold text-[#6B7C80] epilogue-header">{item.label}</span>
                                     </button>
                                 ))}
+                            </div>
+
+                            <div className="border-t border-[#E4ECEA] bg-white p-5 sm:p-6">
+                                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                                    <div className="min-w-0">
+                                        <div className="mb-2 flex flex-wrap items-center gap-2">
+                                            <span className="rounded-full border border-[#DCE6E4] px-3 py-1 text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#427b77] epilogue-header">
+                                                {CATEGORY_META[product.category].label}
+                                            </span>
+                                            <StockBadge status={product.stockStatus} />
+                                        </div>
+                                        <h1 className="text-[26px] font-extrabold leading-tight text-[#182C32] epilogue-header sm:text-[30px]">
+                                            {product.brandName} {product.strength}
+                                        </h1>
+                                        <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                            {product.genericName} by {product.manufacturer}. {product.description}
+                                        </p>
+                                    </div>
+                                    <div className="shrink-0 rounded-2xl border border-[#EAEFEE] px-4 py-3 sm:text-right">
+                                        <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-gray-400 epilogue-header">
+                                            Rating
+                                        </p>
+                                        <div className="mt-2 flex items-center gap-2 sm:justify-end">
+                                            <Stars rating={product.rating} />
+                                            <span className="text-[13px] font-bold text-[#33464C] epilogue-header">
+                                                {product.rating} ({product.reviewCount}+)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

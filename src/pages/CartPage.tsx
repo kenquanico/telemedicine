@@ -10,7 +10,7 @@ export default function CartPage() {
     const total = cartTotal + DELIVERY_FEE - DISCOUNT;
 
     return (
-        <div style={{ padding: "40px 64px" }}>
+        <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
             <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#2d2d2d", letterSpacing: "-0.02em", marginBottom: 32 }}>
                 Shopping Cart
                 <span style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 500, marginLeft: 12, fontFamily: "'Epilogue', sans-serif" }}>
@@ -18,7 +18,7 @@ export default function CartPage() {
                 </span>
             </h2>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 28, alignItems: "flex-start" }}>
+            <div className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
                 {/* ── Cart Items ── */}
                 <div>
                     {cartItems.length === 0 ? (
@@ -43,12 +43,7 @@ export default function CartPage() {
                         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                             {cartItems.map((item) => (
                                 <div key={item.product.id}
-                                     style={{
-                                         display: "flex", gap: 18, padding: 20,
-                                         background: "#fff", border: "1px solid #EAEFEE",
-                                         borderRadius: 18, alignItems: "center",
-                                         transition: "box-shadow 0.2s",
-                                     }}
+                                     className="flex flex-col gap-4 rounded-[18px] border border-[#EAEFEE] bg-white p-5 transition-shadow duration-200 sm:flex-row sm:items-center"
                                      onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(45,45,45,0.07)"}
                                      onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
                                 >
@@ -71,7 +66,7 @@ export default function CartPage() {
                                     </div>
 
                                     {/* Info */}
-                                    <div style={{ flex: 1 }}>
+                                    <div className="min-w-0 flex-1">
                                         <div style={{ fontSize: 10, color: "#427b77", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4, fontFamily: "'Epilogue', sans-serif" }}>
                                             {item.product.manufacturer.split(" ")[0]}
                                         </div>
@@ -87,7 +82,7 @@ export default function CartPage() {
                                     </div>
 
                                     {/* Controls */}
-                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
+                                    <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
                                         <QtySelector value={item.quantity} onChange={(v) => updateQuantity(item.product.id, v)} size="sm" />
                                         <div style={{ fontSize: 17, fontWeight: 800, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
                                             ₱{(item.product.price * item.quantity).toLocaleString()}
@@ -111,11 +106,7 @@ export default function CartPage() {
                 </div>
 
                 {/* ── Order Summary ── */}
-                <div style={{
-                    background: "#fff", border: "1px solid #EAEFEE",
-                    borderRadius: 20, padding: 24, position: "sticky", top: 96,
-                    boxShadow: "0 2px 20px rgba(45,45,45,0.06)",
-                }}>
+                <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
                     <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#2d2d2d", marginBottom: 20, letterSpacing: "-0.01em" }}>
                         Order Summary
                     </h3>

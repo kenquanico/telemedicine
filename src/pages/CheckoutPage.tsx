@@ -23,12 +23,12 @@ export default function CheckoutPage() {
     };
 
     return (
-        <div style={{ padding: "40px 64px" }}>
+        <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
             <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#2d2d2d", letterSpacing: "-0.02em", marginBottom: 32 }}>
                 Checkout
             </h2>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 360px", gap: 28, alignItems: "flex-start" }}>
+            <div className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
                 {/* ── Left ── */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
@@ -37,7 +37,7 @@ export default function CheckoutPage() {
                         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 22, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif", display: "flex", alignItems: "center", gap: 8 }}>
                             Delivery Address
                         </h3>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                        <div className="mb-3.5 grid gap-3.5 sm:grid-cols-2">
                             {[
                                 { label: "First Name", value: address.firstName },
                                 { label: "Last Name",  value: address.lastName  },
@@ -74,7 +74,7 @@ export default function CheckoutPage() {
                                    onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
                             />
                         </div>
-                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 14 }}>
+                        <div className="mb-3.5 grid gap-3.5 sm:grid-cols-2">
                             {[
                                 { label: "City",     value: address.city },
                                 { label: "ZIP Code", value: address.zip  },
@@ -155,11 +155,7 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* ── Order Summary ── */}
-                <div style={{
-                    background: "#fff", border: "1px solid #EAEFEE",
-                    borderRadius: 20, padding: 24, position: "sticky", top: 96,
-                    boxShadow: "0 2px 20px rgba(45,45,45,0.06)",
-                }}>
+                <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
                     <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#2d2d2d", marginBottom: 20, letterSpacing: "-0.01em" }}>
                         Order Summary
                     </h3>
