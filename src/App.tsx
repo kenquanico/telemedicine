@@ -15,6 +15,7 @@ import {
     PaymentHistoryPage,
     AccountPage,
 } from "./pages/OtherPages";
+import PharmaciesPage from "./pages/PharmaciesPage.tsx";
 
 const homeRendersPickupExperience = HomePage.name === "PickupPage";
 
@@ -28,7 +29,7 @@ function PageRouter() {
         medicines: <CatalogPage />,
         product: <ProductDetailPage />,
         pickup: <PickupPage />,
-        pharmacies: <PickupPage />,
+        pharmacies: <PharmaciesPage />,
         pharmacy: <PickupPage />,
         cart: <CartPage />,
         checkout: <CheckoutPage />,
