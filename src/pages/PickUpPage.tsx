@@ -652,7 +652,7 @@ export default function PickupPage() {
                         type="text"
                         value={searchValue}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
-                        placeholder="Search pharmacies…"
+                        placeholder="Search pharmacies by name, location, or medicine…"
                         autoComplete="off"
                         className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] text-sm text-[#262626] placeholder-[#262626]/30 outline-none focus:border-white/90 focus:bg-white/85 transition-all duration-200 epilogue-thin"
                     />
