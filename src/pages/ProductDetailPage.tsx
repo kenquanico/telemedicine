@@ -92,7 +92,7 @@ function AssuranceItem({
 
 function ProductVisual({ image, name, className = "" }: { image: string; name: string; className?: string }) {
     const [imageFailed, setImageFailed] = useState(false);
-    const hasImagePath = image.startsWith("http") || image.startsWith("/");
+    const hasImagePath = image.startsWith("http") || image.startsWith("/") || image.startsWith("data:");
 
     if (hasImagePath && !imageFailed) {
         return <img src={image} alt={name} className={`scale-[1.16] select-none object-contain ${className}`} onError={() => setImageFailed(true)} />;
@@ -196,7 +196,7 @@ export default function ProductDetailPage() {
                                                 : "border-[#E6ECEB] bg-white hover:border-[#BFD4D1] hover:bg-[#F8FBFA]"
                                         }`}
                                     >
-                                        {String(item.icon).startsWith("http") || String(item.icon).startsWith("/") ? (
+                                        {String(item.icon).startsWith("http") || String(item.icon).startsWith("/") || String(item.icon).startsWith("data:") ? (
                                             <img src={item.icon} alt="" className="h-8 w-8 scale-[1.2] object-contain" />
                                         ) : (
                                             <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
