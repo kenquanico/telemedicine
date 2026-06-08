@@ -9,19 +9,19 @@ import { applyProductFilters } from "../utils/productFilters";
 import { getDefaultFilters } from "../utils/filterState";
 
 const CATEGORY_ICON_SRC: Record<Category, string> = {
-    pain_relief: "/SVG/Pain%20Relief.svg",
+    pain_relief: "/SVG/Pain Relief.svg",
     vitamins: "/SVG/Vitamins.svg",
     antibiotics: "/SVG/Antibiotics.svg",
-    cough_cold: "/SVG/Artboard%2011.svg",
-    antacids_gi: "/SVG/Antacids%20%26%20Gi.svg",
+    cough_cold: "/SVG/Artboard 11.svg",
+    antacids_gi: "/SVG/Antacids & Gi.svg",
     dermatology: "/SVG/Dermatology.svg",
-    diabetes_care: "/SVG/Diabetes%20%26%20Care.svg",
-    heart_bp: "/SVG/Heart%20%26%20BP.svg",
-    eye_ear: "/SVG/Eye%20and%20Ear.svg",
-    first_aid: "/SVG/First%20Aid.svg",
-    baby_child: "/SVG/Baby%20%26%20Child.svg",
-    feminine_care: "/SVG/Feminine%20Care.svg",
-    personal_care: "/SVG/Personal%20Care.svg",
+    diabetes_care: "/SVG/Diabetes & Care.svg",
+    heart_bp: "/SVG/Heart & BP.svg",
+    eye_ear: "/SVG/Eye and Ear.svg",
+    first_aid: "/SVG/First Aid.svg",
+    baby_child: "/SVG/Baby & Child.svg",
+    feminine_care: "/SVG/Feminine Care.svg",
+    personal_care: "/SVG/Personal Care.svg",
 };
 
 function CategoryImageTile({

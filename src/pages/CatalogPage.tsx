@@ -89,6 +89,7 @@ function CatalogMedicineCard({
     const [hearted, setHearted] = useState(false);
     const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
+    const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/");
     const stockLabel =
         product.stockStatus === "out_of_stock"
             ? "Out"
@@ -99,7 +100,7 @@ function CatalogMedicineCard({
     return (
         <div className="group cursor-pointer" onClick={onView}>
             <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white">
-                {product.image.startsWith("http") && !imageFailed ? (
+                {hasImagePath && !imageFailed ? (
                     <img
                         src={product.image}
                         alt={product.brandName}

@@ -7,7 +7,7 @@ import type {
 } from "../types";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
-export const PRODUCTS: Product[] = [
+const RAW_PRODUCTS: Product[] = [
     // ── Pain Relief ──────────────────────────────────────────────────────────
     {
         id: "p1",
@@ -1196,6 +1196,29 @@ export const PRODUCTS: Product[] = [
         reviews: [],
     },
 ];
+
+const CATEGORY_PRODUCT_IMAGES: Record<Product["category"], string> = {
+    pain_relief: "/SVG/Pain%20Relief.svg",
+    vitamins: "/SVG/Vitamins.svg",
+    antibiotics: "/SVG/Antibiotics.svg",
+    cough_cold: "/SVG/Artboard%2011.svg",
+    antacids_gi: "/SVG/Antacids%20%26%20Gi.svg",
+    dermatology: "/SVG/Dermatology.svg",
+    diabetes_care: "/SVG/Diabetes%20%26%20Care.svg",
+    heart_bp: "/SVG/Heart%20%26%20BP.svg",
+    eye_ear: "/SVG/Eye%20and%20Ear.svg",
+    first_aid: "/SVG/First%20Aid.svg",
+    baby_child: "/SVG/Baby%20%26%20Child.svg",
+    feminine_care: "/SVG/Feminine%20Care.svg",
+    personal_care: "/SVG/Personal%20Care.svg",
+};
+
+export const PRODUCTS: Product[] = RAW_PRODUCTS.map((product) => ({
+    ...product,
+    image: product.image.includes("images.watsons.com.ph")
+        ? CATEGORY_PRODUCT_IMAGES[product.category]
+        : product.image,
+}));
 
 // ─── Addresses ────────────────────────────────────────────────────────────────
 export const ADDRESSES: Address[] = [
