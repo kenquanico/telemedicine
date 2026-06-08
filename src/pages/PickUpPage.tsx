@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { useApp } from "../hooks/useApp";
 
-const API_KEY = "AIzaSyATaHhW1zDWipZm7SgzjAFNS5j0ta3zDmA";
+const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const FILTERS = ["Open Now", "24 Hours", "Has Parking", "Drive-Through", "Near Me"] as const;
 
