@@ -119,7 +119,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
                 <path d="M${x - 6} 33L${x} 42L${x + 6} 33Z" fill="white" stroke="#e2ecea" stroke-width="1" stroke-linejoin="round"/>
             </g>
             ${iconSvg}
-            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, sans-serif" font-size="10" font-weight="600" fill="#262626">${escapedLabel}</text>
+            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Neue Montreal, sans-serif" font-size="10" font-weight="600" fill="#262626">${escapedLabel}</text>
             <path d="M${x} 45C${x - 7} 45 ${x - 12.5} 51 ${x - 12.5} 58c0 9 12.5 17 12.5 17s12.5-8 12.5-17C${x + 12.5} 51 ${x + 7} 45 ${x} 45z" fill="${pinColor}" fill-opacity="0.82" stroke="white" stroke-width="1.75"/>
             <circle cx="${x}" cy="58" r="4" fill="white" fill-opacity="0.9"/>
             <circle cx="${x}" cy="58" r="2.1" fill="${pinColor}" fill-opacity="0.82"/>
@@ -170,7 +170,10 @@ function StatusPill({ openNow }: { openNow: boolean | null }) {
             : { dot: "#9ca3af", text: "text-[#262626]/70",    bg: "bg-gray-100",   label: "Hours vary" };
 
     return (
-        <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium epilogue-regular ${cfg.bg} ${cfg.text}`}>
+        <span
+            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium epilogue-regular ${cfg.bg} ${cfg.text}`}
+            style={{ lineHeight: 1 }}
+        >
             <span className="w-[5px] h-[5px] rounded-full flex-shrink-0" style={{ background: cfg.dot }} />
             {cfg.label}
         </span>
@@ -489,7 +492,7 @@ export default function PickupPage() {
         const map = new window.google.maps.Map(mapRef.current, {
             center,
             zoom: 15,
-            disableDefaultUI: true, // disable ALL default controls including zoom
+            disableDefaultUI: true,
         });
         mapInstance.current = map;
 
@@ -550,7 +553,6 @@ export default function PickupPage() {
         return () => { try { document.head.removeChild(script); } catch { /**/ } };
     }, [initMap]);
 
-    // Custom control handlers
     const handleZoomIn = useCallback(() => {
         if (!mapInstance.current) return;
         mapInstance.current.setZoom((mapInstance.current.getZoom() ?? 15) + 1);
@@ -675,18 +677,25 @@ export default function PickupPage() {
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer epilogue-regular backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] transition-all ${
+                                    className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border text-xs cursor-pointer epilogue-regular backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] transition-all ${
                                         isActive
                                             ? "border-[#1a1a1a]/70 bg-[#1a1a1a]/78"
                                             : "border-white/70 bg-white/65 text-[#262626] hover:border-white/90 hover:bg-white/85"
                                     }`}
+                                    style={{ lineHeight: 1 }}
                                 >
                                     <Icon
-                                        size={16}
+                                        size={14}
                                         strokeWidth={1.6}
-                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic, verticalAlign: 'middle' }}
+                                        className="shrink-0"
+                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic }}
                                     />
-                                    {f}
+                                    <span
+                                        className="leading-none"
+                                        style={{ color: isActive ? "rgba(255,255,255,0.85)" : undefined }}
+                                    >
+                                        {f}
+                                    </span>
                                 </button>
                             );
                         })}
@@ -701,7 +710,6 @@ export default function PickupPage() {
                     left: sidebarOpen ? "min(372px, calc(100vw - 48px))" : "0",
                 }}
             >
-                {/* Gradient backdrop — only shown when panel is visible */}
                 <div
                     className="transition-opacity duration-300"
                     style={{
@@ -710,7 +718,6 @@ export default function PickupPage() {
                     }}
                 >
                     <div className="pointer-events-auto">
-
 
                         <div className="flex justify-center px-6 pb-2">
                             <button
@@ -768,7 +775,6 @@ export default function PickupPage() {
 
                     </div>
                 </div>
-
             </div>
 
             <style>{`
