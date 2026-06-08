@@ -601,7 +601,7 @@ export default function PickupPage() {
     const sidebarOpen = !!selectedPharmacy;
 
     return (
-        <div className="relative w-full overflow-hidden epilogue-regular" style={{ height: "calc(100vh - 80px)" }}>
+        <div className="relative w-full h-screen overflow-hidden epilogue-regular">
 
             {/* Map */}
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />

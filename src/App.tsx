@@ -47,14 +47,16 @@ function PageRouter() {
 // ─── App Shell ────────────────────────────────────────────────────────────────
 function AppShell() {
     const { currentPage } = useApp();
-    const compactNav =
+    const hideNavbar =
         currentPage === "pickup" ||
-        currentPage === "pharmacies" ||
+        currentPage === "pharmacy" ||
         (currentPage === "home" && homeRendersPickupExperience);
+    const compactNav =
+        currentPage === "pharmacies";
 
     return (
         <div className="min-h-screen bg-white font-['Geist']">
-            <Navbar compact={compactNav} />
+            {!hideNavbar && <Navbar compact={compactNav} />}
             <main>
                 <PageRouter />
             </main>
