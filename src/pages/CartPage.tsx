@@ -60,7 +60,7 @@ export default function CartPage() {
                                         <img
                                             src={item.product.image}
                                             alt={item.product.brandName}
-                                            style={{ width: "100%", height: "100%", objectFit: "contain", padding: 8 }}
+                                            style={{ width: "100%", height: "100%", objectFit: "contain", padding: 0, transform: "scale(1.18)" }}
                                             onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                                         />
                                     </div>
