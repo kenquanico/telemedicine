@@ -2,6 +2,7 @@ import  { useState, useRef, useEffect } from "react";
 import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
 import Logo from "../assets/Dosely-1.svg";
+import SearchModal from "./SearchModal";
 import {
     MapPin,
     Heart,
@@ -16,7 +17,6 @@ import {
     LogOut,
     Settings,
     ClipboardList,
-    X,
 } from "lucide-react";
 
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
@@ -126,11 +126,11 @@ const NAV_TABS: {
 export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
     const hideSecondaryNav = compact || currentPage === "pickup" || currentPage === "pharmacies";
-    const [cartOpen,    setCartOpen]    = useState(false);
-    const [accountOpen, setAccountOpen] = useState(false);
-    const [langOpen,    setLangOpen]    = useState(false);
-    const [activeLang,  setActiveLang]  = useState("EN");
-    const [searchValue, setSearchValue] = useState("");
+    const [cartOpen,      setCartOpen]      = useState(false);
+    const [accountOpen,   setAccountOpen]   = useState(false);
+    const [langOpen,      setLangOpen]      = useState(false);
+    const [activeLang,    setActiveLang]    = useState("EN");
+    const [searchOpen,    setSearchOpen]    = useState(false);
     const cartRef    = useRef<HTMLDivElement>(null);
     const accountRef = useRef<HTMLDivElement>(null);
     const langRef    = useRef<HTMLDivElement>(null);
@@ -146,174 +146,162 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
     }, []);
 
     return (
-        <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
+        <>
+            <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
 
-            {/* ── Top row ── */}
-            <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
+                {/* ── Top row ── */}
+                <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
 
-                {/* Logo */}
-                <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
-                    <img src={Logo} className="h-12 w-auto" alt="Dosely logo" />
-                </button>
+                    {/* Logo */}
+                    <button onClick={() => navigateTo("home")} className="shrink-0 bg-transparent border-none p-0 cursor-pointer mr-1.5">
+                        <img src={Logo} className="h-12 w-auto" alt="Dosely logo" />
+                    </button>
 
-                {/* Location */}
-                <button className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#262626] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer">
-                    <MapPin size={20} className="text-[#262626]" strokeWidth={1.6} />
-                    <span className="text-sm text-[#262626] epilogue-regular">Cebu City, PH</span>
-                    <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
-                </button>
+                    {/* Location */}
+                    <button className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#262626] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer">
+                        <MapPin size={20} className="text-[#262626]" strokeWidth={1.6} />
+                        <span className="text-sm text-[#262626] epilogue-regular">Cebu City, PH</span>
+                        <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
+                    </button>
 
-                <div className="flex-1" />
+                    <div className="flex-1" />
 
-                {/* ── Right action groups ── */}
-                <div className="flex items-center gap-6 shrink-0">
+                    {/* ── Right action groups ── */}
+                    <div className="flex items-center gap-6 shrink-0">
 
-                    {/* Group 1: Favorites + Cart */}
-                    <div className="flex items-center gap-1">
-                        <button
-                            onClick={() => navigateTo("favorites" as PageKey)}
-                            className="icon-btn"
-                            title="Favorites"
-                        >
-                            <Heart size={20} strokeWidth={1.8} />
-                        </button>
-
-                        <div className="relative" ref={cartRef}>
+                        {/* Group 1: Favorites + Cart */}
+                        <div className="flex items-center gap-1">
                             <button
-                                onClick={() => cartCount > 0 && setCartOpen((o) => !o)}
-                                className={["icon-btn", cartCount === 0 ? "opacity-35 cursor-not-allowed" : ""].join(" ")}
-                                title="Cart"
-                                disabled={cartCount === 0}
+                                onClick={() => navigateTo("favorites" as PageKey)}
+                                className="icon-btn"
+                                title="Favorites"
                             >
-                                    <span className="relative">
-                                        <ShoppingBag size={20} strokeWidth={1.8} />
-                                        {cartCount > 0 && (
-                                            <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none shadow-sm">
-                                                {cartCount}
-                                            </span>
-                                        )}
-                                    </span>
+                                <Heart size={20} strokeWidth={1.8} />
                             </button>
-                            {cartOpen && <CartDropdown onClose={() => setCartOpen(false)} />}
-                        </div>
-                    </div>
 
-                    {/* Group 2: Language + Account */}
-                    <div className="flex items-center gap-1">
-
-                        {/* Language */}
-                        <div className="relative" ref={langRef}>
-                            <button
-                                onClick={() => setLangOpen((o) => !o)}
-                                className="flex items-center gap-1.5 text-[#262626] hover:text-[#427b77] transition-colors duration-200 cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-[#2d2d2d]/8"
-                                title="Language"
-                            >
-                                    <span style={{ display: "inline-flex", alignItems: "center", width: 18, height: 18, transform: "rotate(-23deg)" }}>
-                                        <Globe size={18} strokeWidth={1.8} />
-                                    </span>
-                                <span className="text-sm epilogue-regular tracking-wide">{activeLang}</span>
-                                <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
-                            </button>
-                            {langOpen && (
-                                <div className="absolute top-[calc(100%+10px)] right-0 w-40 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
-                                    <div className="px-1.5 py-1 space-y-0.5">
-                                        {LANGUAGES.map((lang) => (
-                                            <button
-                                                key={lang.code}
-                                                onClick={() => { setActiveLang(lang.code); setLangOpen(false); }}
-                                                className={[
-                                                    "w-full flex items-center gap-2.5 px-3 py-2.5 text-xs epilogue-regular font-medium rounded-lg transition-colors duration-150 cursor-pointer text-left",
-                                                    activeLang === lang.code ? "text-[#262626] bg-[#F4F7F8]" : "text-[#262626]/70 hover:bg-[#F4F7F8] hover:text-[#262626]",
-                                                ].join(" ")}
-                                            >
-                                                <span className="text-[10px] tracking-wider w-7">{lang.code}</span>
-                                                <span>{lang.label}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Account */}
-                        <div className="relative" ref={accountRef}>
-                            <button
-                                onClick={() => setAccountOpen((o) => !o)}
-                                className="flex items-center gap-2 pl-2 pr-1.5 py-1 rounded-lg hover:bg-[#2d2d2d]/8 transition-all duration-200 cursor-pointer"
-                            >
-                                <span className="text-sm font-semibold text-[#262626] epilogue-regular leading-none">Ken</span>
-                                <span className="relative w-9 h-9 rounded-full bg-[#427b77] flex items-center justify-center shrink-0">
-                                        <UserRound size={16} strokeWidth={2} className="text-white" />
-                                        <span
-                                            className="absolute -bottom-0.5 -right-0.5 w-[17px] h-[17px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm"
-                                            style={{ transition: "transform 0.2s ease", transform: accountOpen ? "rotate(180deg)" : "rotate(0deg)" }}
-                                        >
-                                            <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
-                                        </span>
-                                    </span>
-                            </button>
-                            {accountOpen && (
-                                <AccountDropdown
-                                    onClose={() => setAccountOpen(false)}
-                                    navigateTo={navigateTo}
-                                />
-                            )}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            {!hideSecondaryNav && (
-                <div className="flex items-center gap-0.5 pl-12 pr-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                    {NAV_TABS.map((tab, index) => {
-                        const isActive = tab.activeOn.includes(currentPage);
-                        return (
-                            <button
-                                key={tab.label}
-                                onClick={() => navigateTo(tab.navigatesTo)}
-                                className={[
-                                    "nav-tab flex items-center py-2 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none epilogue-regular",
-                                    index === 0 ? "pl-0 pr-6" : "px-6",
-                                    isActive ? "nav-tab--active" : "",
-                                ].join(" ")}
-                            >
-                                    <span className="nav-tab-inner">
-                                        <tab.Icon size={18} className="nav-tab-icon" />
-                                        <span className="nav-tab-label">{tab.label}</span>
-                                    </span>
-                            </button>
-                        );
-                    })}
-
-                    <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
-                        <div className="relative flex items-center">
-                            <Search
-                                size={14}
-                                strokeWidth={1.6}
-                                className="absolute left-3.5 pointer-events-none text-[#262626] z-10"
-                            />
-                            <input
-                                type="text"
-                                value={searchValue}
-                                onChange={(e) => setSearchValue(e.target.value)}
-                                placeholder="Search medicines..."
-                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#262626] placeholder:text-[#262626]/35 outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
-                            />
-                            {searchValue && (
+                            <div className="relative" ref={cartRef}>
                                 <button
-                                    onClick={() => setSearchValue("")}
-                                    className="absolute right-3 flex items-center justify-center w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 text-[#262626] transition-colors duration-150 cursor-pointer"
+                                    onClick={() => cartCount > 0 && setCartOpen((o) => !o)}
+                                    className={["icon-btn", cartCount === 0 ? "opacity-35 cursor-not-allowed" : ""].join(" ")}
+                                    title="Cart"
+                                    disabled={cartCount === 0}
                                 >
-                                    <X size={14} strokeWidth={1.6} />
+                                        <span className="relative">
+                                            <ShoppingBag size={20} strokeWidth={1.8} />
+                                            {cartCount > 0 && (
+                                                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none shadow-sm">
+                                                    {cartCount}
+                                                </span>
+                                            )}
+                                        </span>
                                 </button>
-                            )}
+                                {cartOpen && <CartDropdown onClose={() => setCartOpen(false)} />}
+                            </div>
                         </div>
+
+                        {/* Group 2: Language + Account */}
+                        <div className="flex items-center gap-1">
+
+                            {/* Language */}
+                            <div className="relative" ref={langRef}>
+                                <button
+                                    onClick={() => setLangOpen((o) => !o)}
+                                    className="flex items-center gap-1.5 text-[#262626] hover:text-[#427b77] transition-colors duration-200 cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-[#2d2d2d]/8"
+                                    title="Language"
+                                >
+                                        <span style={{ display: "inline-flex", alignItems: "center", width: 18, height: 18, transform: "rotate(-23deg)" }}>
+                                            <Globe size={18} strokeWidth={1.8} />
+                                        </span>
+                                    <span className="text-sm epilogue-regular tracking-wide">{activeLang}</span>
+                                    <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
+                                </button>
+                                {langOpen && (
+                                    <div className="absolute top-[calc(100%+10px)] right-0 w-40 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
+                                        <div className="px-1.5 py-1 space-y-0.5">
+                                            {LANGUAGES.map((lang) => (
+                                                <button
+                                                    key={lang.code}
+                                                    onClick={() => { setActiveLang(lang.code); setLangOpen(false); }}
+                                                    className={[
+                                                        "w-full flex items-center gap-2.5 px-3 py-2.5 text-xs epilogue-regular font-medium rounded-lg transition-colors duration-150 cursor-pointer text-left",
+                                                        activeLang === lang.code ? "text-[#262626] bg-[#F4F7F8]" : "text-[#262626]/70 hover:bg-[#F4F7F8] hover:text-[#262626]",
+                                                    ].join(" ")}
+                                                >
+                                                    <span className="text-[10px] tracking-wider w-7">{lang.code}</span>
+                                                    <span>{lang.label}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Account */}
+                            <div className="relative" ref={accountRef}>
+                                <button
+                                    onClick={() => setAccountOpen((o) => !o)}
+                                    className="flex items-center gap-2 pl-2 pr-1.5 py-1 rounded-lg hover:bg-[#2d2d2d]/8 transition-all duration-200 cursor-pointer"
+                                >
+                                    <span className="text-sm font-semibold text-[#262626] epilogue-regular leading-none">Ken</span>
+                                    <span className="relative w-9 h-9 rounded-full bg-[#427b77] flex items-center justify-center shrink-0">
+                                            <UserRound size={16} strokeWidth={2} className="text-white" />
+                                            <span
+                                                className="absolute -bottom-0.5 -right-0.5 w-[17px] h-[17px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm"
+                                                style={{ transition: "transform 0.2s ease", transform: accountOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+                                            >
+                                                <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
+                                            </span>
+                                        </span>
+                                </button>
+                                {accountOpen && (
+                                    <AccountDropdown
+                                        onClose={() => setAccountOpen(false)}
+                                        navigateTo={navigateTo}
+                                    />
+                                )}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            )}
 
-            <style>{`
+                {!hideSecondaryNav && (
+                    <div className="flex items-center gap-0.5 pl-12 pr-12 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {NAV_TABS.map((tab, index) => {
+                            const isActive = tab.activeOn.includes(currentPage);
+                            return (
+                                <button
+                                    key={tab.label}
+                                    onClick={() => navigateTo(tab.navigatesTo)}
+                                    className={[
+                                        "nav-tab flex items-center py-2 text-sm whitespace-nowrap cursor-pointer bg-transparent border-none epilogue-regular",
+                                        index === 0 ? "pl-0 pr-6" : "px-6",
+                                        isActive ? "nav-tab--active" : "",
+                                    ].join(" ")}
+                                >
+                                        <span className="nav-tab-inner">
+                                            <tab.Icon size={18} className="nav-tab-icon" />
+                                            <span className="nav-tab-label">{tab.label}</span>
+                                        </span>
+                                </button>
+                            );
+                        })}
+
+                        {/* ── Search circle button ── */}
+                        <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
+                            <button
+                                onClick={() => setSearchOpen(true)}
+                                className="icon-btn"
+                                title="Search medicines"
+                                aria-label="Open search"
+                            >
+                                <Search size={18} strokeWidth={1.8} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                <style>{`
                     @keyframes slideDown {
                         from { opacity: 0; transform: translateY(-8px); }
                         to   { opacity: 1; transform: translateY(0); }
@@ -380,6 +368,10 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                     }
                     .icon-btn:hover { background: rgba(45,45,45,0.08); color: #427b77; }
                 `}</style>
-        </nav>
+            </nav>
+
+            {/* ── Search Modal ── */}
+            <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+        </>
     );
 }
