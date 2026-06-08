@@ -219,7 +219,6 @@ function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => 
     );
 }
 
-// ── PharmaciesPage ────────────────────────────────────────────────────────────
 export default function PharmaciesPage() {
     const { navigateTo, showModal } = useApp();
     const [search, setSearch]               = useState("");
@@ -258,7 +257,6 @@ export default function PharmaciesPage() {
             <div className="relative flex items-start gap-7 px-5 sm:px-8 lg:px-16">
                 <div className="flex-1 min-w-0">
 
-                    {/* ── Page Header ── */}
                     <div className="mt-10 mb-8">
                         <p className="text-[11px] font-extrabold tracking-[0.14em] text-[#427b77] uppercase mb-2 epilogue-header">
                             Cebu City, PH
@@ -290,7 +288,6 @@ export default function PharmaciesPage() {
                         ))}
                     </div>
 
-                    {/* ── Search + Sort ── */}
                     <div className="flex flex-col sm:flex-row gap-3 mb-5">
                         <div className="relative flex items-center flex-1">
                             <svg className="absolute left-3.5 pointer-events-none text-[#427b77]/60" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -324,7 +321,6 @@ export default function PharmaciesPage() {
                         </div>
                     </div>
 
-                    {/* ── Filter chips ── */}
                     <div className="flex items-center gap-2 flex-wrap mb-8">
                         <span className="text-[11px] text-gray-400 epilogue-regular flex items-center gap-1">
                             <Filter size={11} strokeWidth={2} /> Filter:
@@ -351,12 +347,10 @@ export default function PharmaciesPage() {
                         )}
                     </div>
 
-                    {/* ── Filter panel mobile ── */}
                     <div className="mb-10 lg:hidden">
                         <FilterPanel filters={filters} onChange={setFilters} />
                     </div>
 
-                    {/* ── All Pharmacies ── */}
                     <div className="mb-[52px]">
                         <SectionHeader title="All Pharmacies" onSeeAll={undefined} />
                         {filtered.length === 0 ? (
