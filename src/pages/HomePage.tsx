@@ -8,9 +8,21 @@ import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
 import { getDefaultFilters } from "../utils/filterState";
 
-function getCategoryImage(category: Category) {
-    return PRODUCTS.find((product) => product.category === category)?.image ?? "";
-}
+const CATEGORY_ICON_SRC: Record<Category, string> = {
+    pain_relief: "/SVG/Pain%20Relief.svg",
+    vitamins: "/SVG/Vitamins.svg",
+    antibiotics: "/SVG/Antibiotics.svg",
+    cough_cold: "/SVG/Artboard%2011.svg",
+    antacids_gi: "/SVG/Antacids%20%26%20Gi.svg",
+    dermatology: "/SVG/Dermatology.svg",
+    diabetes_care: "/SVG/Diabetes%20%26%20Care.svg",
+    heart_bp: "/SVG/Heart%20%26%20BP.svg",
+    eye_ear: "/SVG/Eye%20and%20Ear.svg",
+    first_aid: "/SVG/First%20Aid.svg",
+    baby_child: "/SVG/Baby%20%26%20Child.svg",
+    feminine_care: "/SVG/Feminine%20Care.svg",
+    personal_care: "/SVG/Personal%20Care.svg",
+};
 
 function CategoryImageTile({
                                category,
@@ -20,26 +32,26 @@ function CategoryImageTile({
     onClick: () => void;
 }) {
     const meta = CATEGORY_META[category];
-    const image = getCategoryImage(category);
+    const iconSrc = CATEGORY_ICON_SRC[category];
+    const [imageFailed, setImageFailed] = useState(false);
 
     return (
         <button
             onClick={onClick}
-            className="box-flex bds-u-focus-outline cuisine-tile br-base ma-xs group w-[128px] shrink-0 cursor-pointer text-left"
+            className="box-flex bds-u-focus-outline cuisine-tile br-base ma-xs group w-[108px] shrink-0 cursor-pointer text-left"
             data-testid={`home-cuisine-tile-${category}`}
         >
-            <div className="cuisine-tile__image common-tile-image relative mb-2 aspect-square overflow-hidden rounded-2xl border border-[#EAEFEE] bg-[#F7F9F9] transition-colors duration-200 group-hover:border-[#427b77]">
-                <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-5">
-                    {image.startsWith("http") ? (
+            <div className="cuisine-tile__image common-tile-image relative mb-2 mr-2 aspect-square overflow-hidden rounded-xl border border-[#EAEFEE] bg-[#F7F9F9] transition-colors duration-200 group-hover:border-[#427b77]">
+                <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-1.5">
+                    {imageFailed ? (
+                        <span className="text-4xl leading-none" aria-hidden="true">{meta.icon}</span>
+                    ) : (
                         <img
                             alt=""
-                            className="common-tile-image__logo h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                            src={image}
+                            className="common-tile-image__logo h-full w-full scale-[1.28] object-contain transition-transform duration-300 group-hover:scale-[1.34]"
+                            src={iconSrc}
+                            onError={() => setImageFailed(true)}
                         />
-                    ) : (
-                        <span className="text-4xl leading-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
-                            {meta.icon}
-                        </span>
                     )}
                 </div>
             </div>
@@ -67,6 +79,7 @@ function VendorMedicineCard({
     onAdd: () => void;
 }) {
     const [hearted, setHearted] = useState(false);
+    const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
 
     return (
@@ -75,16 +88,17 @@ function VendorMedicineCard({
             onClick={onView}
         >
             {/* ── Image block ── */}
-            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-[#F0F5F4] mb-3">
-                {typeof product.image === "string" && product.image.startsWith("http") ? (
+            <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-white mb-3">
+                {typeof product.image === "string" && product.image.startsWith("http") && !imageFailed ? (
                     <img
                         src={product.image}
                         alt={product.brandName}
-                        className="h-full w-full select-none object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full scale-[1.22] select-none object-contain transition-transform duration-300 group-hover:scale-[1.28]"
+                        onError={() => setImageFailed(true)}
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center text-5xl select-none transition-transform duration-300 group-hover:scale-105">
-                        {product.image}
+                    <div className="flex h-full w-full select-none items-center justify-center px-4 text-center text-sm font-bold text-[#262626]/70 transition-transform duration-300 group-hover:scale-105 epilogue-header">
+                        {imageFailed ? product.brandName : product.image}
                     </div>
                 )}
 
@@ -174,6 +188,7 @@ function VendorMedicineCard({
 export default function HomePage() {
     const { navigateTo, addToCart, showModal } = useApp();
     const [filters, setFilters] = useState(getDefaultFilters);
+    const [bannerFailed, setBannerFailed] = useState(false);
     const filteredProducts = applyProductFilters(PRODUCTS, filters);
     const featuredProducts = filteredProducts.slice(0, 4);
     const bestSellerProducts = filteredProducts.slice(4);
@@ -201,12 +216,15 @@ export default function HomePage() {
                 <div className="flex-1 min-w-0">
 
                     {/* ── Hero banner ── */}
-                    <div className="relative my-10 overflow-hidden rounded-3xl bg-[#F0F5F4]">
-                        <img
-                            src="/SVG/Dosely%20Banner.svg"
-                            alt="Dosely"
-                            className="block w-full"
-                        />
+                    <div className="relative my-10 min-h-[190px] overflow-hidden rounded-3xl bg-[#C4DEDD] sm:min-h-[230px]">
+                        {!bannerFailed && (
+                            <img
+                                src="/SVG/Dosely%20Banner.svg"
+                                alt="Dosely"
+                                className="block w-full"
+                                onError={() => setBannerFailed(true)}
+                            />
+                        )}
                         <div className="absolute inset-0 flex flex-col items-start justify-center px-6 text-left sm:px-8 lg:px-14">
                             <h1 className="max-w-[560px] text-xl font-extrabold leading-[1.05] text-[#262626] epilogue-header sm:text-3xl lg:text-5xl">
                                 Sign up for care <br/> that arrives today.
@@ -223,12 +241,12 @@ export default function HomePage() {
 
                     {/* ── Categories ── */}
                     <div className="mb-12">
-                        <SectionHeader title="Shop by Category" onSeeAll={() => navigateTo("catalog")} />
+                        <SectionHeader title="Shop by Category" />
                         <div className="lane-component webrefresh mt-5" data-testid="home-refresh-swimlane">
-                            <div className="lane-wrapper overflow-x-auto pb-1">
+                            <div className="lane-wrapper scrollbar-none overflow-x-auto pb-1">
                                 <ul
                                     data-testid="home-cuisine-lane"
-                                    className="cuisine-lane flex gap-3"
+                                    className="cuisine-lane flex gap-5 pr-8"
                                     aria-label="Shop by medicine category"
                                 >
                                     {(Object.keys(CATEGORY_META) as Category[]).map((category) => (
@@ -251,7 +269,7 @@ export default function HomePage() {
 
                     {/* ── Featured Products ── */}
                     <div className="mb-[52px]">
-                        <SectionHeader title="Featured Products" onSeeAll={() => navigateTo("catalog")} />
+                        <SectionHeader title="Featured Products" />
                         {featuredProducts.length === 0 ? (
                             <div className="mt-5 rounded-[20px] border border-[#EAEFEE] bg-white px-6 py-14 text-center">
                                 <div className="mb-1.5 text-[17px] font-bold text-[#262626] epilogue-header">
@@ -282,7 +300,7 @@ export default function HomePage() {
                     {/* ── Best Sellers ── */}
                     {bestSellerProducts.length > 0 && (
                     <div className="mb-16">
-                        <SectionHeader title="Best Sellers" onSeeAll={() => navigateTo("catalog")} />
+                        <SectionHeader title="Best Sellers" />
                         <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3">
                             {bestSellerProducts.map((p) => (
                                 <VendorMedicineCard

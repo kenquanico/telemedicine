@@ -61,3 +61,11 @@ body {
     font-weight: 500;
     font-style: normal;
 }
+
+.scrollbar-none {
+    scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+    display: none;
+}

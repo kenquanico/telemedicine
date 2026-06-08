@@ -18,13 +18,15 @@ function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size
                     alignItems: "center",
                     justifyContent: "center",
                     gap: 6,
+                    padding: "0 14px",
+                    textAlign: "center",
                 }}
             >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#427b77" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5">
                     <rect x="3" y="3" width="18" height="18" rx="3" />
                     <path d="M3 9h18M9 21V9" />
                 </svg>
-                <span style={{ fontSize: 10, color: "#427b77", opacity: 0.5, fontFamily: "'Neue Montreal', sans-serif" }}>{alt}</span>
+                <span style={{ fontSize: 11, color: "#262626", opacity: 0.7, fontFamily: "'Neue Montreal', sans-serif", fontWeight: 700 }}>{alt}</span>
             </div>
         );
     }
@@ -37,7 +39,8 @@ function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size
                 width: "100%",
                 height: size,
                 objectFit: "contain",
-                padding: 12,
+                padding: 0,
+                transform: "scale(1.22)",
             }}
         />
     );
@@ -192,32 +195,12 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
 }
 
 // ─── Section Header ───────────────────────────────────────────────────────────
-export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
+export function SectionHeader({ title }: { title: string }) {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
             <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 28, fontWeight: 500, color: "#262626", letterSpacing: "-0.01em" }}>
                 {title}
             </h2>
-            {onSeeAll && (
-                <button
-                    onClick={onSeeAll}
-                    style={{
-                        color: "#427b77", fontSize: 13, fontWeight: 600,
-                        background: "none", border: "none", cursor: "pointer",
-                        fontFamily: "'Neue Montreal', sans-serif",
-                        display: "flex", alignItems: "center", gap: 4,
-                        padding: "6px 12px", borderRadius: 8,
-                        transition: "background 0.15s",
-                    }}
-                    onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "rgba(66,123,119,0.08)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "transparent"}
-                >
-                    See all
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                </button>
-            )}
         </div>
     );
 }

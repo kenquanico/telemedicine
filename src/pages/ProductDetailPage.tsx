@@ -91,13 +91,15 @@ function AssuranceItem({
 }
 
 function ProductVisual({ image, name, className = "" }: { image: string; name: string; className?: string }) {
-    if (image.startsWith("http")) {
-        return <img src={image} alt={name} className={`select-none object-contain ${className}`} />;
+    const [imageFailed, setImageFailed] = useState(false);
+
+    if (image.startsWith("http") && !imageFailed) {
+        return <img src={image} alt={name} className={`scale-[1.16] select-none object-contain ${className}`} onError={() => setImageFailed(true)} />;
     }
 
     return (
-        <span className={`select-none leading-none ${className}`} aria-hidden="true">
-            {image}
+        <span className={`flex items-center justify-center px-6 text-center text-xl font-bold text-[#262626]/70 epilogue-header ${className}`} aria-hidden="true">
+            {imageFailed ? name : image}
         </span>
     );
 }
@@ -164,7 +166,7 @@ export default function ProductDetailPage() {
                 <section className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
                     <div className="space-y-5">
                         <div className="overflow-hidden rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
-                            <div className="relative flex min-h-[360px] items-center justify-center bg-[#EEF6F4] p-10 sm:min-h-[460px]">
+                            <div className="relative flex min-h-[360px] items-center justify-center bg-white p-6 sm:min-h-[460px] sm:p-8">
                                 <div className="absolute left-5 top-5 rounded-full bg-[#1D546D] px-3 py-1 text-[11px] font-extrabold uppercase text-white epilogue-header">
                                     {product.packSize}
                                 </div>
@@ -174,7 +176,7 @@ export default function ProductDetailPage() {
                                 <ProductVisual
                                     image={product.image}
                                     name={product.brandName}
-                                    className="max-h-[300px] w-full max-w-[420px] drop-shadow-sm sm:max-h-[360px]"
+                                    className="max-h-[320px] w-full max-w-[460px] sm:max-h-[390px]"
                                 />
                             </div>
 
@@ -194,7 +196,7 @@ export default function ProductDetailPage() {
                                         }`}
                                     >
                                         {String(item.icon).startsWith("http") ? (
-                                            <img src={item.icon} alt="" className="h-8 w-8 object-contain" />
+                                            <img src={item.icon} alt="" className="h-8 w-8 scale-[1.2] object-contain" />
                                         ) : (
                                             <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
                                         )}

@@ -352,7 +352,7 @@ export default function PharmaciesPage() {
                     </div>
 
                     <div className="mb-[52px]">
-                        <SectionHeader title="All Pharmacies" onSeeAll={undefined} />
+                        <SectionHeader title="All Pharmacies" />
                         {filtered.length === 0 ? (
                             <div className="mt-5 rounded-[20px] border border-[#EAEFEE] bg-white px-6 py-14 text-center">
                                 <div className="mb-1.5 text-[17px] font-bold text-[#262626] epilogue-header">
