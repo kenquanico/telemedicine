@@ -11,9 +11,9 @@ export default function CartPage() {
 
     return (
         <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
-            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#2d2d2d", letterSpacing: "-0.02em", marginBottom: 32 }}>
+            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#262626", letterSpacing: "-0.02em", marginBottom: 32 }}>
                 Shopping Cart
-                <span style={{ fontSize: 14, color: "#9CA3AF", fontWeight: 500, marginLeft: 12, fontFamily: "'Epilogue', sans-serif" }}>
+                <span style={{ fontSize: 14, color: "rgba(38,38,38,0.6)", fontWeight: 500, marginLeft: 12, fontFamily: "'Epilogue', sans-serif" }}>
                     {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
                 </span>
             </h2>
@@ -31,10 +31,10 @@ export default function CartPage() {
                                 display: "flex", alignItems: "center", justifyContent: "center",
                                 fontSize: 32, margin: "0 auto 20px",
                             }}>🛒</div>
-                            <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 19, fontWeight: 700, color: "#2d2d2d", marginBottom: 8 }}>
+                            <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 19, fontWeight: 700, color: "#262626", marginBottom: 8 }}>
                                 Your cart is empty
                             </h3>
-                            <p style={{ color: "#9CA3AF", fontSize: 14, marginBottom: 24, fontFamily: "'Epilogue', sans-serif" }}>
+                            <p style={{ color: "rgba(38,38,38,0.6)", fontSize: 14, marginBottom: 24, fontFamily: "'Epilogue', sans-serif" }}>
                                 Add some medicines to get started
                             </p>
                             <Btn onClick={() => navigateTo("catalog")} variant="secondary">Browse Medicines</Btn>
@@ -71,12 +71,12 @@ export default function CartPage() {
                                             {item.product.manufacturer.split(" ")[0]}
                                         </div>
                                         <div
-                                            style={{ fontSize: 15, fontWeight: 700, color: "#2d2d2d", marginBottom: 2, cursor: "pointer", fontFamily: "'Epilogue', sans-serif" }}
+                                            style={{ fontSize: 15, fontWeight: 700, color: "#262626", marginBottom: 2, cursor: "pointer", fontFamily: "'Epilogue', sans-serif" }}
                                             onClick={() => navigateTo("product", item.product.id)}
                                         >
                                             {item.product.brandName} {item.product.strength}
                                         </div>
-                                        <div style={{ fontSize: 12, color: "#9CA3AF", fontFamily: "'Epilogue', sans-serif" }}>
+                                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", fontFamily: "'Epilogue', sans-serif" }}>
                                             {item.product.dosageForm} · ₱{item.product.price} each
                                         </div>
                                     </div>
@@ -84,7 +84,7 @@ export default function CartPage() {
                                     {/* Controls */}
                                     <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
                                         <QtySelector value={item.quantity} onChange={(v) => updateQuantity(item.product.id, v)} size="sm" />
-                                        <div style={{ fontSize: 17, fontWeight: 800, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+                                        <div style={{ fontSize: 17, fontWeight: 800, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>
                                             ₱{(item.product.price * item.quantity).toLocaleString()}
                                         </div>
                                         <button
@@ -107,7 +107,7 @@ export default function CartPage() {
 
                 {/* ── Order Summary ── */}
                 <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
-                    <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#2d2d2d", marginBottom: 20, letterSpacing: "-0.01em" }}>
+                    <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#262626", marginBottom: 20, letterSpacing: "-0.01em" }}>
                         Order Summary
                     </h3>
 
@@ -119,10 +119,10 @@ export default function CartPage() {
                         <div style={{ fontSize: 10, fontWeight: 800, color: "#427b77", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6, fontFamily: "'Epilogue', sans-serif" }}>
                             Deliver to
                         </div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>
                             {address.firstName} {address.lastName}
                         </div>
-                        <div style={{ fontSize: 12, color: "#9CA3AF", marginTop: 2, fontFamily: "'Epilogue', sans-serif", lineHeight: 1.5 }}>
+                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginTop: 2, fontFamily: "'Epilogue', sans-serif", lineHeight: 1.5 }}>
                             {address.line}, {address.city} {address.zip}
                         </div>
                     </div>
@@ -130,12 +130,12 @@ export default function CartPage() {
                     {/* Line items */}
                     <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
                         {[
-                            { label: `Subtotal (${cartItems.length} items)`, value: `₱${cartTotal.toLocaleString()}`, color: "#2d2d2d" },
-                            { label: "Delivery Fee",  value: `₱${DELIVERY_FEE}`, color: "#9CA3AF" },
+                            { label: `Subtotal (${cartItems.length} items)`, value: `₱${cartTotal.toLocaleString()}`, color: "#262626" },
+                            { label: "Delivery Fee",  value: `₱${DELIVERY_FEE}`, color: "rgba(38,38,38,0.6)" },
                             { label: "Discount",      value: `−₱${DISCOUNT}`,    color: "#22C55E" },
                         ].map(({ label, value, color }) => (
                             <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-                                <span style={{ color: "#6B7280", fontFamily: "'Epilogue', sans-serif" }}>{label}</span>
+                                <span style={{ color: "rgba(38,38,38,0.7)", fontFamily: "'Epilogue', sans-serif" }}>{label}</span>
                                 <span style={{ color, fontWeight: 600, fontFamily: "'Epilogue', sans-serif" }}>{value}</span>
                             </div>
                         ))}
@@ -144,7 +144,7 @@ export default function CartPage() {
                     <div style={{ height: 1, background: "#F0F3F2", marginBottom: 16 }} />
 
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 17, fontWeight: 800, marginBottom: 20 }}>
-                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#2d2d2d" }}>Total</span>
+                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#262626" }}>Total</span>
                         <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
                     </div>
 
@@ -154,7 +154,7 @@ export default function CartPage() {
                         Proceed to Checkout
                     </Btn>
 
-                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "#C4CBCA", fontFamily: "'Epilogue', sans-serif" }}>
+                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "rgba(38,38,38,0.5)", fontFamily: "'Epilogue', sans-serif" }}>
                         Secure checkout · End-to-end encrypted
                     </div>
                 </div>
