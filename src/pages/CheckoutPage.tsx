@@ -174,7 +174,7 @@ export default function CheckoutPage() {
                                             overflow: "hidden", flexShrink: 0, border: "1px solid #EAEFEE",
                                         }}>
                                             <img src={item.product.image} alt={item.product.brandName}
-                                                 style={{ width: "100%", height: "100%", objectFit: "contain", padding: 4 }}
+                                                 style={{ width: "100%", height: "100%", objectFit: "contain", padding: 0, transform: "scale(1.18)" }}
                                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                                             />
                                         </div>
