@@ -73,7 +73,7 @@ export function OrdersPage() {
                                 key={item.product.id}
                                 style={{ background: "#F3F4F4", borderRadius: 6, padding: "4px 10px", fontSize: 12 }}
                             >
-                {item.product.image} {item.product.brandName} ×{item.quantity}
+                {item.product.brandName} ×{item.quantity}
               </span>
                         ))}
                     </div>
@@ -188,7 +188,7 @@ export function TrackingPage() {
                 <h4 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>Order Items</h4>
                 {order.items.map((item) => (
                     <div key={item.product.id} style={{ display: "flex", justifyContent: "space-between", fontSize: 13, padding: "6px 0", borderBottom: "1px solid #E5E7EB" }}>
-                        <span>{item.product.image} {item.product.brandName} ×{item.quantity}</span>
+                        <span>{item.product.brandName} ×{item.quantity}</span>
                         <span>₱{(item.price * item.quantity).toLocaleString()}</span>
                     </div>
                 ))}
@@ -213,8 +213,8 @@ export function PaymentPage() {
     // Use latest order for invoice if cart is empty
     const order = orders[0];
     const displayItems = cartItems.length > 0
-        ? cartItems.map((i) => ({ name: `${i.product.image} ${i.product.brandName} ${i.product.strength} ×${i.quantity}`, amount: i.product.price * i.quantity }))
-        : order.items.map((i) => ({ name: `${i.product.image} ${i.product.brandName} ×${i.quantity}`, amount: i.price * i.quantity }));
+        ? cartItems.map((i) => ({ name: `${i.product.brandName} ${i.product.strength} ×${i.quantity}`, amount: i.product.price * i.quantity }))
+        : order.items.map((i) => ({ name: `${i.product.brandName} ×${i.quantity}`, amount: i.price * i.quantity }));
 
     return (
         <div style={{ padding: 24, maxWidth: 700, margin: "0 auto" }}>
