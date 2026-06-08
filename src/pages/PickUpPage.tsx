@@ -665,7 +665,7 @@ export default function PickupPage() {
                         </button>
                     )}
                 </div>
-                {/* Filter pills */}
+
                 {!sidebarOpen && (
                     <div className="flex gap-2 overflow-x-auto scrollbar-none flex-nowrap">
                         {FILTERS.map((f) => {
@@ -715,13 +715,13 @@ export default function PickupPage() {
                         <div className="flex justify-center px-6 pb-2">
                             <button
                                 onClick={() => setPanelVisible((v) => !v)}
-                                className="w-8 h-8 rounded-full bg-white border border-[#e8edec] shadow-[0_1px_6px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] hover:border-[#d0e4e2] transition-all"
+                                className="w-10 h-10 rounded-full bg-white border border-[#e8edec] backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] hover:border-[#d0e4e2] transition-all"
                                 aria-label={panelVisible ? "Hide pharmacy list" : "Show pharmacy list"}
                             >
                                 {panelVisible ? (
-                                    <ChevronDown size={14} strokeWidth={2.25} className="text-gray-500" />
+                                    <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
                                 ) : (
-                                    <ChevronUp size={14} strokeWidth={2.25} className="text-gray-500" />
+                                    <ChevronUp size={22} strokeWidth={1.6} className="text-[#262626]" />
                                 )}
                             </button>
                         </div>
