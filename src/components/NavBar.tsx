@@ -25,11 +25,11 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
 
     return (
         <div className="absolute top-[calc(100%+10px)] right-0 w-80 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 p-5 animate-slideDown">
-            <p className="text-xs font-bold text-[#2d2d2d] mb-3 tracking-widest uppercase">
+            <p className="text-xs font-bold text-[#262626] mb-3 tracking-widest uppercase">
                 Cart &mdash; {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
             </p>
             {cartItems.length === 0 ? (
-                <p className="text-center py-6 text-gray-400 text-xs epilogue-regular">Your cart is empty</p>
+                <p className="text-center py-6 text-[#262626]/60 text-xs epilogue-regular">Your cart is empty</p>
             ) : (
                 <>
                     <div className="max-h-56 overflow-y-auto -mx-2 px-2 space-y-1">
@@ -39,8 +39,8 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
                                     {item.product.image}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold text-[#2d2d2d] truncate leading-tight epilogue-regular">{item.product.brandName}</p>
-                                    <p className="text-xs text-gray-400 mt-0.5 epilogue-regular">Qty: {item.quantity}</p>
+                                    <p className="text-sm font-semibold text-[#262626] truncate leading-tight epilogue-regular">{item.product.brandName}</p>
+                                    <p className="text-xs text-[#262626]/60 mt-0.5 epilogue-regular">Qty: {item.quantity}</p>
                                 </div>
                                 <span className="text-sm font-bold text-[#427b77] shrink-0">
                                         ₱{(item.product.price * item.quantity).toLocaleString()}
@@ -50,8 +50,8 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
                     </div>
                     <div className="pt-3 mt-1 border-t border-[#262626]/10">
                         <div className="flex justify-between mb-3">
-                            <span className="text-sm text-gray-500 epilogue-regular">Total</span>
-                            <span className="text-base font-bold text-[#2d2d2d]">₱{cartTotal.toLocaleString()}</span>
+                            <span className="text-sm text-[#262626]/70 epilogue-regular">Total</span>
+                            <span className="text-base font-bold text-[#262626]">₱{cartTotal.toLocaleString()}</span>
                         </div>
                         <button
                             onClick={() => { navigateTo("cart"); onClose(); }}
@@ -77,7 +77,7 @@ function AccountDropdown({ onClose, navigateTo }: { onClose: () => void; navigat
     return (
         <div className="absolute top-[calc(100%+10px)] right-0 w-56 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
             <div className="px-4 py-2.5 mb-0.5">
-                <p className="text-sm font-semibold text-[#2d2d2d] leading-tight epilogue-regular">Ken Aldrey Quanico</p>
+                <p className="text-sm font-semibold text-[#262626] leading-tight epilogue-regular">Ken Aldrey Quanico</p>
                 <button className="text-xs text-[#3B82F6] mt-0.5 epilogue-subheader hover:text-[#2563EB]">View Profile</button>
             </div>
             <div className="px-1.5 py-0.5">
@@ -85,7 +85,7 @@ function AccountDropdown({ onClose, navigateTo }: { onClose: () => void; navigat
                     <button
                         key={label}
                         onClick={() => { navigateTo(page); onClose(); }}
-                        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs epilogue-regular text-gray-500 hover:bg-[#F4F7F8] hover:text-[#2d2d2d] rounded-lg transition-colors duration-150 cursor-pointer"
+                        className="w-full flex items-center gap-2.5 px-3 py-2.5 text-xs epilogue-regular text-[#262626]/70 hover:bg-[#F4F7F8] hover:text-[#262626] rounded-lg transition-colors duration-150 cursor-pointer"
                     >
                         <Icon size={15} strokeWidth={1.8} />
                         <span>{label}</span>
@@ -157,10 +157,10 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                 </button>
 
                 {/* Location */}
-                <button className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#2d2d2d] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer">
-                    <MapPin size={18} className="text-[#2d2d2d]" strokeWidth={2} />
-                    <span className="text-sm text-[#2d2d2d] epilogue-regular">Cebu City, PH</span>
-                    <ChevronDown size={13} strokeWidth={2} />
+                <button className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#262626] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer">
+                    <MapPin size={20} className="text-[#262626]" strokeWidth={1.6} />
+                    <span className="text-sm text-[#262626] epilogue-regular">Cebu City, PH</span>
+                    <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
                 </button>
 
                 <div className="flex-1" />
@@ -205,14 +205,14 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                         <div className="relative" ref={langRef}>
                             <button
                                 onClick={() => setLangOpen((o) => !o)}
-                                className="flex items-center gap-1.5 text-[#2d2d2d] hover:text-[#427b77] transition-colors duration-200 cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-[#2d2d2d]/8"
+                                className="flex items-center gap-1.5 text-[#262626] hover:text-[#427b77] transition-colors duration-200 cursor-pointer px-2.5 py-1.5 rounded-lg hover:bg-[#2d2d2d]/8"
                                 title="Language"
                             >
                                     <span style={{ display: "inline-flex", alignItems: "center", width: 18, height: 18, transform: "rotate(-23deg)" }}>
                                         <Globe size={18} strokeWidth={1.8} />
                                     </span>
                                 <span className="text-sm epilogue-regular tracking-wide">{activeLang}</span>
-                                <ChevronDown size={12} strokeWidth={2} style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
+                                <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
                             </button>
                             {langOpen && (
                                 <div className="absolute top-[calc(100%+10px)] right-0 w-40 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
@@ -223,7 +223,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                                 onClick={() => { setActiveLang(lang.code); setLangOpen(false); }}
                                                 className={[
                                                     "w-full flex items-center gap-2.5 px-3 py-2.5 text-xs epilogue-regular font-medium rounded-lg transition-colors duration-150 cursor-pointer text-left",
-                                                    activeLang === lang.code ? "text-[#2d2d2d] bg-[#F4F7F8]" : "text-gray-500 hover:bg-[#F4F7F8] hover:text-[#2d2d2d]",
+                                                    activeLang === lang.code ? "text-[#262626] bg-[#F4F7F8]" : "text-[#262626]/70 hover:bg-[#F4F7F8] hover:text-[#262626]",
                                                 ].join(" ")}
                                             >
                                                 <span className="text-[10px] tracking-wider w-7">{lang.code}</span>
@@ -241,14 +241,14 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 onClick={() => setAccountOpen((o) => !o)}
                                 className="flex items-center gap-2 pl-2 pr-1.5 py-1 rounded-lg hover:bg-[#2d2d2d]/8 transition-all duration-200 cursor-pointer"
                             >
-                                <span className="text-sm font-semibold text-[#2d2d2d] epilogue-regular leading-none">Ken</span>
+                                <span className="text-sm font-semibold text-[#262626] epilogue-regular leading-none">Ken</span>
                                 <span className="relative w-9 h-9 rounded-full bg-[#427b77] flex items-center justify-center shrink-0">
                                         <UserRound size={16} strokeWidth={2} className="text-white" />
                                         <span
                                             className="absolute -bottom-0.5 -right-0.5 w-[17px] h-[17px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm"
                                             style={{ transition: "transform 0.2s ease", transform: accountOpen ? "rotate(180deg)" : "rotate(0deg)" }}
                                         >
-                                            <ChevronDown size={9} strokeWidth={2.5} className="text-[#2d2d2d]" />
+                                            <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
                                         </span>
                                     </span>
                             </button>
@@ -290,22 +290,22 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                         <div className="relative flex items-center">
                             <Search
                                 size={14}
-                                strokeWidth={2}
-                                className="absolute left-3.5 pointer-events-none text-[#427b77]/60 z-10"
+                                strokeWidth={1.6}
+                                className="absolute left-3.5 pointer-events-none text-[#262626] z-10"
                             />
                             <input
                                 type="text"
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
                                 placeholder="Search medicines..."
-                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#2d2d2d] placeholder:text-[#2d2d2d]/35 outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
+                                className="w-72 pl-9 pr-8 py-2.5 text-xs bg-white epilogue-regular border border-gray-200 rounded-full text-[#262626] placeholder:text-[#262626]/35 outline-none shadow-[0_0_0_3px_rgba(66,123,119,0.08)] transition-all duration-200 focus:shadow-[0_0_0_4px_rgba(66,123,119,0.13)]"
                             />
                             {searchValue && (
                                 <button
                                     onClick={() => setSearchValue("")}
-                                    className="absolute right-3 flex items-center justify-center w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 text-[#427b77] transition-colors duration-150 cursor-pointer"
+                                    className="absolute right-3 flex items-center justify-center w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 text-[#262626] transition-colors duration-150 cursor-pointer"
                                 >
-                                    <X size={9} strokeWidth={2.5} />
+                                    <X size={14} strokeWidth={1.6} />
                                 </button>
                             )}
                         </div>
@@ -322,11 +322,11 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
 
                     /* ── Nav tab base ── */
                     .nav-tab {
-                        color: rgba(45,45,45,0.40);
+                        color: rgba(38,38,38,0.40);
                         font-weight: 400;
                         transition: color 0.2s ease;
                     }
-                    .nav-tab:hover { color: rgba(45,45,45,0.70); }
+                    .nav-tab:hover { color: rgba(38,38,38,0.70); }
 
                     /* Inner flex row: icon + label — fixed width so every tab is the same */
                     .nav-tab-inner {
@@ -347,7 +347,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                         width: 100%;
                         height: 2.5px;
                         border-radius: 3px 3px 0 0;
-                        background: #2d2d2d;
+                        background: #262626;
                         transform: translateX(-50%) scaleX(0);
                         transform-origin: center;
                         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
@@ -356,7 +356,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
 
                     /* Active state */
                     .nav-tab--active {
-                        color: #2d2d2d;
+                        color: #262626;
                         font-weight: 500;
                     }
                     .nav-tab--active .nav-tab-inner::after {
@@ -375,7 +375,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                     .icon-btn {
                         display: flex; align-items: center; justify-content: center;
                         width: 38px; height: 38px; border-radius: 50%; border: none;
-                        background: transparent; color: #2d2d2d; cursor: pointer;
+                        background: transparent; color: #262626; cursor: pointer;
                         transition: background 0.15s ease, color 0.15s ease; flex-shrink: 0;
                     }
                     .icon-btn:hover { background: rgba(45,45,45,0.08); color: #427b77; }
