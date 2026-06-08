@@ -89,7 +89,7 @@ function CatalogMedicineCard({
     const [hearted, setHearted] = useState(false);
     const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
-    const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/");
+    const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/") || product.image.startsWith("data:");
     const stockLabel =
         product.stockStatus === "out_of_stock"
             ? "Out"
