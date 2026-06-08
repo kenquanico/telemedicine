@@ -8,6 +8,7 @@ interface AppContextValue {
     // Navigation
     currentPage: PageKey;
     navigateTo: (page: PageKey, productId?: string) => void;
+    navigateBack: () => void;
     selectedProductId: string | null;
 
     // Cart
@@ -48,6 +49,7 @@ const AppContext = createContext<AppContextValue | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [currentPage, setCurrentPage] = useState<PageKey>("home");
+    const [previousPage, setPreviousPage] = useState<PageKey | null>(null);
     const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [orders] = useState<Order[]>(ORDERS);
@@ -57,10 +59,22 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [modal, setModal] = useState<ModalState | null>(null);
 
     const navigateTo = useCallback((page: PageKey, productId?: string) => {
-        setCurrentPage(page);
+        setCurrentPage((prev) => {
+            if (prev !== page) setPreviousPage(prev);
+            return page;
+        });
         if (productId) setSelectedProductId(productId);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
+
+    const navigateBack = useCallback(() => {
+        setCurrentPage((current) => {
+            const destination = previousPage ?? "home";
+            setPreviousPage(current);
+            return destination;
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }, [previousPage]);
 
     const addToCart = useCallback((product: Product, qty = 1) => {
         setCartItems((prev) => {
@@ -106,6 +120,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             value={{
                 currentPage,
                 navigateTo,
+                navigateBack,
                 selectedProductId,
                 cartItems,
                 addToCart,

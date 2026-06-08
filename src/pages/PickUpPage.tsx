@@ -5,6 +5,7 @@ import {
     Globe, ExternalLink, ChevronLeft, Locate, ChevronDown, ChevronUp,
     Plus, Minus,
 } from "lucide-react";
+import { useApp } from "../hooks/useApp";
 
 const API_KEY = "AIzaSyATaHhW1zDWipZm7SgzjAFNS5j0ta3zDmA";
 
@@ -191,17 +192,17 @@ function MapControls({
     return (
         <div className="absolute right-4 z-20 flex flex-col gap-2.5" style={{ top: "50%", transform: "translateY(-50%)" }}>
             {/* Zoom group */}
-            <div className="flex flex-col rounded-full shadow-[0_2px_16px_rgba(10,31,30,0.13)] overflow-hidden border border-[#e8edec]">
+            <div className="flex flex-col rounded-full shadow-[0_2px_14px_rgba(10,31,30,0.10)] overflow-hidden border border-white/70 bg-white/45 backdrop-blur-md">
                 <button
                     onClick={onZoomIn}
-                    className="w-10 h-10 bg-white flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] active:bg-[#edf5f4] transition-colors border-b border-[#e8edec]"
+                    className="w-10 h-10 bg-white/55 flex items-center justify-center cursor-pointer hover:bg-white/80 active:bg-white/90 transition-colors border-b border-white/70"
                     aria-label="Zoom in"
                 >
                     <Plus size={16} strokeWidth={2} className="text-[#3d7a75]" />
                 </button>
                 <button
                     onClick={onZoomOut}
-                    className="w-10 h-10 bg-white flex items-center justify-center cursor-pointer hover:bg-[#f6faf9] active:bg-[#edf5f4] transition-colors"
+                    className="w-10 h-10 bg-white/55 flex items-center justify-center cursor-pointer hover:bg-white/80 active:bg-white/90 transition-colors"
                     aria-label="Zoom out"
                 >
                     <Minus size={16} strokeWidth={2} className="text-[#3d7a75]" />
@@ -211,10 +212,10 @@ function MapControls({
             {/* Locate button — separated */}
             <button
                 onClick={onLocate}
-                className={`w-10 h-10 rounded-full border flex items-center justify-center cursor-pointer shadow-[0_2px_16px_rgba(10,31,30,0.13)] transition-all ${
+                className={`w-10 h-10 rounded-full border flex items-center justify-center cursor-pointer shadow-[0_2px_14px_rgba(10,31,30,0.10)] backdrop-blur-md transition-all ${
                     locating
-                        ? "bg-[#3d7a75] border-[#3d7a75]"
-                        : "bg-white border-[#e8edec] hover:bg-[#f6faf9] active:bg-[#edf5f4]"
+                        ? "bg-[#3d7a75]/78 border-[#3d7a75]/70"
+                        : "bg-white/65 border-white/70 hover:bg-white/85 active:bg-white/95"
                 }`}
                 aria-label="My location"
             >
@@ -448,6 +449,7 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function PickupPage() {
+    const { navigateBack } = useApp();
     const mapRef       = useRef<HTMLDivElement>(null);
     const mapInstance  = useRef<google.maps.Map | null>(null);
     const markersRef   = useRef<google.maps.Marker[]>([]);
@@ -628,6 +630,14 @@ export default function PickupPage() {
                     overflow: "hidden",
                 }}
             >
+                <button
+                    onClick={navigateBack}
+                    aria-label="Go back"
+                    className="w-11 h-11 rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-white/85 active:bg-white/95 transition-all shrink-0"
+                >
+                    <ChevronLeft size={18} strokeWidth={2.25} className="text-[#3d7a75]" />
+                </button>
+
                 {/* Search bar */}
                 <div className="relative inline-flex items-center">
                     <Search
@@ -642,14 +652,14 @@ export default function PickupPage() {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                         placeholder="Search pharmacies…"
                         autoComplete="off"
-                        className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-[#262626]/20 bg-white text-sm  text-[#1a1a1a] placeholder-[#262626]/30 outline-none  focus:border-[#3d7a75]/45  transition-all duration-200 epilogue-thin"
+                        className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] text-sm text-[#1a1a1a] placeholder-[#262626]/30 outline-none focus:border-white/90 focus:bg-white/85 transition-all duration-200 epilogue-thin"
                     />
                     {searchValue && (
                         <button
                             onClick={() => setSearchValue("")}
                             aria-label="Clear search"
-                            className="absolute right-[10px] w-5 h-5 rounded-full border-none cursor-pointer flex items-center justify-center transition-colors duration-150"
-                            style={{ background: "rgba(61,122,117,0.10)", color: "#3d7a75" }}
+                            className="absolute right-[10px] w-5 h-5 rounded-full border border-white/60 bg-white/55 backdrop-blur-md cursor-pointer flex items-center justify-center transition-colors duration-150 hover:bg-white/80"
+                            style={{ color: "#3d7a75" }}
                         >
                             <X size={10} strokeWidth={2.5} style={{ display: "block" }} />
                         </button>
@@ -665,10 +675,10 @@ export default function PickupPage() {
                                 <button
                                     key={f}
                                     onClick={() => toggleFilter(f)}
-                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer epilogue-regular ${
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-xs cursor-pointer epilogue-regular backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] transition-all ${
                                         isActive
-                                            ? "border-[#1a1a1a] bg-[#1a1a1a]"
-                                            : "border-[#262626]/20 bg-white text-[#262626] hover:border-[#d0e4e2] hover:bg-[#f6faf9]"
+                                            ? "border-[#1a1a1a]/70 bg-[#1a1a1a]/78"
+                                            : "border-white/70 bg-white/65 text-[#262626] hover:border-white/90 hover:bg-white/85"
                                     }`}
                                 >
                                     <Icon
