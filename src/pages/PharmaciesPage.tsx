@@ -4,7 +4,7 @@ import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
 import FilterPanel from "../components/FilterPanel";
 import { getDefaultFilters } from "../utils/filterState";
-import { Search, X, Filter, BadgeCheck } from "lucide-react";
+import { X, Filter, BadgeCheck } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type ServiceTag = "delivery" | "pickup" | "24hrs" | "senior_discount" | "prescription";
@@ -162,7 +162,7 @@ function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => 
                 </div>
 
                 {/* Delivery time — bottom left floating chip */}
-                <div className="absolute bottom-2.5 left-2.5 bg-white/90 backdrop-blur-sm text-[#2d2d2d] text-[10px] font-bold px-2 py-0.5 rounded-lg epilogue-header shadow-sm">
+                <div className="absolute bottom-2.5 left-2.5 bg-white/90 backdrop-blur-sm text-[#262626] text-[10px] font-bold px-2 py-0.5 rounded-lg epilogue-header shadow-sm">
                     🚚 {pharmacy.deliveryTime}
                 </div>
             </div>
@@ -172,7 +172,7 @@ function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => 
                 {/* Name + distance */}
                 <div className="flex items-start justify-between gap-2 mb-1">
                     <div className="flex items-center gap-1 flex-1 min-w-0">
-                        <p className="text-[15px] font-bold text-[#2d2d2d] epilogue-header leading-snug truncate">
+                        <p className="text-[15px] font-bold text-[#262626] epilogue-header leading-snug truncate">
                             {pharmacy.name}
                         </p>
                         {pharmacy.verified && (
@@ -185,7 +185,7 @@ function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => 
                 </div>
 
                 {/* Branch · address */}
-                <p className="text-[13px] text-gray-400 epilogue-regular mb-1.5 truncate">
+                <p className="text-[13px] text-[#262626]/60 epilogue-regular mb-1.5 truncate">
                     {pharmacy.branch} · {pharmacy.address}
                 </p>
 
@@ -197,19 +197,19 @@ function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => 
                                   d="M7.88486 12.1954L4.88943 13.7787C4.64763 13.9065 4.34857 13.813 4.22145 13.5699C4.17083 13.4731 4.15336 13.3622 4.17175 13.2544L4.74383 9.90101C4.75759 9.82035 4.73099 9.73805 4.6727 9.68092L2.24935 7.30602C2.05373 7.11431 2.04973 6.79947 2.24041 6.6028C2.31634 6.52448 2.41583 6.47352 2.52348 6.45779L5.87247 5.96853C5.95302 5.95676 6.02265 5.9059 6.05868 5.83251L7.55639 2.78147C7.67729 2.53518 7.97388 2.43406 8.21885 2.55561C8.3164 2.60402 8.39535 2.6834 8.4435 2.78147L9.94121 5.83251C9.97723 5.9059 10.0469 5.95676 10.1274 5.96853L13.4764 6.45779C13.7467 6.49728 13.9341 6.74963 13.8948 7.02142C13.8791 7.12965 13.8284 7.22968 13.7505 7.30602L11.3272 9.68092C11.2689 9.73805 11.2423 9.82035 11.2561 9.90101L11.8281 13.2544C11.8743 13.5251 11.6935 13.7822 11.4242 13.8286C11.317 13.8471 11.2067 13.8296 11.1105 13.7787L8.11503 12.1954C8.04298 12.1573 7.95691 12.1573 7.88486 12.1954Z"
                             />
                         </svg>
-                        <span className="text-[13px] font-semibold text-[#2d2d2d] epilogue-header">{pharmacy.rating}</span>
-                        <span className="text-[13px] text-gray-400 epilogue-regular">({pharmacy.reviewCount}+)</span>
+                        <span className="text-[13px] font-semibold text-[#262626] epilogue-header">{pharmacy.rating}</span>
+                        <span className="text-[13px] text-[#262626]/60 epilogue-regular">({pharmacy.reviewCount}+)</span>
                     </div>
 
-                    <span className="text-[12px] text-gray-300">•</span>
+                    <span className="text-[12px] text-[#262626]/40">•</span>
 
-                    <span className="text-[13px] text-gray-400 epilogue-regular">
+                    <span className="text-[13px] text-[#262626]/60 epilogue-regular">
                         Min. ₱{pharmacy.minOrder}
                     </span>
 
                     {pharmacy.tags.includes("24hrs") && (
                         <>
-                            <span className="text-[12px] text-gray-300">•</span>
+                            <span className="text-[12px] text-[#262626]/40">•</span>
                             <span className="text-[13px] font-semibold text-[#427b77] epilogue-regular">24 hrs</span>
                         </>
                     )}
@@ -261,10 +261,10 @@ export default function PharmaciesPage() {
                         <p className="text-[11px] font-extrabold tracking-[0.14em] text-[#427b77] uppercase mb-2 epilogue-header">
                             Cebu City, PH
                         </p>
-                        <h1 className="text-[28px] font-extrabold text-[#2d2d2d] epilogue-header leading-tight mb-2">
+                        <h1 className="text-[28px] font-extrabold text-[#262626] epilogue-header leading-tight mb-2">
                             Partner Pharmacies
                         </h1>
-                        <p className="text-[14px] text-gray-400 epilogue-regular max-w-[480px]">
+                        <p className="text-[14px] text-[#262626]/60 epilogue-regular max-w-[480px]">
                             All partner pharmacies are FDA-registered. Order directly and get medicines delivered to your door.
                         </p>
                     </div>
@@ -281,8 +281,8 @@ export default function PharmaciesPage() {
                                     {f.icon}
                                 </div>
                                 <div>
-                                    <div className="text-[13px] font-bold text-[#2d2d2d] epilogue-header mb-0.5">{f.title}</div>
-                                    <div className="text-xs text-gray-400 epilogue-regular">{f.sub}</div>
+                                    <div className="text-[13px] font-bold text-[#262626] epilogue-header mb-0.5">{f.title}</div>
+                                    <div className="text-xs text-[#262626]/60 epilogue-regular">{f.sub}</div>
                                 </div>
                             </div>
                         ))}
@@ -290,17 +290,17 @@ export default function PharmaciesPage() {
 
                     <div className="flex flex-col sm:flex-row gap-3 mb-5">
                         <div className="relative flex items-center flex-1">
-                            <svg className="absolute left-3.5 pointer-events-none text-[#427b77]/60" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                            <svg className="absolute left-3.5 pointer-events-none text-[#262626]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                             <input
                                 type="text"
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 placeholder="Search pharmacies..."
-                                className="w-full pl-9 pr-9 py-2.5 text-xs bg-white epilogue-regular border border-[#EAEFEE] rounded-xl text-[#2d2d2d] placeholder:text-[#2d2d2d]/30 outline-none transition-all duration-200 focus:border-[#427b77]/40 focus:shadow-[0_0_0_3px_rgba(66,123,119,0.10)]"
+                                className="w-full pl-9 pr-9 py-2.5 text-xs bg-white epilogue-regular border border-[#EAEFEE] rounded-xl text-[#262626] placeholder:text-[#262626]/30 outline-none transition-all duration-200 focus:border-[#427b77]/40 focus:shadow-[0_0_0_3px_rgba(66,123,119,0.10)]"
                             />
                             {search && (
                                 <button onClick={() => setSearch("")} className="absolute right-3 w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 flex items-center justify-center transition-colors">
-                                    <X size={9} strokeWidth={2.5} className="text-[#427b77]" />
+                                    <X size={14} strokeWidth={1.6} className="text-[#262626]" />
                                 </button>
                             )}
                         </div>
@@ -312,7 +312,7 @@ export default function PharmaciesPage() {
                                     className={`px-3.5 py-2 rounded-xl text-[11px] font-bold epilogue-header capitalize transition-all duration-200 ${
                                         sortBy === s
                                             ? "bg-[#2d2d2d] text-white"
-                                            : "bg-white border border-[#EAEFEE] text-gray-400 hover:border-[#427b77]/30 hover:text-[#2d2d2d]"
+                                            : "bg-white border border-[#EAEFEE] text-[#262626]/60 hover:border-[#427b77]/30 hover:text-[#262626]"
                                     }`}
                                 >
                                     {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -322,8 +322,8 @@ export default function PharmaciesPage() {
                     </div>
 
                     <div className="flex items-center gap-2 flex-wrap mb-8">
-                        <span className="text-[11px] text-gray-400 epilogue-regular flex items-center gap-1">
-                            <Filter size={11} strokeWidth={2} /> Filter:
+                        <span className="text-[11px] text-[#262626]/60 epilogue-regular flex items-center gap-1">
+                            <Filter size={20} strokeWidth={1.6} className="text-[#262626]" /> Filter:
                         </span>
                         {SERVICE_TAGS.map((t) => (
                             <button
@@ -334,7 +334,7 @@ export default function PharmaciesPage() {
                                 className={`px-3 py-1.5 rounded-lg text-[11px] font-bold epilogue-header transition-all duration-200 ${
                                     activeFilters.includes(t.key)
                                         ? "bg-[#427b77] text-white"
-                                        : "bg-white border border-[#EAEFEE] text-gray-400 hover:border-[#427b77]/30 hover:text-[#2d2d2d]"
+                                        : "bg-white border border-[#EAEFEE] text-[#262626]/60 hover:border-[#427b77]/30 hover:text-[#262626]"
                                 }`}
                             >
                                 {t.label}
@@ -355,7 +355,7 @@ export default function PharmaciesPage() {
                         <SectionHeader title="All Pharmacies" onSeeAll={undefined} />
                         {filtered.length === 0 ? (
                             <div className="mt-5 rounded-[20px] border border-[#EAEFEE] bg-white px-6 py-14 text-center">
-                                <div className="mb-1.5 text-[17px] font-bold text-[#2d2d2d] epilogue-header">
+                                <div className="mb-1.5 text-[17px] font-bold text-[#262626] epilogue-header">
                                     No pharmacies match these filters
                                 </div>
                                 <button
@@ -378,8 +378,8 @@ export default function PharmaciesPage() {
                     <div className="mb-16 rounded-2xl border border-[#EAEFEE] bg-white px-8 py-8 flex flex-col sm:flex-row items-center gap-6">
                         <div className="w-11 h-11 rounded-xl bg-[#F0F7F6] flex items-center justify-center text-xl shrink-0">🏪</div>
                         <div className="flex-1 text-center sm:text-left">
-                            <div className="text-[13px] font-bold text-[#2d2d2d] epilogue-header mb-0.5">Own a pharmacy in Cebu?</div>
-                            <div className="text-xs text-gray-400 epilogue-regular">Partner with Dosely to reach more customers with same-day delivery.</div>
+                            <div className="text-[13px] font-bold text-[#262626] epilogue-header mb-0.5">Own a pharmacy in Cebu?</div>
+                            <div className="text-xs text-[#262626]/60 epilogue-regular">Partner with Dosely to reach more customers with same-day delivery.</div>
                         </div>
                         <button className="bg-[#2d2d2d] hover:bg-[#427b77] text-white rounded-xl px-5 py-2.5 text-[12px] font-bold cursor-pointer epilogue-header transition-colors duration-200 shrink-0 whitespace-nowrap">
                             Become a Partner
