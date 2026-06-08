@@ -1,6 +1,8 @@
 import  { useState, useRef, useEffect } from "react";
 import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
+import LocationPickerModal from "./LocationPickerModal";
+
 import Logo from "../assets/Dosely-1.svg";
 import SearchModal from "./SearchModal";
 import {
@@ -22,6 +24,7 @@ import {
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
 function CartDropdown({ onClose }: { onClose: () => void }) {
     const { cartItems, cartTotal, navigateTo } = useApp();
+
 
     return (
         <div className="absolute top-[calc(100%+10px)] right-0 w-80 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 p-5 animate-slideDown">
@@ -131,6 +134,8 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
     const [langOpen,      setLangOpen]      = useState(false);
     const [activeLang,    setActiveLang]    = useState("EN");
     const [searchOpen,    setSearchOpen]    = useState(false);
+    const [locationOpen,   setLocationOpen]   = useState(false);
+    const [activeLocation, setActiveLocation] = useState("Cebu City, PH");
     const cartRef    = useRef<HTMLDivElement>(null);
     const accountRef = useRef<HTMLDivElement>(null);
     const langRef    = useRef<HTMLDivElement>(null);
@@ -158,9 +163,12 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                     </button>
 
                     {/* Location */}
-                    <button className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#262626] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer">
+                    <button
+                        onClick={() => setLocationOpen(true)}
+                        className="flex items-center gap-1.5 hover:bg-[#2d2d2d]/8 px-2.5 py-1.5 rounded-lg text-[#262626] shrink-0 whitespace-nowrap transition-all duration-200 cursor-pointer"
+                    >
                         <MapPin size={20} className="text-[#262626]" strokeWidth={1.6} />
-                        <span className="text-sm text-[#262626] epilogue-regular">Cebu City, PH</span>
+                        <span className="text-sm text-[#262626] epilogue-regular">{activeLocation}</span>
                         <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
                     </button>
 
@@ -372,6 +380,15 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
 
             {/* ── Search Modal ── */}
             <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+            <LocationPickerModal
+                isOpen={locationOpen}
+                onClose={() => setLocationOpen(false)}
+                onSelect={(loc) => {
+                    setActiveLocation(`${loc.name}, PH`);
+                    setLocationOpen(false);
+                }}
+                currentLocation={activeLocation}
+            />
         </>
     );
 }
