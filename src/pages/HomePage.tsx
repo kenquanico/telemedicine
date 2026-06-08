@@ -248,31 +248,6 @@ export default function HomePage() {
                         <FilterPanel filters={filters} onChange={setFilters} />
                     </div>
 
-                    {/* ── Promo Banners ── */}
-                    <div className="grid grid-cols-1 gap-[18px] mb-[52px]">
-                        <div className="relative min-h-[150px] overflow-hidden rounded-[20px] bg-gradient-to-br from-[#1D546D] to-[#427b77] p-8">
-                            <div className="absolute -right-7.5 -top-7.5 w-40 h-40 rounded-full bg-white/[0.06]" />
-                            <p className="text-[10px] font-extrabold tracking-[0.12em] text-white/50 uppercase mb-2 epilogue-header">Limited Offer</p>
-                            <h3 className="epilogue-header text-xl font-extrabold text-white mb-2 tracking-tight">Get 20% Off Vitamins</h3>
-                            <p className="text-[13px] text-white/70 mb-[22px] epilogue-regular leading-relaxed">
-                                Use code <strong className="text-white">HEALTH20</strong> at checkout
-                            </p>
-                            <button onClick={() => navigateTo("catalog")} className="bg-white text-[#1D546D] border-none rounded-[10px] px-5 py-2.5 text-xs font-bold cursor-pointer epilogue-header tracking-[0.02em]">
-                                Shop Now
-                            </button>
-                        </div>
-                        <div className="relative min-h-[150px] overflow-hidden rounded-[20px] bg-gradient-to-br from-[#1a2a30] to-[#2d2d2d] p-8">
-                            <div className="absolute -right-5 -bottom-10 w-[180px] h-[180px] rounded-full bg-white/[0.04]" />
-                            <p className="text-[10px] font-extrabold tracking-[0.12em] text-white/40 uppercase mb-2 epilogue-header">Free Shipping</p>
-                            <h3 className="epilogue-header text-xl font-extrabold text-white mb-2 tracking-tight">Free Delivery ₱500+</h3>
-                            <p className="text-[13px] text-white/60 mb-[22px] epilogue-regular leading-relaxed">
-                                Available within Cebu City metro area
-                            </p>
-                            <button onClick={() => navigateTo("catalog")} className="bg-white/10 text-white border border-white/[0.15] rounded-[10px] px-5 py-2.5 text-xs font-bold cursor-pointer epilogue-header">
-                                Order Now
-                            </button>
-                        </div>
-                    </div>
 
                     {/* ── Featured Products ── */}
                     <div className="mb-[52px]">
