@@ -24,7 +24,7 @@ export default function CheckoutPage() {
 
     return (
         <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
-            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 24, fontWeight: 800, color: "#262626", letterSpacing: "-0.02em", marginBottom: 32 }}>
+            <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 24, fontWeight: 800, color: "#262626", letterSpacing: "-0.02em", marginBottom: 32 }}>
                 Checkout
             </h2>
 
@@ -34,7 +34,7 @@ export default function CheckoutPage() {
 
                     {/* Delivery Address */}
                     <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 22, color: "#262626", fontFamily: "'Epilogue', sans-serif", display: "flex", alignItems: "center", gap: 8 }}>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 22, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", display: "flex", alignItems: "center", gap: 8 }}>
                             Delivery Address
                         </h3>
                         <div className="mb-3.5 grid gap-3.5 sm:grid-cols-2">
@@ -43,13 +43,13 @@ export default function CheckoutPage() {
                                 { label: "Last Name",  value: address.lastName  },
                             ].map(({ label, value }) => (
                                 <div key={label}>
-                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
                                         {label}
                                     </label>
                                     <input defaultValue={value}
                                            style={{
                                                border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                               fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                               fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
                                                width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
                                                transition: "border-color 0.15s",
                                            }}
@@ -60,13 +60,13 @@ export default function CheckoutPage() {
                             ))}
                         </div>
                         <div style={{ marginBottom: 14 }}>
-                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
                                 Address Line
                             </label>
                             <input defaultValue={address.line}
                                    style={{
                                        border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                       fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                       fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
                                        width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
                                        transition: "border-color 0.15s",
                                    }}
@@ -80,13 +80,13 @@ export default function CheckoutPage() {
                                 { label: "ZIP Code", value: address.zip  },
                             ].map(({ label, value }) => (
                                 <div key={label}>
-                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
                                         {label}
                                     </label>
                                     <input defaultValue={value}
                                            style={{
                                                border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                               fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                               fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
                                                width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
                                                transition: "border-color 0.15s",
                                            }}
@@ -97,13 +97,13 @@ export default function CheckoutPage() {
                             ))}
                         </div>
                         <div>
-                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Epilogue', sans-serif" }}>
+                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
                                 Phone Number
                             </label>
                             <input defaultValue={address.phone}
                                    style={{
                                        border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                       fontSize: 14, fontFamily: "'Epilogue', sans-serif", outline: "none",
+                                       fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
                                        width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
                                        transition: "border-color 0.15s",
                                    }}
@@ -115,7 +115,7 @@ export default function CheckoutPage() {
 
                     {/* Payment Method */}
                     <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>
+                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>
                             Payment Method
                         </h3>
                         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -139,8 +139,8 @@ export default function CheckoutPage() {
                                     </div>
                                     <span style={{ fontSize: 22 }}>{meta.icon}</span>
                                     <div>
-                                        <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>{meta.label}</div>
-                                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginTop: 2, fontFamily: "'Epilogue', sans-serif" }}>
+                                        <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>{meta.label}</div>
+                                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginTop: 2, fontFamily: "'Neue Montreal', sans-serif" }}>
                                             {key === "cod"         && "Pay when your order arrives"}
                                             {key === "gcash"       && "Pay via GCash e-wallet"}
                                             {key === "maya"        && "Pay via Maya e-wallet"}
@@ -156,13 +156,13 @@ export default function CheckoutPage() {
 
                 {/* ── Order Summary ── */}
                 <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
-                    <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 16, fontWeight: 700, color: "#262626", marginBottom: 20, letterSpacing: "-0.01em" }}>
+                    <h3 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 16, fontWeight: 700, color: "#262626", marginBottom: 20, letterSpacing: "-0.01em" }}>
                         Order Summary
                     </h3>
 
                     {/* Items */}
                     <div style={{ background: "#F7FAF9", borderRadius: 14, padding: 14, marginBottom: 18 }}>
-                        <div style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Epilogue', sans-serif", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                        <div style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Neue Montreal', sans-serif", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.07em" }}>
                             {cartItems.length} items
                         </div>
                         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -178,11 +178,11 @@ export default function CheckoutPage() {
                                                  onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                                             />
                                         </div>
-                                        <span style={{ fontSize: 13, color: "#262626", fontFamily: "'Epilogue', sans-serif", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                        <span style={{ fontSize: 13, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                             {item.product.brandName} ×{item.quantity}
                                         </span>
                                     </div>
-                                    <span style={{ fontSize: 13, fontWeight: 700, color: "#262626", fontFamily: "'Epilogue', sans-serif", flexShrink: 0, marginLeft: 8 }}>
+                                    <span style={{ fontSize: 13, fontWeight: 700, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", flexShrink: 0, marginLeft: 8 }}>
                                         ₱{(item.product.price * item.quantity).toLocaleString()}
                                     </span>
                                 </div>
@@ -198,8 +198,8 @@ export default function CheckoutPage() {
                             { label: "Discount",  value: `−₱${DISCOUNT}`,    color: "#22C55E" },
                         ].map(({ label, value, color }) => (
                             <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-                                <span style={{ color: "rgba(38,38,38,0.7)", fontFamily: "'Epilogue', sans-serif" }}>{label}</span>
-                                <span style={{ color, fontWeight: 600, fontFamily: "'Epilogue', sans-serif" }}>{value}</span>
+                                <span style={{ color: "rgba(38,38,38,0.7)", fontFamily: "'Neue Montreal', sans-serif" }}>{label}</span>
+                                <span style={{ color, fontWeight: 600, fontFamily: "'Neue Montreal', sans-serif" }}>{value}</span>
                             </div>
                         ))}
                     </div>
@@ -207,15 +207,15 @@ export default function CheckoutPage() {
                     <div style={{ height: 1, background: "#F0F3F2", marginBottom: 16 }} />
 
                     <div style={{ display: "flex", justifyContent: "space-between", fontSize: 17, fontWeight: 800, marginBottom: 20 }}>
-                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#262626" }}>Total</span>
-                        <span style={{ fontFamily: "'Epilogue', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
+                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#262626" }}>Total</span>
+                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
                     </div>
 
                     <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder}>
                         Place Order
                     </Btn>
 
-                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "rgba(38,38,38,0.5)", fontFamily: "'Epilogue', sans-serif" }}>
+                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "rgba(38,38,38,0.5)", fontFamily: "'Neue Montreal', sans-serif" }}>
                         Your data is encrypted and secure
                     </div>
                 </div>
