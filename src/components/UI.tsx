@@ -126,7 +126,7 @@ export function QtySelector({ value, onChange, min = 1, max = 99, size = "md" }:
                     fontFamily: "'Epilogue', sans-serif",
                 }}
             >−</button>
-            <span style={{ fontSize, fontWeight: 700, minWidth: 28, textAlign: "center", fontFamily: "'Epilogue', sans-serif", color: "#2d2d2d" }}>{value}</span>
+            <span style={{ fontSize, fontWeight: 700, minWidth: 28, textAlign: "center", fontFamily: "'Epilogue', sans-serif", color: "#262626" }}>{value}</span>
             <button
                 onClick={() => onChange(Math.min(max, value + 1))}
                 style={{
@@ -195,7 +195,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
 export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 28, fontWeight: 500, color: "#2d2d2d", letterSpacing: "-0.01em" }}>
+            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 28, fontWeight: 500, color: "#262626", letterSpacing: "-0.01em" }}>
                 {title}
             </h2>
             {onSeeAll && (
@@ -213,7 +213,7 @@ export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: (
                     onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "transparent"}
                 >
                     See all
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                 </button>
@@ -275,7 +275,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                         position: "absolute", bottom: 10, right: 10,
                         width: 34, height: 34,
                         background: isOOS ? "#E5E7EB" : "#2d2d2d",
-                        color: isOOS ? "#9CA3AF" : "#fff",
+                        color: isOOS ? "rgba(38,38,38,0.5)" : "#fff",
                         border: "none",
                         borderRadius: 10,
                         fontSize: 22,
@@ -299,17 +299,17 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                 <div style={{ fontSize: 10, fontWeight: 700, color: "#427b77", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4, fontFamily: "'Epilogue', sans-serif" }}>
                     {product.manufacturer.split(" ")[0]}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#2d2d2d", marginBottom: 2, lineHeight: 1.35, fontFamily: "'Epilogue', sans-serif" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", marginBottom: 2, lineHeight: 1.35, fontFamily: "'Epilogue', sans-serif" }}>
                     {product.brandName}
                 </div>
-                <div style={{ fontSize: 12, color: "#9CA3AF", marginBottom: 10, fontFamily: "'Epilogue', sans-serif" }}>
+                <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginBottom: 10, fontFamily: "'Epilogue', sans-serif" }}>
                     {product.strength} · {product.dosageForm}
                 </div>
 
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8, marginTop: "auto" }}>
-                    <span style={{ fontSize: 17, fontWeight: 800, color: "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>₱{product.price}</span>
+                    <span style={{ fontSize: 17, fontWeight: 800, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>₱{product.price}</span>
                     {product.originalPrice && (
-                        <span style={{ fontSize: 12, color: "#C4CBCA", textDecoration: "line-through", fontFamily: "'Epilogue', sans-serif" }}>₱{product.originalPrice}</span>
+                        <span style={{ fontSize: 12, color: "rgba(38,38,38,0.5)", textDecoration: "line-through", fontFamily: "'Epilogue', sans-serif" }}>₱{product.originalPrice}</span>
                     )}
                 </div>
 
@@ -321,7 +321,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                             </svg>
                         ))}
                     </div>
-                    <span style={{ fontSize: 11, color: "#9CA3AF", fontFamily: "'Epilogue', sans-serif" }}>({product.reviewCount})</span>
+                    <span style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Epilogue', sans-serif" }}>({product.reviewCount})</span>
                 </div>
             </div>
         </div>
@@ -370,7 +370,7 @@ export function CategoryCard({ icon, label, color, active, onClick }: CatCardPro
             }}>
                 {icon}
             </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: active ? "#427b77" : "#2d2d2d", fontFamily: "'Epilogue', sans-serif" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: active ? "#427b77" : "#262626", fontFamily: "'Epilogue', sans-serif" }}>
                 {label}
             </div>
         </div>
@@ -419,7 +419,7 @@ export function NotificationModal() {
                         background: "#F4F6F5", border: "none", borderRadius: 10,
                         width: 34, height: 34, cursor: "pointer",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        color: "#6B7280", fontSize: 14,
+                        color: "rgba(38,38,38,0.7)", fontSize: 14,
                     }}
                 >✕</button>
                 <div style={{
@@ -430,10 +430,10 @@ export function NotificationModal() {
                 }}>
                     {modal.icon}
                 </div>
-                <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 20, fontWeight: 700, textAlign: "center", marginBottom: 8, color: "#2d2d2d" }}>
+                <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 20, fontWeight: 700, textAlign: "center", marginBottom: 8, color: "#262626" }}>
                     {modal.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "#6B7280", textAlign: "center", marginBottom: 24, lineHeight: 1.7, fontFamily: "'Epilogue', sans-serif" }}>
+                <p style={{ fontSize: 14, color: "rgba(38,38,38,0.7)", textAlign: "center", marginBottom: 24, lineHeight: 1.7, fontFamily: "'Epilogue', sans-serif" }}>
                     {modal.message}
                 </p>
                 {modal.actionLabel && (
@@ -472,7 +472,7 @@ export function Stars({ rating }: { rating: number }) {
                     </svg>
                 ))}
             </span>
-            <span style={{ color: "#9CA3AF", fontSize: 13, fontFamily: "'Epilogue', sans-serif" }}>({rating.toFixed(1)})</span>
+            <span style={{ color: "rgba(38,38,38,0.6)", fontSize: 13, fontFamily: "'Epilogue', sans-serif" }}>({rating.toFixed(1)})</span>
         </span>
     );
 }
