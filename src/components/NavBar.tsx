@@ -1,7 +1,7 @@
 import  { useState, useRef, useEffect } from "react";
 import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
-import LocationPickerModal from "./LocationPickerModal";
+import LocationPickerModal, { type Location } from "./LocationPickerModal";
 
 import Logo from "../assets/Dosely-1.svg";
 import SearchModal from "./SearchModal";
@@ -125,6 +125,19 @@ const NAV_TABS: {
     { label: "Pharmacies", navigatesTo: "pharmacies", activeOn: ["pharmacies"],  Icon: Building2 },
 ];
 
+const DEFAULT_LOCATION_LABEL = "Cebu City, PH";
+
+function getNavbarLocationLabel(location: Location | null) {
+    if (!location) return DEFAULT_LOCATION_LABEL;
+
+    const parts = [
+        location.name,
+        location.city && location.city !== location.name ? location.city : null,
+    ].filter(Boolean);
+
+    return parts.join(", ");
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
@@ -135,7 +148,8 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
     const [activeLang,    setActiveLang]    = useState("EN");
     const [searchOpen,    setSearchOpen]    = useState(false);
     const [locationOpen,   setLocationOpen]   = useState(false);
-    const [activeLocation, setActiveLocation] = useState("Cebu City, PH");
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const activeLocation = getNavbarLocationLabel(selectedLocation);
     const cartRef    = useRef<HTMLDivElement>(null);
     const accountRef = useRef<HTMLDivElement>(null);
     const langRef    = useRef<HTMLDivElement>(null);
@@ -384,10 +398,10 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                 isOpen={locationOpen}
                 onClose={() => setLocationOpen(false)}
                 onSelect={(loc) => {
-                    setActiveLocation(`${loc.name}, PH`);
+                    setSelectedLocation(loc);
                     setLocationOpen(false);
                 }}
-                currentLocation={activeLocation}
+                selectedLocation={selectedLocation}
             />
         </>
     );
