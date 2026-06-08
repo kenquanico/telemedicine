@@ -12,17 +12,17 @@ const formatPeso = (value?: number) => {
 
 function BackIcon() {
     return (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M19 12H5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            <path d="M12 5 5 12l7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M19 12H5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            <path d="M12 5 5 12l7 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
 
 function CartIcon() {
     return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6.5 6h15l-1.7 8.4a2 2 0 0 1-2 1.6H9.3a2 2 0 0 1-2-1.6L5 3H2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M6.5 6h15l-1.7 8.4a2 2 0 0 1-2 1.6H9.3a2 2 0 0 1-2-1.6L5 3H2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="currentColor" />
         </svg>
     );
@@ -30,17 +30,17 @@ function CartIcon() {
 
 function CheckIcon() {
     return (
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
 
 function DeliveryIcon() {
     return (
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 7h10v10H4V7Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-            <path d="M14 10h3.5L21 14v3h-7v-7Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h10v10H4V7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            <path d="M14 10h3.5L21 14v3h-7v-7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
             <path d="M7.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM17.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="currentColor" />
         </svg>
     );
@@ -48,9 +48,9 @@ function DeliveryIcon() {
 
 function ShieldIcon() {
     return (
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3 5 6v5.5c0 4.2 2.8 7.4 7 8.5 4.2-1.1 7-4.3 7-8.5V6l-7-3Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-            <path d="m8.8 12 2.2 2.2 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3 5 6v5.5c0 4.2 2.8 7.4 7 8.5 4.2-1.1 7-4.3 7-8.5V6l-7-3Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+            <path d="m8.8 12 2.2 2.2 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     );
 }
@@ -62,8 +62,8 @@ function FieldRow({ label, value }: { label: string; value?: FieldValue }) {
 
     return (
         <div className="grid gap-1 rounded-xl border border-[#E6ECEB] bg-white px-4 py-3 sm:grid-cols-[160px_1fr] sm:gap-4">
-            <dt className="text-[12px] font-bold uppercase text-[#6B7C80] epilogue-header">{label}</dt>
-            <dd className="text-[14px] leading-relaxed text-[#22343A] epilogue-regular">{displayValue}</dd>
+            <dt className="text-[12px] font-bold uppercase text-[#262626]/70 epilogue-header">{label}</dt>
+            <dd className="text-[14px] leading-relaxed text-[#262626] epilogue-regular">{displayValue}</dd>
         </div>
     );
 }
@@ -83,8 +83,8 @@ function AssuranceItem({
                 {icon}
             </div>
             <div>
-                <p className="text-[13px] font-bold text-[#22343A] epilogue-header">{title}</p>
-                <p className="mt-0.5 text-[12px] leading-relaxed text-[#7A878A] epilogue-regular">{subtitle}</p>
+                <p className="text-[13px] font-bold text-[#262626] epilogue-header">{title}</p>
+                <p className="mt-0.5 text-[12px] leading-relaxed text-[#262626]/60 epilogue-regular">{subtitle}</p>
             </div>
         </div>
     );
@@ -155,7 +155,7 @@ export default function ProductDetailPage() {
                 <button
                     type="button"
                     onClick={() => navigateTo("catalog")}
-                    className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#DCE6E4] bg-white px-4 py-2 text-[13px] font-bold text-[#427b77] shadow-sm transition hover:border-[#BFD4D1] hover:bg-[#F0F7F6] epilogue-header"
+                    className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#DCE6E4] bg-white px-4 py-2 text-[13px] font-bold text-[#262626] shadow-sm transition hover:border-[#BFD4D1] hover:bg-[#F0F7F6] epilogue-header"
                 >
                     <BackIcon />
                     Back to Catalog
@@ -198,7 +198,7 @@ export default function ProductDetailPage() {
                                         ) : (
                                             <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
                                         )}
-                                        <span className="mt-2 max-w-full truncate text-[11px] font-bold text-[#6B7C80] epilogue-header">{item.label}</span>
+                                        <span className="mt-2 max-w-full truncate text-[11px] font-bold text-[#262626]/70 epilogue-header">{item.label}</span>
                                     </button>
                                 ))}
                             </div>
@@ -212,20 +212,20 @@ export default function ProductDetailPage() {
                                             </span>
                                             <StockBadge status={product.stockStatus} />
                                         </div>
-                                        <h1 className="text-[26px] font-extrabold leading-tight text-[#182C32] epilogue-header sm:text-[30px]">
+                                        <h1 className="text-[26px] font-extrabold leading-tight text-[#262626] epilogue-header sm:text-[30px]">
                                             {product.brandName} {product.strength}
                                         </h1>
-                                        <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                        <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                             {product.genericName} by {product.manufacturer}. {product.description}
                                         </p>
                                     </div>
                                     <div className="shrink-0 rounded-2xl border border-[#EAEFEE] px-4 py-3 sm:text-right">
-                                        <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-gray-400 epilogue-header">
+                                        <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#262626]/60 epilogue-header">
                                             Rating
                                         </p>
                                         <div className="mt-2 flex items-center gap-2 sm:justify-end">
                                             <Stars rating={product.rating} />
-                                            <span className="text-[13px] font-bold text-[#33464C] epilogue-header">
+                                            <span className="text-[13px] font-bold text-[#262626] epilogue-header">
                                                 {product.rating} ({product.reviewCount}+)
                                             </span>
                                         </div>
@@ -243,25 +243,25 @@ export default function ProductDetailPage() {
 
                     <aside className="overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)] lg:sticky lg:top-[120px]">
                         <div className="border-b border-[#F4F6F5] px-5 py-4">
-                            <p className="text-sm font-bold text-[#2d2d2d] epilogue-header">Add to cart</p>
-                            <p className="mt-0.5 text-[11px] text-gray-400 epilogue-regular">Same-day Cebu delivery</p>
+                            <p className="text-sm font-bold text-[#262626] epilogue-header">Add to cart</p>
+                            <p className="mt-0.5 text-[11px] text-[#262626]/60 epilogue-regular">Same-day Cebu delivery</p>
                         </div>
 
                         <div className="grid gap-5 px-5 py-5">
                             <div>
                                 <div className="mb-3 flex items-start justify-between gap-3">
                                     <div className="min-w-0">
-                                        <h1 className="truncate text-[18px] font-extrabold leading-tight text-[#2d2d2d] epilogue-header">
+                                        <h1 className="truncate text-[18px] font-extrabold leading-tight text-[#262626] epilogue-header">
                                             {product.brandName}
                                         </h1>
-                                        <p className="mt-1 text-[12px] leading-relaxed text-gray-400 epilogue-regular">
+                                        <p className="mt-1 text-[12px] leading-relaxed text-[#262626]/60 epilogue-regular">
                                             {product.strength} · {product.dosageForm}
                                         </p>
                                     </div>
                                     <StockBadge status={product.stockStatus} />
                                 </div>
 
-                                <p className="line-clamp-2 text-[12px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                <p className="line-clamp-2 text-[12px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                     {product.genericName}
                                 </p>
                             </div>
@@ -269,13 +269,13 @@ export default function ProductDetailPage() {
                             <div className="h-px bg-[#F4F6F5]" />
 
                             <div>
-                                <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-gray-400 epilogue-header">Price</p>
+                                <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#262626]/60 epilogue-header">Price</p>
                                 <div className="mt-2 flex items-baseline gap-2">
-                                    <span className="text-[28px] font-extrabold leading-none text-[#2d2d2d] epilogue-header">
+                                    <span className="text-[28px] font-extrabold leading-none text-[#262626] epilogue-header">
                                         {formatPeso(product.price)}
                                     </span>
                                     {product.originalPrice && (
-                                        <span className="text-[13px] font-semibold text-gray-400 line-through epilogue-regular">
+                                        <span className="text-[13px] font-semibold text-[#262626]/60 line-through epilogue-regular">
                                             {formatPeso(product.originalPrice)}
                                         </span>
                                     )}
@@ -286,9 +286,9 @@ export default function ProductDetailPage() {
 
                             <div className="grid gap-3">
                                 <div>
-                                    <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-gray-400 epilogue-header">Quantity</p>
+                                    <p className="text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#262626]/60 epilogue-header">Quantity</p>
                                     {!isOutOfStock && (
-                                        <p className="mt-1 text-[12px] text-gray-400 epilogue-regular">{product.stockCount}+ available</p>
+                                        <p className="mt-1 text-[12px] text-[#262626]/60 epilogue-regular">{product.stockCount}+ available</p>
                                     )}
                                 </div>
                                 <QtySelector value={qty} onChange={setQty} />
@@ -345,7 +345,7 @@ export default function ProductDetailPage() {
                                             tabIndex={isActive ? 0 : -1}
                                             onClick={() => setActiveTab(tab.key)}
                                             className={`relative py-5 text-[14px] font-bold transition epilogue-header ${
-                                                isActive ? "text-[#2d2d2d]" : "text-[#7A878A] hover:text-[#33464C]"
+                                                isActive ? "text-[#262626]" : "text-[#262626]/60 hover:text-[#262626]"
                                             }`}
                                         >
                                             <span className="bds-c-tab__label" id={`tabs__tab-${tab.key}-label`}>
@@ -367,8 +367,8 @@ export default function ProductDetailPage() {
                         {activeTab === "details" && (
                             <div>
                                 <div className="mb-5">
-                                    <h2 className="text-xl font-extrabold text-[#182C32] epilogue-header">Product Details</h2>
-                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                    <h2 className="text-xl font-extrabold text-[#262626] epilogue-header">Product Details</h2>
+                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                         Key information for checking the medicine, pack size, storage, and expiration before checkout.
                                     </p>
                                 </div>
@@ -383,8 +383,8 @@ export default function ProductDetailPage() {
                         {activeTab === "dosage" && (
                             <div>
                                 <div className="mb-5">
-                                    <h2 className="text-xl font-extrabold text-[#182C32] epilogue-header">Dosage & Usage</h2>
-                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                    <h2 className="text-xl font-extrabold text-[#262626] epilogue-header">Dosage & Usage</h2>
+                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                         Recommended usage details for adults, children, and daily limits.
                                     </p>
                                 </div>
@@ -399,8 +399,8 @@ export default function ProductDetailPage() {
                         {activeTab === "warnings" && (
                             <div>
                                 <div className="mb-5">
-                                    <h2 className="text-xl font-extrabold text-[#182C32] epilogue-header">Warnings</h2>
-                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                    <h2 className="text-xl font-extrabold text-[#262626] epilogue-header">Warnings</h2>
+                                    <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                         Important precautions before taking this medicine.
                                     </p>
                                 </div>
@@ -424,21 +424,21 @@ export default function ProductDetailPage() {
                             <div>
                                 <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                                     <div>
-                                        <h2 className="text-xl font-extrabold text-[#182C32] epilogue-header">Customer Reviews</h2>
-                                        <p className="mt-2 text-[14px] leading-relaxed text-[#6B7C80] epilogue-regular">
+                                        <h2 className="text-xl font-extrabold text-[#262626] epilogue-header">Customer Reviews</h2>
+                                        <p className="mt-2 text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                             Feedback from customers who ordered this product.
                                         </p>
                                     </div>
                                     <div className="flex items-center gap-3 rounded-2xl bg-[#F8FBFA] px-4 py-3">
                                         <Stars rating={product.rating} />
-                                        <span className="text-[13px] font-bold text-[#33464C] epilogue-header">{product.rating}</span>
+                                        <span className="text-[13px] font-bold text-[#262626] epilogue-header">{product.rating}</span>
                                     </div>
                                 </div>
 
                                 {reviewCount === 0 ? (
                                     <div className="rounded-2xl border border-dashed border-[#D7E3E1] bg-[#F8FBFA] px-5 py-8 text-center">
-                                        <p className="text-[15px] font-bold text-[#33464C] epilogue-header">No reviews yet</p>
-                                        <p className="mt-2 text-[13px] text-[#7A878A] epilogue-regular">Be the first to review this medicine.</p>
+                                        <p className="text-[15px] font-bold text-[#262626] epilogue-header">No reviews yet</p>
+                                        <p className="mt-2 text-[13px] text-[#262626]/60 epilogue-regular">Be the first to review this medicine.</p>
                                     </div>
                                 ) : (
                                     <div className="grid gap-4">
@@ -450,15 +450,15 @@ export default function ProductDetailPage() {
                                                             {review.reviewer[0]}
                                                         </div>
                                                         <div>
-                                                            <p className="text-[14px] font-extrabold text-[#22343A] epilogue-header">{review.reviewer}</p>
+                                                            <p className="text-[14px] font-extrabold text-[#262626] epilogue-header">{review.reviewer}</p>
                                                             <div className="mt-1">
                                                                 <Stars rating={review.rating} />
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <time className="text-[12px] font-semibold text-[#8B989B] epilogue-regular">{review.date}</time>
+                                                    <time className="text-[12px] font-semibold text-[#262626]/60 epilogue-regular">{review.date}</time>
                                                 </div>
-                                                <p className="mt-4 text-[14px] leading-relaxed text-[#5C6D72] epilogue-regular">{review.comment}</p>
+                                                <p className="mt-4 text-[14px] leading-relaxed text-[#262626]/70 epilogue-regular">{review.comment}</p>
                                             </article>
                                         ))}
                                     </div>
