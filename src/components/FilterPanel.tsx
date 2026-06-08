@@ -30,7 +30,7 @@ const BRAND_OPTIONS = [
 function Section({ title, children }: { title: string; children: ReactNode }) {
     return (
         <section className="grid gap-3">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-gray-400 epilogue-header">
+            <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#262626]/60 epilogue-header">
                 {title}
             </p>
             {children}
@@ -43,7 +43,7 @@ function RadioRow({ active, onClick, children }: { active: boolean; onClick: () 
         <button
             onClick={onClick}
             className={`flex min-h-8 w-full items-center gap-2.5 rounded-[10px] border border-transparent px-2 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
-                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
+                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#262626]"
             }`}
         >
             <span
@@ -63,7 +63,7 @@ function CheckRow({ active, onClick, children }: { active: boolean; onClick: () 
         <button
             onClick={onClick}
             className={`flex min-h-8 w-full items-center gap-2.5 rounded-[10px] border border-transparent px-2 py-1.5 text-left text-[13px] transition-colors duration-150 epilogue-regular ${
-                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#2d2d2d]"
+                active ? "font-bold text-[#427b77]" : "font-medium text-[#262626]/80 hover:text-[#262626]"
             }`}
         >
             <span
@@ -96,10 +96,10 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
     return (
         <div>
             <div className="mb-3 flex items-center justify-between">
-                <span className="rounded-lg border border-[#EAEFEE] px-2.5 py-1 text-[12px] font-semibold text-[#2d2d2d] epilogue-regular">
+                <span className="rounded-lg border border-[#EAEFEE] px-2.5 py-1 text-[12px] font-semibold text-[#262626] epilogue-regular">
                     ₱{value[0].toLocaleString()}
                 </span>
-                <span className="rounded-lg border border-[#EAEFEE] px-2.5 py-1 text-[12px] font-semibold text-[#2d2d2d] epilogue-regular">
+                <span className="rounded-lg border border-[#EAEFEE] px-2.5 py-1 text-[12px] font-semibold text-[#262626] epilogue-regular">
                     ₱{value[1].toLocaleString()}
                 </span>
             </div>
@@ -149,7 +149,7 @@ function PriceSlider({ value, onChange }: { value: [number, number]; onChange: (
                             className={`rounded-lg border px-2 py-1.5 text-left text-[11px] transition-colors duration-150 epilogue-regular ${
                                 active
                                     ? "border-[#427b77] font-bold text-[#427b77]"
-                                    : "border-[#EAEFEE] text-gray-400 hover:border-[#C9D8D6] hover:text-[#2d2d2d]"
+                                    : "border-[#EAEFEE] text-[#262626]/60 hover:border-[#C9D8D6] hover:text-[#262626]"
                             }`}
                         >
                             {preset.label}
@@ -189,8 +189,8 @@ export default function FilterPanel({
             <div className="w-[252px] shrink-0 overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)]">
                 <div className="flex items-center justify-between border-b border-[#F4F6F5] px-5 py-4">
                     <div>
-                        <p className="text-sm font-bold text-[#2d2d2d] epilogue-header">Filters</p>
-                        <p className="mt-0.5 text-[11px] text-gray-400 epilogue-regular">
+                        <p className="text-sm font-bold text-[#262626] epilogue-header">Filters</p>
+                        <p className="mt-0.5 text-[11px] text-[#262626]/60 epilogue-regular">
                             {activeCount > 0 ? `${activeCount} active` : "Refine results"}
                         </p>
                     </div>
