@@ -201,49 +201,25 @@ export default function HomePage() {
                 <div className="flex-1 min-w-0">
 
                     {/* ── Hero banner ── */}
-                    <div className="relative my-10 flex min-h-[200px] flex-col justify-center overflow-hidden rounded-3xl bg-gradient-to-br from-[#1a3a38] via-[#2d6b66] to-[#427b77] px-7 py-9 sm:px-10 lg:px-14 lg:py-[52px]">
-                        <div className="absolute -right-15 -top-15 w-80 h-80 rounded-full bg-white/[0.04] pointer-events-none" />
-                        <div className="absolute right-15 -bottom-20 w-[220px] h-[220px] rounded-full bg-white/[0.03] pointer-events-none" />
-                        <p className="epilogue-header text-[11px] font-extrabold tracking-[0.14em] text-white/55 uppercase mb-3">
-                            Same-Day Delivery · Cebu City
-                        </p>
-                        <h1 className="epilogue-regular text-[34px] font-extrabold text-white leading-tight mb-3.5 tracking-tight max-w-[480px]">
-                            Authentic medicines,<br />delivered to your door.
-                        </h1>
-                        <p className="epilogue-regular text-sm text-white/65 leading-relaxed max-w-[380px] mb-7">
-                            Order from FDA-registered pharmacies in Cebu City and get your medicines within hours.
-                        </p>
-                        <div className="flex flex-wrap gap-3">
+                    <div className="relative my-10 overflow-hidden rounded-3xl bg-[#F0F5F4]">
+                        <img
+                            src="/SVG/Dosely%20Banner.svg"
+                            alt="Dosely"
+                            className="block w-full"
+                        />
+                        <div className="absolute inset-0 flex flex-col items-start justify-center px-6 text-left sm:px-8 lg:px-14">
+                            <h1 className="max-w-[560px] text-xl font-extrabold leading-[1.05] text-[#262626] epilogue-header sm:text-3xl lg:text-5xl">
+                                Sign up for care <br/> that arrives today.
+                            </h1>
                             <button
                                 onClick={() => navigateTo("catalog")}
-                                className="bg-white text-[#262626] border-none rounded-xl px-6 py-3 text-[13px] font-bold cursor-pointer epilogue-header tracking-[0.01em] transition-opacity duration-200 hover:opacity-90"
+                                className="mt-5 rounded-lg bg-white px-5 py-2 text-sm font-bold text-[#437c78] shadow-sm transition-opacity duration-200 hover:opacity-90 epilogue-header"
                             >
-                                Shop Medicines
-                            </button>
-                            <button className="bg-white/[0.12] text-white border border-white/20 rounded-xl px-6 py-3 text-[13px] font-semibold cursor-pointer epilogue-regular backdrop-blur-sm transition-colors duration-200 hover:bg-white/[0.18]">
-                                Learn More
+                                Sign Up
                             </button>
                         </div>
                     </div>
 
-                    {/* ── Trust bar ── */}
-                    <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-3">
-                        {[
-                            { icon: "🚚", title: "Same-Day Delivery", sub: "Order before 3PM" },
-                            { icon: "✅", title: "Authentic Medicines", sub: "FDA-registered sources" },
-                            { icon: "💬", title: "Pharmacist Support", sub: "Chat anytime" },
-                        ].map((f) => (
-                            <div key={f.title} className="bg-white border border-[#EAEFEE] rounded-2xl px-[22px] py-5 flex items-center gap-3.5">
-                                <div className="w-11 h-11 rounded-xl bg-[#F0F7F6] flex items-center justify-center text-xl shrink-0">
-                                    {f.icon}
-                                </div>
-                                <div>
-                                    <div className="text-[13px] font-bold text-[#262626] epilogue-header mb-0.5">{f.title}</div>
-                                    <div className="text-xs text-[#262626]/60 epilogue-regular">{f.sub}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
 
                     {/* ── Categories ── */}
                     <div className="mb-12">
