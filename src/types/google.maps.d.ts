@@ -70,6 +70,28 @@ declare namespace google.maps {
         constructor();
     }
 
+    interface GeocoderAddressComponent {
+        long_name: string;
+        short_name: string;
+        types: string[];
+    }
+
+    interface GeocoderResult {
+        formatted_address: string;
+        address_components: GeocoderAddressComponent[];
+    }
+
+    enum GeocoderStatus {
+        OK = "OK",
+    }
+
+    class Geocoder {
+        geocode(
+            request: { location: LatLngLiteral },
+            callback: (results: GeocoderResult[] | null, status: GeocoderStatus) => void
+        ): void;
+    }
+
     namespace places {
         enum PlacesServiceStatus {
             OK = "OK",
