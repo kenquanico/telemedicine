@@ -20,6 +20,7 @@ interface LocationPickerModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSelect: (location: Location) => void;
+    initialSelectedLocation?: Location | null;
     currentBreadcrumb?: {
         region: string;
         city: string;
@@ -37,6 +38,63 @@ const PRESET_LOCATIONS: Location[] = [
     { id: "5", name: "Mandaue City Hall",   address: "Mandaue City, 6014 Cebu",                      distance: "5.8 km", lat: 10.3236, lng: 123.9520, type: "nearby", barangay: "Brgy. Centro",        city: "Mandaue City" },
     { id: "6", name: "Mactan Island",       address: "Lapu-Lapu City, 6015 Cebu",                    distance: "9.2 km", lat: 10.3078, lng: 124.0020, type: "nearby", barangay: "Brgy. Mactan",        city: "Lapu-Lapu City" },
 ];
+
+function formatCoordinates(lat: number, lng: number) {
+    return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+}
+
+function getAddressComponent(result: google.maps.GeocoderResult, types: string[]) {
+    return result.address_components.find((component) =>
+        types.every((type) => component.types.includes(type))
+    )?.long_name;
+}
+
+function getCurrentLocationDetails(lat: number, lng: number): Promise<Pick<Location, "name" | "address" | "barangay" | "city">> {
+    const fallback = formatCoordinates(lat, lng);
+
+    if (!window.google?.maps.Geocoder) {
+        return Promise.resolve({
+            name: fallback,
+            address: fallback,
+            barangay: "Current Position",
+            city: undefined,
+        });
+    }
+
+    return new Promise((resolve) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: { lat, lng } }, (results, status) => {
+            const result = status === google.maps.GeocoderStatus.OK ? results?.[0] : null;
+            if (!result) {
+                resolve({
+                    name: fallback,
+                    address: fallback,
+                    barangay: "Current Position",
+                    city: undefined,
+                });
+                return;
+            }
+
+            const city =
+                getAddressComponent(result, ["locality"]) ??
+                getAddressComponent(result, ["administrative_area_level_2"]);
+            const barangay =
+                getAddressComponent(result, ["sublocality_level_1"]) ??
+                getAddressComponent(result, ["sublocality"]) ??
+                getAddressComponent(result, ["neighborhood"]);
+            const streetNumber = getAddressComponent(result, ["street_number"]);
+            const route = getAddressComponent(result, ["route"]);
+            const streetAddress = [streetNumber, route].filter(Boolean).join(" ");
+
+            resolve({
+                name: streetAddress || barangay || result.formatted_address || fallback,
+                address: result.formatted_address || fallback,
+                barangay,
+                city,
+            });
+        });
+    });
+}
 
 // ── Google Maps Loader ────────────────────────────────────────────────────────
 function useGoogleMaps() {
@@ -168,6 +226,7 @@ export default function LocationPickerModal({
                                                 isOpen,
                                                 onClose,
                                                 onSelect,
+                                                initialSelectedLocation = null,
                                                 currentBreadcrumb = {
                                                     region: "Location",
                                                     city: "Cebu City",
@@ -176,8 +235,12 @@ export default function LocationPickerModal({
                                                 },
                                             }: LocationPickerModalProps) {
     const [search, setSearch] = useState("");
-    const [selected, setSelected] = useState<Location | null>(null);
-    const [mapCenter, setMapCenter] = useState({ lat: 10.2934, lng: 123.9017 });
+    const [selected, setSelected] = useState<Location | null>(initialSelectedLocation);
+    const [mapCenter, setMapCenter] = useState(
+        initialSelectedLocation
+            ? { lat: initialSelectedLocation.lat, lng: initialSelectedLocation.lng }
+            : { lat: 10.2934, lng: 123.9017 }
+    );
     const [locating, setLocating] = useState(false);
     const [gpsPrompt, setGpsPrompt] = useState(false);
     const [gpsDenied, setGpsDenied] = useState(false);
@@ -205,17 +268,17 @@ export default function LocationPickerModal({
         setGpsPrompt(false);
         setLocating(true);
         navigator.geolocation.getCurrentPosition(
-            (pos) => {
+            async (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+                const locationDetails = await getCurrentLocationDetails(lat, lng);
                 const loc: Location = {
                     id: "current",
-                    name: "My Location",
-                    address: "Current GPS position",
+                    ...locationDetails,
                     distance: "0 km",
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
+                    lat,
+                    lng,
                     type: "current",
-                    barangay: "Current Position",
-                    city: "GPS",
                 };
                 handleSelect(loc);
                 setLocating(false);
