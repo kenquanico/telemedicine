@@ -7,9 +7,21 @@ import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
 import { getActiveFilterCount, getDefaultFilters } from "../utils/filterState";
 
-function getCategoryImage(category: Category) {
-    return PRODUCTS.find((product) => product.category === category)?.image ?? "";
-}
+const CATEGORY_ICON_SRC: Record<Category, string> = {
+    pain_relief: "/SVG/Pain%20Relief.svg",
+    vitamins: "/SVG/Vitamins.svg",
+    antibiotics: "/SVG/Antibiotics.svg",
+    cough_cold: "/SVG/Artboard%2011.svg",
+    antacids_gi: "/SVG/Antacids%20%26%20Gi.svg",
+    dermatology: "/SVG/Dermatology.svg",
+    diabetes_care: "/SVG/Diabetes%20%26%20Care.svg",
+    heart_bp: "/SVG/Heart%20%26%20BP.svg",
+    eye_ear: "/SVG/Eye%20and%20Ear.svg",
+    first_aid: "/SVG/First%20Aid.svg",
+    baby_child: "/SVG/Baby%20%26%20Child.svg",
+    feminine_care: "/SVG/Feminine%20Care.svg",
+    personal_care: "/SVG/Personal%20Care.svg",
+};
 
 function CategoryCuisineTile({
     category,
@@ -21,32 +33,32 @@ function CategoryCuisineTile({
     onClick: () => void;
 }) {
     const meta = CATEGORY_META[category];
-    const image = getCategoryImage(category);
+    const iconSrc = CATEGORY_ICON_SRC[category];
+    const [imageFailed, setImageFailed] = useState(false);
 
     return (
         <button
             onClick={onClick}
-            className="box-flex bds-u-focus-outline cuisine-tile br-base ma-xs group w-[128px] shrink-0 cursor-pointer text-left"
+            className="box-flex bds-u-focus-outline cuisine-tile br-base ma-xs group w-[108px] shrink-0 cursor-pointer text-left"
             data-testid={`cuisine-tile-${category}`}
         >
             <div
-                className={`cuisine-tile__image common-tile-image relative mb-2 aspect-square overflow-hidden rounded-2xl border transition-all duration-200 ${
+                className={`cuisine-tile__image common-tile-image relative mb-2 aspect-square overflow-hidden rounded-xl border transition-all duration-200 ${
                     active
                         ? "border-[#427b77] bg-[#F7F9F9] shadow-[0_8px_20px_rgba(66,123,119,0.10)]"
                         : "border-[#EAEFEE] bg-[#F7F9F9] group-hover:border-[#427b77]"
                 }`}
             >
-                <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-5">
-                    {image.startsWith("http") ? (
+                <div className="common-tile-image__overlay flex h-full w-full items-center justify-center p-1.5">
+                    {imageFailed ? (
+                        <span className="text-4xl leading-none" aria-hidden="true">{meta.icon}</span>
+                    ) : (
                         <img
                             alt=""
-                            className="common-tile-image__logo h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                            src={image}
+                            className="common-tile-image__logo h-full w-full scale-[1.28] object-contain transition-transform duration-300 group-hover:scale-[1.34]"
+                            src={iconSrc}
+                            onError={() => setImageFailed(true)}
                         />
-                    ) : (
-                        <span className="text-4xl leading-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
-                            {meta.icon}
-                        </span>
                     )}
                 </div>
             </div>
@@ -75,6 +87,7 @@ function CatalogMedicineCard({
     onAdd: () => void;
 }) {
     const [hearted, setHearted] = useState(false);
+    const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
     const stockLabel =
         product.stockStatus === "out_of_stock"
@@ -85,16 +98,17 @@ function CatalogMedicineCard({
 
     return (
         <div className="group cursor-pointer" onClick={onView}>
-            <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-[#F0F5F4]">
-                {product.image.startsWith("http") ? (
+            <div className="relative mb-3 aspect-[4/3] w-full overflow-hidden rounded-2xl bg-white">
+                {product.image.startsWith("http") && !imageFailed ? (
                     <img
                         src={product.image}
                         alt={product.brandName}
-                        className="h-full w-full select-none object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full scale-[1.22] select-none object-contain transition-transform duration-300 group-hover:scale-[1.28]"
+                        onError={() => setImageFailed(true)}
                     />
                 ) : (
-                    <div className="flex h-full w-full select-none items-center justify-center text-5xl transition-transform duration-300 group-hover:scale-105">
-                        {product.image}
+                    <div className="flex h-full w-full select-none items-center justify-center px-4 text-center text-sm font-bold text-[#262626]/70 transition-transform duration-300 group-hover:scale-105 epilogue-header">
+                        {imageFailed ? product.brandName : product.image}
                     </div>
                 )}
 
@@ -235,21 +249,13 @@ export default function CatalogPage() {
                             >
                                 Shop by Category
                             </h2>
-                            {activeTab !== "all" && (
-                                <button
-                                    onClick={() => setActiveTab("all")}
-                                    className="rounded-lg border border-[#DCE6E4] px-3 py-1.5 text-[13px] font-semibold text-[#427b77] transition-colors duration-150 hover:border-[#BFD4D1] epilogue-regular"
-                                >
-                                    See all
-                                </button>
-                            )}
                         </div>
 
                         <div className="lane-component webrefresh" data-testid="refresh-swimlane">
-                            <div className="lane-wrapper overflow-x-auto pb-1">
+                            <div className="lane-wrapper scrollbar-none overflow-x-auto pb-1">
                                 <ul
                                     data-testid="cuisine-lane"
-                                    className="cuisine-lane flex gap-3"
+                                    className="cuisine-lane flex gap-5 pr-8"
                                     aria-labelledby="medicine-categories-swimlane-title"
                                 >
                                     {(Object.keys(CATEGORY_META) as Category[]).map((category) => (
