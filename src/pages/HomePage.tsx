@@ -81,6 +81,7 @@ function VendorMedicineCard({
     const [hearted, setHearted] = useState(false);
     const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
+    const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/") || product.image.startsWith("data:");
 
     return (
         <div
@@ -89,7 +90,7 @@ function VendorMedicineCard({
         >
             {/* ── Image block ── */}
             <div className="relative w-full aspect-[4/3] overflow-hidden rounded-2xl bg-white mb-3">
-                {typeof product.image === "string" && product.image.startsWith("http") && !imageFailed ? (
+                {hasImagePath && !imageFailed ? (
                     <img
                         src={product.image}
                         alt={product.brandName}
