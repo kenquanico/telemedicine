@@ -126,6 +126,7 @@ const NAV_TABS: {
 ];
 
 const DEFAULT_LOCATION_LABEL = "Cebu City, PH";
+const SAVED_LOCATION_KEY = "dosely:selectedLocation";
 
 function getNavbarLocationLabel(location: Location | null) {
     if (!location) return DEFAULT_LOCATION_LABEL;
@@ -138,6 +139,19 @@ function getNavbarLocationLabel(location: Location | null) {
     return parts.join(", ");
 }
 
+function getSavedLocation() {
+    try {
+        const savedLocation = window.localStorage.getItem(SAVED_LOCATION_KEY);
+        return savedLocation ? (JSON.parse(savedLocation) as Location) : null;
+    } catch {
+        return null;
+    }
+}
+
+function saveLocation(location: Location) {
+    window.localStorage.setItem(SAVED_LOCATION_KEY, JSON.stringify(location));
+}
+
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 export default function Navbar({ compact = false }: { compact?: boolean }) {
     const { currentPage, navigateTo, cartCount } = useApp();
@@ -148,7 +162,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
     const [activeLang,    setActiveLang]    = useState("EN");
     const [searchOpen,    setSearchOpen]    = useState(false);
     const [locationOpen,   setLocationOpen]   = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+    const [selectedLocation, setSelectedLocation] = useState<Location | null>(getSavedLocation);
     const activeLocation = getNavbarLocationLabel(selectedLocation);
     const cartRef    = useRef<HTMLDivElement>(null);
     const accountRef = useRef<HTMLDivElement>(null);
@@ -399,9 +413,10 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                 onClose={() => setLocationOpen(false)}
                 onSelect={(loc) => {
                     setSelectedLocation(loc);
+                    saveLocation(loc);
                     setLocationOpen(false);
                 }}
-                selectedLocation={selectedLocation}
+                initialSelectedLocation={selectedLocation}
             />
         </>
     );
