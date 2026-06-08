@@ -24,7 +24,7 @@ function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size
                     <rect x="3" y="3" width="18" height="18" rx="3" />
                     <path d="M3 9h18M9 21V9" />
                 </svg>
-                <span style={{ fontSize: 10, color: "#427b77", opacity: 0.5, fontFamily: "'Epilogue', sans-serif" }}>{alt}</span>
+                <span style={{ fontSize: 10, color: "#427b77", opacity: 0.5, fontFamily: "'Neue Montreal', sans-serif" }}>{alt}</span>
             </div>
         );
     }
@@ -64,7 +64,7 @@ export function StockBadge({ status }: { status: StockStatus }) {
                 borderRadius: 20,
                 padding: "3px 9px",
                 letterSpacing: "0.02em",
-                fontFamily: "'Epilogue', sans-serif",
+                fontFamily: "'Neue Montreal', sans-serif",
             }}
         >
             <span style={{ width: 5, height: 5, borderRadius: "50%", background: s.dot, flexShrink: 0 }} />
@@ -88,7 +88,7 @@ export function StatusBadge({ status }: { status: OrderStatus }) {
                 textTransform: "uppercase",
                 letterSpacing: "0.5px",
                 whiteSpace: "nowrap",
-                fontFamily: "'Epilogue', sans-serif",
+                fontFamily: "'Neue Montreal', sans-serif",
             }}
         >
             {s.icon} {s.label}
@@ -123,10 +123,10 @@ export function QtySelector({ value, onChange, min = 1, max = 99, size = "md" }:
                     color: "#427b77",
                     lineHeight: 1,
                     transition: "all 0.15s",
-                    fontFamily: "'Epilogue', sans-serif",
+                    fontFamily: "'Neue Montreal', sans-serif",
                 }}
             >−</button>
-            <span style={{ fontSize, fontWeight: 700, minWidth: 28, textAlign: "center", fontFamily: "'Epilogue', sans-serif", color: "#262626" }}>{value}</span>
+            <span style={{ fontSize, fontWeight: 700, minWidth: 28, textAlign: "center", fontFamily: "'Neue Montreal', sans-serif", color: "#262626" }}>{value}</span>
             <button
                 onClick={() => onChange(Math.min(max, value + 1))}
                 style={{
@@ -141,7 +141,7 @@ export function QtySelector({ value, onChange, min = 1, max = 99, size = "md" }:
                     color: "#427b77",
                     lineHeight: 1,
                     transition: "all 0.15s",
-                    fontFamily: "'Epilogue', sans-serif",
+                    fontFamily: "'Neue Montreal', sans-serif",
                 }}
             >+</button>
         </div>
@@ -172,7 +172,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
                 ...variants[variant],
                 ...sizes[size],
                 cursor: rest.disabled ? "not-allowed" : "pointer",
-                fontFamily: "'Epilogue', sans-serif",
+                fontFamily: "'Neue Montreal', sans-serif",
                 fontWeight: 600,
                 width: fullWidth ? "100%" : undefined,
                 display: "inline-flex",
@@ -195,7 +195,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
 export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: () => void }) {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-            <h2 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 28, fontWeight: 500, color: "#262626", letterSpacing: "-0.01em" }}>
+            <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 28, fontWeight: 500, color: "#262626", letterSpacing: "-0.01em" }}>
                 {title}
             </h2>
             {onSeeAll && (
@@ -204,7 +204,7 @@ export function SectionHeader({ title, onSeeAll }: { title: string; onSeeAll?: (
                     style={{
                         color: "#427b77", fontSize: 13, fontWeight: 600,
                         background: "none", border: "none", cursor: "pointer",
-                        fontFamily: "'Epilogue', sans-serif",
+                        fontFamily: "'Neue Montreal', sans-serif",
                         display: "flex", alignItems: "center", gap: 4,
                         padding: "6px 12px", borderRadius: 8,
                         transition: "background 0.15s",
@@ -262,7 +262,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                         position: "absolute", top: 10, right: 10,
                         background: "#427b77", color: "#fff",
                         fontSize: 10, fontWeight: 700, borderRadius: 6, padding: "3px 7px",
-                        fontFamily: "'Epilogue', sans-serif",
+                        fontFamily: "'Neue Montreal', sans-serif",
                     }}>
                         SALE
                     </div>
@@ -285,7 +285,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                         lineHeight: 1,
                         transition: "background 0.2s, transform 0.15s",
                         boxShadow: isOOS ? "none" : "0 2px 8px rgba(45,45,45,0.18)",
-                        fontFamily: "'Epilogue', sans-serif",
+                        fontFamily: "'Neue Montreal', sans-serif",
                     }}
                     onMouseEnter={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#427b77"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}}
                     onMouseLeave={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}}
@@ -296,20 +296,20 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
 
             {/* Info */}
             <div style={{ padding: "14px 16px 16px", flex: 1, display: "flex", flexDirection: "column" }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "#427b77", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4, fontFamily: "'Epilogue', sans-serif" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#427b77", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4, fontFamily: "'Neue Montreal', sans-serif" }}>
                     {product.manufacturer.split(" ")[0]}
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", marginBottom: 2, lineHeight: 1.35, fontFamily: "'Epilogue', sans-serif" }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", marginBottom: 2, lineHeight: 1.35, fontFamily: "'Neue Montreal', sans-serif" }}>
                     {product.brandName}
                 </div>
-                <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginBottom: 10, fontFamily: "'Epilogue', sans-serif" }}>
+                <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginBottom: 10, fontFamily: "'Neue Montreal', sans-serif" }}>
                     {product.strength} · {product.dosageForm}
                 </div>
 
                 <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8, marginTop: "auto" }}>
-                    <span style={{ fontSize: 17, fontWeight: 800, color: "#262626", fontFamily: "'Epilogue', sans-serif" }}>₱{product.price}</span>
+                    <span style={{ fontSize: 17, fontWeight: 800, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>₱{product.price}</span>
                     {product.originalPrice && (
-                        <span style={{ fontSize: 12, color: "rgba(38,38,38,0.5)", textDecoration: "line-through", fontFamily: "'Epilogue', sans-serif" }}>₱{product.originalPrice}</span>
+                        <span style={{ fontSize: 12, color: "rgba(38,38,38,0.5)", textDecoration: "line-through", fontFamily: "'Neue Montreal', sans-serif" }}>₱{product.originalPrice}</span>
                     )}
                 </div>
 
@@ -321,7 +321,7 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                             </svg>
                         ))}
                     </div>
-                    <span style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Epilogue', sans-serif" }}>({product.reviewCount})</span>
+                    <span style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Neue Montreal', sans-serif" }}>({product.reviewCount})</span>
                 </div>
             </div>
         </div>
@@ -370,7 +370,7 @@ export function CategoryCard({ icon, label, color, active, onClick }: CatCardPro
             }}>
                 {icon}
             </div>
-            <div style={{ fontSize: 12, fontWeight: 700, color: active ? "#427b77" : "#262626", fontFamily: "'Epilogue', sans-serif" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: active ? "#427b77" : "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>
                 {label}
             </div>
         </div>
@@ -430,10 +430,10 @@ export function NotificationModal() {
                 }}>
                     {modal.icon}
                 </div>
-                <h3 style={{ fontFamily: "'Epilogue', sans-serif", fontSize: 20, fontWeight: 700, textAlign: "center", marginBottom: 8, color: "#262626" }}>
+                <h3 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 20, fontWeight: 700, textAlign: "center", marginBottom: 8, color: "#262626" }}>
                     {modal.title}
                 </h3>
-                <p style={{ fontSize: 14, color: "rgba(38,38,38,0.7)", textAlign: "center", marginBottom: 24, lineHeight: 1.7, fontFamily: "'Epilogue', sans-serif" }}>
+                <p style={{ fontSize: 14, color: "rgba(38,38,38,0.7)", textAlign: "center", marginBottom: 24, lineHeight: 1.7, fontFamily: "'Neue Montreal', sans-serif" }}>
                     {modal.message}
                 </p>
                 {modal.actionLabel && (
@@ -443,7 +443,7 @@ export function NotificationModal() {
                             width: "100%", background: "#2d2d2d", color: "#fff",
                             border: "none", borderRadius: 12, padding: 14,
                             fontSize: 14, fontWeight: 700, cursor: "pointer",
-                            fontFamily: "'Epilogue', sans-serif", letterSpacing: "0.02em",
+                            fontFamily: "'Neue Montreal', sans-serif", letterSpacing: "0.02em",
                             transition: "background 0.2s",
                         }}
                         onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#427b77"}
@@ -472,7 +472,7 @@ export function Stars({ rating }: { rating: number }) {
                     </svg>
                 ))}
             </span>
-            <span style={{ color: "rgba(38,38,38,0.6)", fontSize: 13, fontFamily: "'Epilogue', sans-serif" }}>({rating.toFixed(1)})</span>
+            <span style={{ color: "rgba(38,38,38,0.6)", fontSize: 13, fontFamily: "'Neue Montreal', sans-serif" }}>({rating.toFixed(1)})</span>
         </span>
     );
 }
