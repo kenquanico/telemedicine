@@ -256,102 +256,11 @@ export default function PharmaciesPage() {
         <>
             <div className="relative flex items-start gap-7 px-5 sm:px-8 lg:px-16">
                 <div className="flex-1 min-w-0">
-
-                    <div className="mt-10 mb-8">
-                        <p className="text-[11px] font-extrabold tracking-[0.14em] text-[#427b77] uppercase mb-2 epilogue-header">
-                            Cebu City, PH
-                        </p>
-                        <h1 className="text-[28px] font-extrabold text-[#262626] epilogue-header leading-tight mb-2">
-                            Partner Pharmacies
-                        </h1>
-                        <p className="text-[14px] text-[#262626]/60 epilogue-regular max-w-[480px]">
-                            All partner pharmacies are FDA-registered. Order directly and get medicines delivered to your door.
-                        </p>
-                    </div>
-
-                    {/* ── Trust bar ── */}
-                    <div className="mb-12 grid grid-cols-1 gap-4 md:grid-cols-3">
-                        {[
-                            { icon: "🛡️", title: "FDA Registered",      sub: "All verified partners"    },
-                            { icon: "🚚", title: "Same-Day Delivery",    sub: "Order before 3PM"         },
-                            { icon: "💊", title: "6 Partner Pharmacies", sub: "Across Cebu City"         },
-                        ].map((f) => (
-                            <div key={f.title} className="bg-white border border-[#EAEFEE] rounded-2xl px-[22px] py-5 flex items-center gap-3.5">
-                                <div className="w-11 h-11 rounded-xl bg-[#F0F7F6] flex items-center justify-center text-xl shrink-0">
-                                    {f.icon}
-                                </div>
-                                <div>
-                                    <div className="text-[13px] font-bold text-[#262626] epilogue-header mb-0.5">{f.title}</div>
-                                    <div className="text-xs text-[#262626]/60 epilogue-regular">{f.sub}</div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 mb-5">
-                        <div className="relative flex items-center flex-1">
-                            <svg className="absolute left-3.5 pointer-events-none text-[#262626]" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-                            <input
-                                type="text"
-                                value={search}
-                                onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Search pharmacies..."
-                                className="w-full pl-9 pr-9 py-2.5 text-xs bg-white epilogue-regular border border-[#EAEFEE] rounded-xl text-[#262626] placeholder:text-[#262626]/30 outline-none transition-all duration-200 focus:border-[#427b77]/40 focus:shadow-[0_0_0_3px_rgba(66,123,119,0.10)]"
-                            />
-                            {search && (
-                                <button onClick={() => setSearch("")} className="absolute right-3 w-4 h-4 rounded-full bg-[#427b77]/10 hover:bg-[#427b77]/20 flex items-center justify-center transition-colors">
-                                    <X size={14} strokeWidth={1.6} className="text-[#262626]" />
-                                </button>
-                            )}
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                            {(["distance", "rating", "delivery"] as const).map((s) => (
-                                <button
-                                    key={s}
-                                    onClick={() => setSortBy(s)}
-                                    className={`px-3.5 py-2 rounded-xl text-[11px] font-bold epilogue-header capitalize transition-all duration-200 ${
-                                        sortBy === s
-                                            ? "bg-[#2d2d2d] text-white"
-                                            : "bg-white border border-[#EAEFEE] text-[#262626]/60 hover:border-[#427b77]/30 hover:text-[#262626]"
-                                    }`}
-                                >
-                                    {s.charAt(0).toUpperCase() + s.slice(1)}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-wrap mb-8">
-                        <span className="text-[11px] text-[#262626]/60 epilogue-regular flex items-center gap-1">
-                            <Filter size={20} strokeWidth={1.6} className="text-[#262626]" /> Filter:
-                        </span>
-                        {SERVICE_TAGS.map((t) => (
-                            <button
-                                key={t.key}
-                                onClick={() => setActiveFilters((prev) =>
-                                    prev.includes(t.key) ? prev.filter((x) => x !== t.key) : [...prev, t.key]
-                                )}
-                                className={`px-3 py-1.5 rounded-lg text-[11px] font-bold epilogue-header transition-all duration-200 ${
-                                    activeFilters.includes(t.key)
-                                        ? "bg-[#427b77] text-white"
-                                        : "bg-white border border-[#EAEFEE] text-[#262626]/60 hover:border-[#427b77]/30 hover:text-[#262626]"
-                                }`}
-                            >
-                                {t.label}
-                            </button>
-                        ))}
-                        {activeFilters.length > 0 && (
-                            <button onClick={() => setActiveFilters([])} className="text-[11px] text-[#427b77] font-semibold epilogue-regular hover:underline">
-                                Clear all
-                            </button>
-                        )}
-                    </div>
-
                     <div className="mb-10 lg:hidden">
                         <FilterPanel filters={filters} onChange={setFilters} />
                     </div>
 
-                    <div className="mb-[52px]">
+                    <div className="mb-[52px] mt-10">
                         <SectionHeader title="All Pharmacies" />
                         {filtered.length === 0 ? (
                             <div className="mt-5 rounded-[20px] border border-[#EAEFEE] bg-white px-6 py-14 text-center">
