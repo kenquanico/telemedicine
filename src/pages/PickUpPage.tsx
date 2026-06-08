@@ -119,7 +119,7 @@ function getMarkerIcon(pharmacy: Pharmacy): google.maps.Icon {
                 <path d="M${x - 6} 33L${x} 42L${x + 6} 33Z" fill="white" stroke="#e2ecea" stroke-width="1" stroke-linejoin="round"/>
             </g>
             ${iconSvg}
-            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, sans-serif" font-size="10" font-weight="600" fill="#1a1a1a">${escapedLabel}</text>
+            <text x="${iconOffsetX + iconSize + 7}" y="22" text-anchor="start" font-family="Epilogue, sans-serif" font-size="10" font-weight="600" fill="#262626">${escapedLabel}</text>
             <path d="M${x} 45C${x - 7} 45 ${x - 12.5} 51 ${x - 12.5} 58c0 9 12.5 17 12.5 17s12.5-8 12.5-17C${x + 12.5} 51 ${x + 7} 45 ${x} 45z" fill="${pinColor}" fill-opacity="0.82" stroke="white" stroke-width="1.75"/>
             <circle cx="${x}" cy="58" r="4" fill="white" fill-opacity="0.9"/>
             <circle cx="${x}" cy="58" r="2.1" fill="${pinColor}" fill-opacity="0.82"/>
@@ -167,7 +167,7 @@ function StatusPill({ openNow }: { openNow: boolean | null }) {
         ? { dot: "#059669", text: "text-emerald-700", bg: "bg-emerald-50", label: "Open now" }
         : openNow === false
             ? { dot: "#dc2626", text: "text-red-600",     bg: "bg-red-50",     label: "Closed" }
-            : { dot: "#9ca3af", text: "text-gray-500",    bg: "bg-gray-100",   label: "Hours vary" };
+            : { dot: "#9ca3af", text: "text-[#262626]/70",    bg: "bg-gray-100",   label: "Hours vary" };
 
     return (
         <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10.5px] font-medium epilogue-regular ${cfg.bg} ${cfg.text}`}>
@@ -198,14 +198,14 @@ function MapControls({
                     className="w-10 h-10 bg-white/55 flex items-center justify-center cursor-pointer hover:bg-white/80 active:bg-white/90 transition-colors border-b border-white/70"
                     aria-label="Zoom in"
                 >
-                    <Plus size={16} strokeWidth={2} className="text-[#3d7a75]" />
+                    <Plus size={20} strokeWidth={1.6} className="text-[#262626]" />
                 </button>
                 <button
                     onClick={onZoomOut}
                     className="w-10 h-10 bg-white/55 flex items-center justify-center cursor-pointer hover:bg-white/80 active:bg-white/90 transition-colors"
                     aria-label="Zoom out"
                 >
-                    <Minus size={16} strokeWidth={2} className="text-[#3d7a75]" />
+                    <Minus size={20} strokeWidth={1.6} className="text-[#262626]" />
                 </button>
             </div>
 
@@ -221,8 +221,8 @@ function MapControls({
             >
                 <Locate
                     size={15}
-                    strokeWidth={2}
-                    className={`transition-colors ${locating ? "text-white" : "text-[#3d7a75]"}`}
+                    strokeWidth={1.6}
+                    className={`transition-colors ${locating ? "text-white" : "text-[#262626]"}`}
                 />
             </button>
         </div>
@@ -259,7 +259,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                         onClick={onClose}
                         className="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/88 backdrop-blur-sm flex items-center justify-center shadow-sm cursor-pointer hover:bg-white transition-colors border border-black/5"
                     >
-                        <X size={15} strokeWidth={2} className="text-[#1a1a1a]" />
+                        <X size={20} strokeWidth={1.6} className="text-[#262626]" />
                     </button>
                 </div>
 
@@ -276,11 +276,11 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 {pharmacy ? getInitials(pharmacy.name) : ""}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h2 className="text-[16px] font-extrabold text-[#1a1a1a] leading-snug tracking-[-0.025em] mb-0.5 epilogue-header">
+                                <h2 className="text-[16px] font-extrabold text-[#262626] leading-snug tracking-[-0.025em] mb-0.5 epilogue-header">
                                     {pharmacy?.name}
                                 </h2>
-                                <p className="flex items-start gap-1 text-[11.5px] text-gray-400 leading-relaxed epilogue-regular">
-                                    <MapPin size={10} strokeWidth={2} className="flex-shrink-0 mt-0.5 text-gray-400" />
+                                <p className="flex items-start gap-1 text-[11.5px] text-[#262626]/60 leading-relaxed epilogue-regular">
+                                    <MapPin size={14} strokeWidth={1.6} className="flex-shrink-0 mt-0.5 text-[#262626]/60" />
                                     {pharmacy?.address || "See on map"}
                                 </p>
                             </div>
@@ -288,9 +288,9 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
 
                         {pharmacy?.rating && (
                             <div className="flex items-center gap-2 mt-3 pt-3 border-t border-[#f2f5f4]">
-                                <span className="text-[14px] font-bold text-[#1a1a1a] tracking-tight epilogue-header">{pharmacy.rating}</span>
+                                <span className="text-[14px] font-bold text-[#262626] tracking-tight epilogue-header">{pharmacy.rating}</span>
                                 <StarRating rating={pharmacy.rating} />
-                                <span className="text-[11px] text-gray-400 epilogue-regular">
+                                <span className="text-[11px] text-[#262626]/60 epilogue-regular">
                                     {pharmacy.userRatingsTotal.toLocaleString()}+ reviews
                                 </span>
                             </div>
@@ -309,7 +309,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 className="flex-1 flex flex-col items-center gap-1.5 py-2.5 rounded-xl border border-[#edf0ef] bg-[#fafbfb] cursor-pointer hover:border-[#d4e4e2] hover:bg-[#f3f8f7] transition-all"
                             >
                                 <Icon size={15} strokeWidth={1.75} style={{ color: ic }} />
-                                <span className="text-[10px] font-medium text-gray-500 epilogue-regular">{label}</span>
+                                <span className="text-[10px] font-medium text-[#262626]/70 epilogue-regular">{label}</span>
                             </button>
                         ))}
                     </div>
@@ -321,10 +321,10 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 <Clock size={13} strokeWidth={1.75} className="text-emerald-600" />
                             </div>
                             <div className="pt-0.5">
-                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Hours</p>
+                                <p className="text-[10px] font-semibold text-[#262626]/60 uppercase tracking-widest mb-0.5 epilogue-subheader">Hours</p>
                                 <p className={`text-[12.5px] font-semibold ${
                                     pharmacy?.openNow === true ? "text-emerald-700" :
-                                        pharmacy?.openNow === false ? "text-red-600" : "text-gray-500"
+                                        pharmacy?.openNow === false ? "text-red-600" : "text-[#262626]/70"
                                 } epilogue-subheader`}>
                                     {pharmacy?.openNow === true ? "Open now" : pharmacy?.openNow === false ? "Closed" : "Hours vary"}
                                 </p>
@@ -336,8 +336,8 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                 <MapPin size={13} strokeWidth={1.75} className="text-violet-500" />
                             </div>
                             <div className="pt-0.5">
-                                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Address</p>
-                                <p className="text-[12.5px] font-medium text-[#1a1a1a] leading-snug epilogue-regular">
+                                <p className="text-[10px] font-semibold text-[#262626]/60 uppercase tracking-widest mb-0.5 epilogue-subheader">Address</p>
+                                <p className="text-[12.5px] font-medium text-[#262626] leading-snug epilogue-regular">
                                     {pharmacy?.address || "Not available"}
                                 </p>
                             </div>
@@ -349,7 +349,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                                     <Truck size={13} strokeWidth={1.75} className="text-blue-500" />
                                 </div>
                                 <div className="pt-0.5">
-                                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-0.5 epilogue-subheader">Delivery</p>
+                                    <p className="text-[10px] font-semibold text-[#262626]/60 uppercase tracking-widest mb-0.5 epilogue-subheader">Delivery</p>
                                     <p className="text-[12.5px] font-semibold text-blue-600 epilogue-subheader">Free delivery available</p>
                                 </div>
                             </div>
@@ -358,10 +358,10 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
 
                     {pharmacy?.types && pharmacy.types.length > 0 && (
                         <div className="px-5 py-4 border-b border-[#f2f5f4]">
-                            <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-widest mb-2.5 epilogue-subheader">Category</p>
+                            <p className="text-[10px] font-semibold text-[#262626]/60 uppercase tracking-widest mb-2.5 epilogue-subheader">Category</p>
                             <div className="flex flex-wrap gap-1.5">
                                 {pharmacy.types.slice(0, 5).map((t) => (
-                                    <span key={t} className="px-2.5 py-[3px] rounded-full text-[10.5px] font-medium bg-[#f2f5f4] text-gray-500 capitalize epilogue-regular">
+                                    <span key={t} className="px-2.5 py-[3px] rounded-full text-[10.5px] font-medium bg-[#f2f5f4] text-[#262626]/70 capitalize epilogue-regular">
                                         {t.replace(/_/g, " ")}
                                     </span>
                                 ))}
@@ -383,7 +383,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                         }}
                     >
                         Reserve for Pickup
-                        <ChevronRight size={14} strokeWidth={2.5} />
+                        <ChevronRight size={22} strokeWidth={1.6} className="text-white" />
                     </button>
                 </div>
             </div>
@@ -424,7 +424,7 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
 
             {/* Info */}
             <div className="px-0.5">
-                <p className="text-[13px] font-bold text-[#1a1a1a] mb-1.5 truncate epilogue-header">
+                <p className="text-[13px] font-bold text-[#262626] mb-1.5 truncate epilogue-header">
                     {pharmacy.name}
                 </p>
                 <div className="flex items-center gap-1.5 mb-2">
@@ -432,14 +432,14 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
                         <span className="flex items-center gap-[3px] text-[11px] font-semibold text-amber-600 epilogue-subheader">
                             <Star size={10} fill="currentColor" strokeWidth={0} className="text-amber-500" />
                             {pharmacy.rating}
-                            <span className="font-normal text-gray-400 text-[10.5px]">({pharmacy.userRatingsTotal}+)</span>
+                            <span className="font-normal text-[#262626]/60 text-[10.5px]">({pharmacy.userRatingsTotal}+)</span>
                         </span>
                     )}
-                    <span className="text-gray-200 text-[10px]">·</span>
+                    <span className="text-[#262626]/20 text-[10px]">·</span>
                     <StatusPill openNow={pharmacy.openNow} />
                 </div>
-                <p className="flex items-center gap-1 text-[10.5px] text-gray-400 truncate epilogue-regular">
-                    <MapPin size={9} strokeWidth={1.75} className="text-gray-300 flex-shrink-0" />
+                <p className="flex items-center gap-1 text-[10.5px] text-[#262626]/60 truncate epilogue-regular">
+                    <MapPin size={9} strokeWidth={1.75} className="text-[#262626]/40 flex-shrink-0" />
                     {pharmacy.address || "See on map"}
                 </p>
             </div>
@@ -635,16 +635,16 @@ export default function PickupPage() {
                     aria-label="Go back"
                     className="w-11 h-11 rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.10)] flex items-center justify-center cursor-pointer hover:bg-white/85 active:bg-white/95 transition-all shrink-0"
                 >
-                    <ChevronLeft size={18} strokeWidth={2.25} className="text-[#3d7a75]" />
+                    <ChevronLeft size={22} strokeWidth={1.6} className="text-[#262626]" />
                 </button>
 
                 {/* Search bar */}
                 <div className="relative inline-flex items-center">
                     <Search
                         size={20}
-                        strokeWidth={2}
-                        className="absolute left-3.5 pointer-events-none z-10"
-                        style={{ color: "#3d7a75", opacity: 0.7, display: "block" }}
+                        strokeWidth={1.6}
+                        className="absolute left-3.5 pointer-events-none z-10 text-[#262626]"
+                        style={{ opacity: 0.7, display: "block" }}
                     />
                     <input
                         type="text"
@@ -652,16 +652,16 @@ export default function PickupPage() {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
                         placeholder="Search pharmacies…"
                         autoComplete="off"
-                        className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] text-sm text-[#1a1a1a] placeholder-[#262626]/30 outline-none focus:border-white/90 focus:bg-white/85 transition-all duration-200 epilogue-thin"
+                        className="w-[280px] pl-[38px] pr-9 py-[11px] rounded-full border border-white/70 bg-white/65 backdrop-blur-md shadow-[0_2px_14px_rgba(10,31,30,0.08)] text-sm text-[#262626] placeholder-[#262626]/30 outline-none focus:border-white/90 focus:bg-white/85 transition-all duration-200 epilogue-thin"
                     />
                     {searchValue && (
                         <button
                             onClick={() => setSearchValue("")}
                             aria-label="Clear search"
                             className="absolute right-[10px] w-5 h-5 rounded-full border border-white/60 bg-white/55 backdrop-blur-md cursor-pointer flex items-center justify-center transition-colors duration-150 hover:bg-white/80"
-                            style={{ color: "#3d7a75" }}
+                            style={{ color: "#262626" }}
                         >
-                            <X size={10} strokeWidth={2.5} style={{ display: "block" }} />
+                            <X size={14} strokeWidth={1.6} style={{ display: "block" }} />
                         </button>
                     )}
                 </div>
@@ -683,7 +683,7 @@ export default function PickupPage() {
                                 >
                                     <Icon
                                         size={16}
-                                        strokeWidth={2.5}
+                                        strokeWidth={1.6}
                                         style={{ color: isActive ? "rgba(255,255,255,0.85)" : ic, verticalAlign: 'middle' }}
                                     />
                                     {f}
@@ -748,8 +748,8 @@ export default function PickupPage() {
                                         />
                                     ))
                                 ) : filtered.length === 0 ? (
-                                    <div className="flex items-center gap-2 py-4 text-gray-400 text-[12px] epilogue-regular">
-                                        <MapPin size={18} strokeWidth={1.5} />
+                                    <div className="flex items-center gap-2 py-4 text-[#262626]/60 text-[12px] epilogue-regular">
+                                        <MapPin size={20} strokeWidth={1.6} className="text-[#262626]" />
                                         <span>No results found</span>
                                     </div>
                                 ) : (
