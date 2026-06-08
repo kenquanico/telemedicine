@@ -259,7 +259,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                         onClick={onClose}
                         className="absolute top-4 left-4 w-8 h-8 rounded-full bg-white/88 backdrop-blur-sm flex items-center justify-center shadow-sm cursor-pointer hover:bg-white transition-colors border border-black/5"
                     >
-                        <ChevronLeft size={15} strokeWidth={2} className="text-[#1a1a1a]" />
+                        <X size={15} strokeWidth={2} className="text-[#1a1a1a]" />
                     </button>
                 </div>
 
