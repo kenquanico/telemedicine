@@ -19,6 +19,12 @@ interface AppContextValue {
     cartTotal: number;
     cartCount: number;
 
+    // Favorites
+    favoriteIds: string[];
+    toggleFavorite: (productId: string) => void;
+    removeFavorite: (productId: string) => void;
+    clearFavorites: () => void;
+
     // Orders
     orders: Order[];
     selectedOrderId: string | null;
@@ -46,6 +52,16 @@ export interface ModalState {
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 const AppContext = createContext<AppContextValue | null>(null);
+const FAVORITES_STORAGE_KEY = "dosely:favorites";
+
+function getSavedFavoriteIds() {
+    try {
+        const saved = window.localStorage.getItem(FAVORITES_STORAGE_KEY);
+        return saved ? (JSON.parse(saved) as string[]) : [];
+    } catch {
+        return [];
+    }
+}
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [currentPage, setCurrentPage] = useState<PageKey>("home");
@@ -57,6 +73,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [addresses] = useState<Address[]>(ADDRESSES);
     const [selectedAddressId, setSelectedAddressId] = useState<string>(ADDRESSES[0].id);
     const [modal, setModal] = useState<ModalState | null>(null);
+    const [favoriteIds, setFavoriteIds] = useState<string[]>(getSavedFavoriteIds);
+
+    const saveFavoriteIds = useCallback((ids: string[]) => {
+        try {
+            window.localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(ids));
+        } catch {
+            // Favorites still work for the session if storage is unavailable.
+        }
+    }, []);
 
     const navigateTo = useCallback((page: PageKey, productId?: string) => {
         setCurrentPage((prev) => {
@@ -106,6 +131,29 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    const toggleFavorite = useCallback((productId: string) => {
+        setFavoriteIds((prev) => {
+            const next = prev.includes(productId)
+                ? prev.filter((id) => id !== productId)
+                : [...prev, productId];
+            saveFavoriteIds(next);
+            return next;
+        });
+    }, [saveFavoriteIds]);
+
+    const removeFavorite = useCallback((productId: string) => {
+        setFavoriteIds((prev) => {
+            const next = prev.filter((id) => id !== productId);
+            saveFavoriteIds(next);
+            return next;
+        });
+    }, [saveFavoriteIds]);
+
+    const clearFavorites = useCallback(() => {
+        setFavoriteIds([]);
+        saveFavoriteIds([]);
+    }, [saveFavoriteIds]);
+
     const cartTotal = cartItems.reduce(
         (sum, i) => sum + i.product.price * i.quantity,
         0
@@ -128,6 +176,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 updateQuantity,
                 cartTotal,
                 cartCount,
+                favoriteIds,
+                toggleFavorite,
+                removeFavorite,
+                clearFavorites,
                 orders,
                 selectedOrderId,
                 setSelectedOrderId,
