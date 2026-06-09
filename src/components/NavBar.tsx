@@ -154,7 +154,7 @@ function saveLocation(location: Location) {
 
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 export default function Navbar({ compact = false }: { compact?: boolean }) {
-    const { currentPage, navigateTo, cartCount } = useApp();
+    const { currentPage, navigateTo, cartCount, favoriteIds } = useApp();
     const hideSecondaryNav = compact || currentPage === "pickup" || currentPage === "pharmacies";
     const [cartOpen,      setCartOpen]      = useState(false);
     const [accountOpen,   setAccountOpen]   = useState(false);
@@ -212,7 +212,14 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 className="icon-btn"
                                 title="Favorites"
                             >
-                                <Heart size={20} strokeWidth={1.8} />
+                                <span className="relative">
+                                    <Heart size={20} strokeWidth={1.8} />
+                                    {favoriteIds.length > 0 && (
+                                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none shadow-sm">
+                                            {favoriteIds.length}
+                                        </span>
+                                    )}
+                                </span>
                             </button>
 
                             <div className="relative" ref={cartRef}>
