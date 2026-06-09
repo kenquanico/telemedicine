@@ -8,6 +8,7 @@ import ProductDetailPage from "./pages/ProductDetailPage";
 import PickupPage from "./pages/PickUpPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import FavoritesPage from "./pages/FavoritesPage";
 import {
     OrdersPage,
     TrackingPage,
@@ -33,7 +34,7 @@ function PageRouter() {
         pharmacy: <PickupPage />,
         cart: <CartPage />,
         checkout: <CheckoutPage />,
-        favorites: <CatalogPage />,
+        favorites: <FavoritesPage />,
         orders: <OrdersPage />,
         tracking: <TrackingPage />,
         payment: <PaymentPage />,
