@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
-import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
 import type { Product } from "../types";
 import { Heart, Trash2, ShoppingBag, Search } from "lucide-react";
@@ -212,101 +211,85 @@ export default function FavoritesPage() {
 
     return (
         <>
-            <div className="px-5 sm:px-8 lg:px-16 py-10">
-
-                {/* ── Page header ── */}
-                <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#F4F7F8] border border-[#EAEFEE] flex items-center justify-center">
-                            <Heart size={18} strokeWidth={1.8} className="text-[#427b77]" />
-                        </div>
-                        <div>
-                            <h1 className="text-[22px] font-extrabold text-[#262626] epilogue-header leading-tight">
-                                Favourites
-                            </h1>
-                            <p className="text-[13px] text-[#262626]/50 epilogue-regular">
+            <div className="px-5 sm:px-8 lg:px-16">
+                <main className="min-w-0">
+                    <div className="mb-6 mt-10 flex flex-wrap items-center justify-between gap-4 sm:mt-14">
+                        <div className="min-w-0">
+                            <p className="mb-1 text-xs font-medium text-[#262626]/60 epilogue-regular">
                                 {favoriteProducts.length} saved medicine{favoriteProducts.length !== 1 ? "s" : ""}
                             </p>
+                            <h2 className="text-[28px] font-medium tracking-[-0.01em] text-[#262626] epilogue-regular">
+                                Favorites
+                            </h2>
                         </div>
+
+                        {favoriteProducts.length > 0 && (
+                            <div className="flex flex-wrap items-center gap-2">
+                                <button
+                                    onClick={handleAddAllToCart}
+                                    className="flex items-center gap-1.5 rounded-xl bg-[#2d2d2d] px-4 py-2 text-xs font-semibold text-white transition-colors duration-200 hover:bg-[#427b77] epilogue-header"
+                                >
+                                    <ShoppingBag size={13} strokeWidth={2} />
+                                    Add All to Cart
+                                </button>
+                                <button
+                                    onClick={handleClearAll}
+                                    className="flex items-center gap-1.5 rounded-xl border border-[#EAEFEE] bg-white px-4 py-2 text-xs font-semibold text-[#262626]/50 transition-colors duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-400 epilogue-regular"
+                                >
+                                    <Trash2 size={13} strokeWidth={1.8} />
+                                    Clear All
+                                </button>
+                            </div>
+                        )}
                     </div>
-
-                    {favoriteProducts.length > 0 && (
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={handleAddAllToCart}
-                                className="flex items-center gap-1.5 rounded-xl bg-[#2d2d2d] hover:bg-[#427b77] text-white px-4 py-2 text-xs font-semibold epilogue-header transition-colors duration-200"
-                            >
-                                <ShoppingBag size={13} strokeWidth={2} />
-                                Add All to Cart
-                            </button>
-                            <button
-                                onClick={handleClearAll}
-                                className="flex items-center gap-1.5 rounded-xl border border-[#EAEFEE] bg-white hover:bg-red-50 hover:border-red-200 text-[#262626]/50 hover:text-red-400 px-4 py-2 text-xs font-semibold epilogue-regular transition-colors duration-200"
-                            >
-                                <Trash2 size={13} strokeWidth={1.8} />
-                                Clear All
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* ── Card wrapper ── */}
-                <div className="rounded-3xl border border-[#EAEFEE] bg-[#FAFBFB] overflow-hidden">
 
                     {favoriteProducts.length === 0 ? (
                         <EmptyFavorites onBrowse={() => navigateTo("catalog")} />
                     ) : (
-                        <div className="p-6 sm:p-8">
-
-                            {/* ── Search bar ── */}
+                        <>
                             <div className="relative mb-7">
                                 <Search
                                     size={15}
                                     strokeWidth={2}
-                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#262626]/35 pointer-events-none"
+                                    className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[#262626]/35"
                                 />
                                 <input
                                     type="text"
-                                    placeholder="Search your favourites…"
+                                    placeholder="Search your favorites..."
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    className="w-full sm:w-72 pl-9 pr-4 py-2 rounded-xl border border-[#EAEFEE] bg-white text-sm text-[#262626] epilogue-regular placeholder:text-[#262626]/35 focus:outline-none focus:border-[#427b77] transition-colors duration-200"
+                                    className="w-full rounded-xl border border-[#EAEFEE] bg-white py-2 pl-9 pr-4 text-sm text-[#262626] transition-colors duration-200 placeholder:text-[#262626]/35 focus:border-[#427b77] focus:outline-none sm:w-72 epilogue-regular"
                                 />
                             </div>
 
-                            {/* ── Filtered empty ── */}
                             {filteredFavorites.length === 0 ? (
-                                <div className="py-14 text-center">
-                                    <p className="text-[15px] font-bold text-[#262626] epilogue-header mb-1">
+                                <div className="mb-16 px-6 py-20 text-center">
+                                    <p className="mb-1 text-[15px] font-bold text-[#262626] epilogue-header">
                                         No matches for "{searchQuery}"
                                     </p>
                                     <button
                                         onClick={() => setSearchQuery("")}
-                                        className="mt-3 text-xs text-[#427b77] epilogue-regular hover:underline"
+                                        className="mt-3 text-xs text-[#427b77] hover:underline epilogue-regular"
                                     >
                                         Clear search
                                     </button>
                                 </div>
                             ) : (
-                                <>
-                                    <SectionHeader title={`Saved Medicines · ${filteredFavorites.length}`} />
-
-                                    <div className="mt-5 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                                        {filteredFavorites.map((p) => (
-                                            <VendorMedicineCard
-                                                key={p.id}
-                                                product={p}
-                                                onView={() => navigateTo("product", p.id)}
-                                                onAdd={() => handleAddToCart(p.id)}
-                                                onUnfavorite={() => handleUnfavorite(p.id)}
-                                            />
-                                        ))}
-                                    </div>
-                                </>
+                                <div className="mb-16 grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                                    {filteredFavorites.map((p) => (
+                                        <VendorMedicineCard
+                                            key={p.id}
+                                            product={p}
+                                            onView={() => navigateTo("product", p.id)}
+                                            onAdd={() => handleAddToCart(p.id)}
+                                            onUnfavorite={() => handleUnfavorite(p.id)}
+                                        />
+                                    ))}
+                                </div>
                             )}
-                        </div>
+                        </>
                     )}
-                </div>
+                </main>
             </div>
 
             <Footer />
