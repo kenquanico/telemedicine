@@ -19,48 +19,91 @@ import {
     LogOut,
     Settings,
     ClipboardList,
+    ChevronRight,
+    Package,
 } from "lucide-react";
 
 // ─── Cart Dropdown ────────────────────────────────────────────────────────────
 function CartDropdown({ onClose }: { onClose: () => void }) {
     const { cartItems, cartTotal, navigateTo } = useApp();
 
-
     return (
-        <div className="absolute top-[calc(100%+10px)] right-0 w-80 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 p-5 animate-slideDown">
-            <p className="text-xs font-bold text-[#262626] mb-3 tracking-widest uppercase">
-                Cart &mdash; {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
-            </p>
+        <div className="absolute top-[calc(100%+10px)] right-0 w-[340px] bg-white rounded-2xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-[#EAEFEE] z-50 overflow-hidden animate-slideDown">
+
+            {/* Header */}
+            <div className="px-5 pt-4 pb-3 border-b border-[#F0F3F2] flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <ShoppingBag size={14} strokeWidth={2} className="text-[#427b77]" />
+                    <span className="text-xs font-extrabold text-[#262626] epilogue-header tracking-wide uppercase">
+                        Cart
+                    </span>
+                </div>
+                <span className="text-[10px] font-bold text-[#262626]/40 epilogue-header uppercase tracking-widest">
+                    {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
+                </span>
+            </div>
+
             {cartItems.length === 0 ? (
-                <p className="text-center py-6 text-[#262626]/60 text-xs epilogue-regular">Your cart is empty</p>
+                <div className="flex flex-col items-center justify-center px-5 py-10 text-center">
+                    <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-[16px] bg-[#F4F7F8]">
+                        <Package size={22} strokeWidth={1.5} className="text-[#427b77]" />
+                    </div>
+                    <p className="text-[13px] font-bold text-[#262626] epilogue-header mb-1">Nothing here yet</p>
+                    <p className="text-[11px] text-[#262626]/45 epilogue-regular">Add medicines to get started</p>
+                </div>
             ) : (
                 <>
-                    <div className="max-h-56 overflow-y-auto -mx-2 px-2 space-y-1">
+                    {/* Item list */}
+                    <div className="max-h-[260px] overflow-y-auto px-3 py-2 space-y-0.5" style={{ scrollbarWidth: "none" }}>
                         {cartItems.map((item) => (
-                            <div key={item.product.id} className="flex gap-2.5 px-2 py-2.5 border-b border-[#262626]/10 items-center last:border-b-0 hover:bg-[#F4F7F8] rounded-lg transition-colors duration-150">
-                                <div className="w-11 h-11 bg-[#F4F7F8] rounded-lg flex items-center justify-center text-lg shrink-0">
-                                    {item.product.image}
+                            <div
+                                key={item.product.id}
+                                className="flex items-center gap-3 px-2 py-2.5 rounded-xl hover:bg-[#F7FAF9] transition-colors duration-150 cursor-default"
+                            >
+                                {/* Image */}
+                                <div className="w-11 h-11 rounded-xl bg-[#F4F7F8] flex items-center justify-center shrink-0 overflow-hidden">
+                                    <img
+                                        src={item.product.image}
+                                        alt={item.product.brandName}
+                                        className="w-full h-full object-contain scale-[1.15]"
+                                        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                                    />
                                 </div>
+
+                                {/* Info */}
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-semibold text-[#262626] truncate leading-tight epilogue-regular">{item.product.brandName}</p>
-                                    <p className="text-xs text-[#262626]/60 mt-0.5 epilogue-regular">Qty: {item.quantity}</p>
+                                    <p className="text-[13px] font-bold text-[#262626] epilogue-header truncate leading-tight">
+                                        {item.product.brandName}
+                                    </p>
+                                    <p className="text-[11px] text-[#262626]/50 epilogue-regular mt-0.5">
+                                        {item.product.strength} · Qty {item.quantity}
+                                    </p>
                                 </div>
-                                <span className="text-sm font-bold text-[#427b77] shrink-0">
-                                        ₱{(item.product.price * item.quantity).toLocaleString()}
-                                    </span>
+
+                                {/* Price */}
+                                <span className="text-[13px] font-extrabold text-[#427b77] epilogue-header shrink-0">
+                                    ₱{(item.product.price * item.quantity).toLocaleString()}
+                                </span>
                             </div>
                         ))}
                     </div>
-                    <div className="pt-3 mt-1 border-t border-[#262626]/10">
-                        <div className="flex justify-between mb-3">
-                            <span className="text-sm text-[#262626]/70 epilogue-regular">Total</span>
-                            <span className="text-base font-bold text-[#262626]">₱{cartTotal.toLocaleString()}</span>
+
+                    {/* Footer */}
+                    <div className="px-4 pt-3 pb-4 border-t border-[#F0F3F2]">
+                        {/* Total row */}
+                        <div className="flex items-baseline justify-between mb-3.5">
+                            <span className="text-[12px] text-[#262626]/55 epilogue-regular">Subtotal</span>
+                            <span className="text-[17px] font-extrabold text-[#262626] epilogue-header" style={{ letterSpacing: "-0.02em" }}>
+                                ₱{cartTotal.toLocaleString()}
+                            </span>
                         </div>
+
                         <button
                             onClick={() => { navigateTo("cart"); onClose(); }}
-                            className="w-full bg-[#2d2d2d] hover:bg-[#427b77] text-white rounded-lg py-3 text-xs font-semibold transition-colors duration-200 cursor-pointer tracking-wide"
+                            className="w-full flex items-center justify-center gap-2 bg-[#2d2d2d] hover:bg-[#427b77] text-white rounded-xl py-3 text-[12px] font-bold epilogue-header transition-colors duration-200 cursor-pointer tracking-wide"
                         >
                             View Cart &amp; Checkout
+                            <ChevronRight size={14} strokeWidth={2.5} />
                         </button>
                     </div>
                 </>
