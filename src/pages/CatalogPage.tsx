@@ -81,12 +81,15 @@ function CatalogMedicineCard({
     product,
     onView,
     onAdd,
+    isFavorite,
+    onToggleFavorite,
 }: {
     product: Product;
     onView: () => void;
     onAdd: () => void;
+    isFavorite: boolean;
+    onToggleFavorite: () => void;
 }) {
-    const [hearted, setHearted] = useState(false);
     const [imageFailed, setImageFailed] = useState(false);
     const isOutOfStock = product.stockStatus === "out_of_stock";
     const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/") || product.image.startsWith("data:");
@@ -130,16 +133,16 @@ function CatalogMedicineCard({
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
-                        setHearted((h) => !h);
+                        onToggleFavorite();
                     }}
-                    aria-label={hearted ? "Remove from favourites" : "Add to favourites"}
+                    aria-label={isFavorite ? "Remove from favourites" : "Add to favourites"}
                     className="absolute bottom-2.5 right-[46px] flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
                 >
                     <svg width="15" height="15" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                         <path
                             fillRule="evenodd"
                             clipRule="evenodd"
-                            fill={hearted ? "#e11d48" : "rgba(38,38,38,0.5)"}
+                            fill={isFavorite ? "#e11d48" : "rgba(38,38,38,0.5)"}
                             d="M12.6217 2.82875C14.6366 3.8152 15.5488 6.39602 14.6592 8.59316C13.5308 11.0256 11.4249 12.9696 8.3415 14.4254C8.15614 14.5107 7.94533 14.5229 7.75273 14.4618L7.65776 14.425C4.57478 12.9693 2.46912 11.0254 1.34078 8.59316C0.451161 6.39602 1.36338 3.8152 3.37828 2.82875C4.83682 2.11468 6.33306 2.64718 7.49473 3.62706C7.55809 3.68051 7.63615 3.75107 7.72889 3.83874L7.72892 3.83871C7.88199 3.98341 8.11731 3.98336 8.27032 3.8386C8.34183 3.77095 8.40276 3.71543 8.45314 3.67203C9.62526 2.66225 11.1429 2.10474 12.6217 2.82875ZM11.8696 4.45404C11.1697 4.11137 10.2881 4.36724 9.41854 5.19403L9.24485 5.36699L8.28326 6.36823C8.12801 6.52989 7.87475 6.53148 7.71758 6.37179L6.75338 5.36542C5.83294 4.40468 4.87775 4.08814 4.13039 4.45404C2.96994 5.02217 2.42026 6.5773 2.92018 7.81797C3.76446 9.63786 5.30414 11.1633 7.59598 12.391L7.82073 12.5071C7.93328 12.5652 8.06585 12.5655 8.17856 12.5077C8.30589 12.4425 8.40456 12.391 8.47457 12.353C10.6006 11.2014 12.0681 9.79624 12.9017 8.18989L13.0437 7.90114C13.5554 6.63747 13.0778 5.16307 12.024 4.53751L11.8696 4.45404Z"
                         />
                     </svg>
@@ -204,7 +207,7 @@ function CatalogMedicineCard({
 }
 
 export default function CatalogPage() {
-    const { navigateTo, addToCart, showModal } = useApp();
+    const { navigateTo, addToCart, showModal, favoriteIds, toggleFavorite } = useApp();
 
     const [filters, setFilters] = useState(getDefaultFilters);
 
@@ -304,6 +307,8 @@ export default function CatalogPage() {
                                     product={product}
                                     onView={() => navigateTo("product", product.id)}
                                     onAdd={() => handleAdd(product.id)}
+                                    isFavorite={favoriteIds.includes(product.id)}
+                                    onToggleFavorite={() => toggleFavorite(product.id)}
                                 />
                             ))}
                         </div>
