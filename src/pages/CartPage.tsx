@@ -1,5 +1,7 @@
 import { useApp } from "../hooks/useApp";
 import { QtySelector, Btn } from "../components/UI";
+import { useState } from "react";
+import { ShoppingBag, MapPin, ChevronRight, Tag, Shield } from "lucide-react";
 
 const DELIVERY_FEE = 49;
 const DISCOUNT = 28;
@@ -8,157 +10,237 @@ export default function CartPage() {
     const { cartItems, removeFromCart, updateQuantity, cartTotal, navigateTo, addresses, selectedAddressId } = useApp();
     const address = addresses.find((a) => a.id === selectedAddressId) ?? addresses[0];
     const total = cartTotal + DELIVERY_FEE - DISCOUNT;
+    const [removingId, setRemovingId] = useState<string | null>(null);
+
+    const handleRemove = (id: string) => {
+        setRemovingId(id);
+        setTimeout(() => {
+            removeFromCart(id);
+            setRemovingId(null);
+        }, 220);
+    };
 
     return (
-        <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
-            <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 24, fontWeight: 800, color: "#262626", letterSpacing: "-0.02em", marginBottom: 32 }}>
-                Shopping Cart
-                <span style={{ fontSize: 14, color: "rgba(38,38,38,0.6)", fontWeight: 500, marginLeft: 12, fontFamily: "'Neue Montreal', sans-serif" }}>
-                    {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
-                </span>
-            </h2>
+        <div className="relative flex items-start gap-7 px-5 py-10 sm:px-8 lg:px-16 lg:py-12">
 
-            <div className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-                {/* ── Cart Items ── */}
-                <div>
-                    {cartItems.length === 0 ? (
-                        <div style={{
-                            background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20,
-                            padding: "80px 40px", textAlign: "center",
-                        }}>
-                            <div style={{
-                                width: 80, height: 80, borderRadius: 24, background: "#F4F6F5",
-                                display: "flex", alignItems: "center", justifyContent: "center",
-                                fontSize: 32, margin: "0 auto 20px",
-                            }}>🛒</div>
-                            <h3 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 19, fontWeight: 700, color: "#262626", marginBottom: 8 }}>
-                                Your cart is empty
-                            </h3>
-                            <p style={{ color: "rgba(38,38,38,0.6)", fontSize: 14, marginBottom: 24, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                Add some medicines to get started
-                            </p>
-                            <Btn onClick={() => navigateTo("catalog")} variant="secondary">Browse Medicines</Btn>
+            {/* ── Main content ── */}
+            <div className="flex-1 min-w-0">
+
+                {/* ── Page heading ── */}
+                <div className="mb-8 flex items-baseline gap-3">
+                    <h2 className="text-2xl font-extrabold text-[#262626] epilogue-header" style={{ letterSpacing: "-0.02em" }}>
+                        Shopping Cart
+                    </h2>
+                    {cartItems.length > 0 && (
+                        <span className="text-sm text-[#262626]/50 epilogue-regular font-medium">
+                            {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
+                        </span>
+                    )}
+                </div>
+
+                {/* ── Empty state ── */}
+                {cartItems.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center rounded-3xl border border-[#EAEFEE] bg-white px-8 py-20 text-center">
+                        <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-[24px] bg-[#F4F7F8]">
+                            <ShoppingBag size={34} strokeWidth={1.4} className="text-[#427b77]" />
                         </div>
-                    ) : (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                            {cartItems.map((item) => (
-                                <div key={item.product.id}
-                                     className="flex flex-col gap-4 rounded-[18px] border border-[#EAEFEE] bg-white p-5 transition-shadow duration-200 sm:flex-row sm:items-center"
-                                     onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(45,45,45,0.07)"}
-                                     onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
+                        <h3 className="mb-2 text-[19px] font-extrabold text-[#262626] epilogue-header">
+                            Your cart is empty
+                        </h3>
+                        <p className="mb-7 text-sm text-[#262626]/55 epilogue-regular">
+                            Add medicines to get started
+                        </p>
+                        <Btn onClick={() => navigateTo("catalog")} variant="secondary">
+                            Browse Medicines
+                        </Btn>
+                    </div>
+                ) : (
+                    <div className="flex flex-col gap-3">
+                        {cartItems.map((item) => {
+                            const isRemoving = removingId === item.product.id;
+                            return (
+                                <div
+                                    key={item.product.id}
+                                    className="group flex flex-col gap-4 rounded-2xl border border-[#EAEFEE] bg-white p-5 transition-all duration-200 sm:flex-row sm:items-center"
+                                    style={{
+                                        opacity: isRemoving ? 0 : 1,
+                                        transform: isRemoving ? "translateX(12px)" : "translateX(0)",
+                                        transition: "opacity 0.22s ease, transform 0.22s ease, box-shadow 0.2s ease",
+                                    }}
+                                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(45,45,45,0.07)"}
+                                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
                                 >
-                                    {/* Image */}
+                                    {/* ── Product image ── */}
                                     <div
-                                        style={{
-                                            width: 80, height: 80, background: "#F7FAF9",
-                                            borderRadius: 14, display: "flex", alignItems: "center",
-                                            justifyContent: "center", flexShrink: 0, cursor: "pointer",
-                                            overflow: "hidden",
-                                        }}
+                                        className="relative h-20 w-20 shrink-0 cursor-pointer overflow-hidden rounded-xl bg-[#F7FAF9]"
                                         onClick={() => navigateTo("product", item.product.id)}
                                     >
                                         <img
                                             src={item.product.image}
                                             alt={item.product.brandName}
-                                            style={{ width: "100%", height: "100%", objectFit: "contain", padding: 0, transform: "scale(1.18)" }}
-                                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                                            className="h-full w-full scale-[1.18] object-contain transition-transform duration-300 group-hover:scale-[1.26]"
+                                            onError={(e) => {
+                                                (e.currentTarget as HTMLImageElement).style.display = "none";
+                                            }}
                                         />
                                     </div>
 
-                                    {/* Info */}
+                                    {/* ── Info ── */}
                                     <div className="min-w-0 flex-1">
-                                        <div style={{ fontSize: 10, color: "#427b77", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 4, fontFamily: "'Neue Montreal', sans-serif" }}>
+                                        <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.07em] text-[#427b77] epilogue-header">
                                             {item.product.manufacturer.split(" ")[0]}
                                         </div>
                                         <div
-                                            style={{ fontSize: 15, fontWeight: 700, color: "#262626", marginBottom: 2, cursor: "pointer", fontFamily: "'Neue Montreal', sans-serif" }}
+                                            className="mb-1 cursor-pointer text-[15px] font-extrabold text-[#262626] epilogue-header leading-snug truncate"
                                             onClick={() => navigateTo("product", item.product.id)}
                                         >
                                             {item.product.brandName} {item.product.strength}
                                         </div>
-                                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", fontFamily: "'Neue Montreal', sans-serif" }}>
-                                            {item.product.dosageForm} · ₱{item.product.price} each
+                                        <div className="text-[13px] text-[#262626]/55 epilogue-regular">
+                                            {item.product.dosageForm} · {item.product.packSize}
                                         </div>
                                     </div>
 
-                                    {/* Controls */}
-                                    <div className="flex shrink-0 flex-row items-center justify-between gap-4 sm:flex-col sm:items-end">
-                                        <QtySelector value={item.quantity} onChange={(v) => updateQuantity(item.product.id, v)} size="sm" />
-                                        <div style={{ fontSize: 17, fontWeight: 800, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>
+                                    {/* ── Controls ── */}
+                                    <div className="flex shrink-0 flex-row items-center justify-between gap-5 sm:flex-col sm:items-end">
+                                        <QtySelector
+                                            value={item.quantity}
+                                            onChange={(v) => updateQuantity(item.product.id, v)}
+                                            size="sm"
+                                        />
+                                        <div className="text-[17px] font-extrabold text-[#262626] epilogue-header">
                                             ₱{(item.product.price * item.quantity).toLocaleString()}
                                         </div>
                                         <button
-                                            onClick={() => removeFromCart(item.product.id)}
-                                            style={{
-                                                color: "#EF4444", background: "none", border: "none",
-                                                fontSize: 12, cursor: "pointer",
-                                                fontFamily: "'Neue Montreal', sans-serif", fontWeight: 600,
-                                                padding: "4px 8px", borderRadius: 6, transition: "background 0.15s",
-                                            }}
-                                            onMouseEnter={e => (e.currentTarget as HTMLButtonElement).style.background = "#FEF2F2"}
-                                            onMouseLeave={e => (e.currentTarget as HTMLButtonElement).style.background = "transparent"}
-                                        >Remove</button>
+                                            onClick={() => handleRemove(item.product.id)}
+                                            className="rounded-lg px-2.5 py-1.5 text-[11px] font-bold text-red-400 transition-colors duration-150 hover:bg-red-50 hover:text-red-500 epilogue-header cursor-pointer border-none bg-transparent"
+                                        >
+                                            Remove
+                                        </button>
                                     </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+
+            {/* ── Order Summary sidebar ── */}
+            {cartItems.length > 0 && (
+                <div className="sticky top-[120px] hidden w-[340px] shrink-0 self-start lg:block">
+                    <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)]">
+
+                        <h3 className="mb-5 text-[16px] font-extrabold text-[#262626] epilogue-header" style={{ letterSpacing: "-0.01em" }}>
+                            Order Summary
+                        </h3>
+
+                        {/* Delivery address */}
+                        <button
+                            className="mb-5 w-full cursor-pointer rounded-xl border border-[#EAEFEE] bg-[#F7FAF9] p-4 text-left transition-colors duration-150 hover:border-[#427b77]/40 hover:bg-[#F0F6F5]"
+                        >
+                            <div className="mb-2 flex items-center justify-between">
+                                <div className="flex items-center gap-1.5">
+                                    <MapPin size={12} strokeWidth={2} className="text-[#427b77]" />
+                                    <span className="text-[10px] font-extrabold uppercase tracking-[0.08em] text-[#427b77] epilogue-header">
+                                        Deliver to
+                                    </span>
+                                </div>
+                                <ChevronRight size={13} strokeWidth={2} className="text-[#262626]/30" />
+                            </div>
+                            <div className="text-[13px] font-extrabold text-[#262626] epilogue-header leading-snug">
+                                {address.firstName} {address.lastName}
+                            </div>
+                            <div className="mt-0.5 text-[12px] text-[#262626]/55 epilogue-regular leading-relaxed">
+                                {address.line}, {address.city} {address.zip}
+                            </div>
+                        </button>
+
+                        {/* Promo code row */}
+                        <div className="mb-5 flex items-center gap-2.5 rounded-xl border border-dashed border-[#EAEFEE] px-4 py-3 transition-colors duration-150 hover:border-[#427b77]/40 cursor-pointer">
+                            <Tag size={14} strokeWidth={1.8} className="text-[#427b77] shrink-0" />
+                            <span className="text-[12px] text-[#262626]/50 epilogue-regular flex-1">Add promo code</span>
+                            <ChevronRight size={13} strokeWidth={2} className="text-[#262626]/25" />
+                        </div>
+
+                        {/* Line items */}
+                        <div className="mb-4 flex flex-col gap-3">
+                            {[
+                                {
+                                    label: `Subtotal (${cartItems.length} item${cartItems.length !== 1 ? "s" : ""})`,
+                                    value: `₱${cartTotal.toLocaleString()}`,
+                                    valueClass: "text-[#262626] font-bold",
+                                },
+                                {
+                                    label: "Delivery fee",
+                                    value: `₱${DELIVERY_FEE}`,
+                                    valueClass: "text-[#262626]/60 font-semibold",
+                                },
+                                {
+                                    label: "Discount",
+                                    value: `−₱${DISCOUNT}`,
+                                    valueClass: "text-[#22C55E] font-bold",
+                                },
+                            ].map(({ label, value, valueClass }) => (
+                                <div key={label} className="flex items-center justify-between">
+                                    <span className="text-[13px] text-[#262626]/60 epilogue-regular">{label}</span>
+                                    <span className={`text-[13px] epilogue-header ${valueClass}`}>{value}</span>
                                 </div>
                             ))}
                         </div>
-                    )}
-                </div>
 
-                {/* ── Order Summary ── */}
-                <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
-                    <h3 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 16, fontWeight: 700, color: "#262626", marginBottom: 20, letterSpacing: "-0.01em" }}>
-                        Order Summary
-                    </h3>
+                        <div className="mb-5 h-px bg-[#F0F3F2]" />
 
-                    {/* Delivery address */}
-                    <div style={{
-                        background: "#F7FAF9", border: "1.5px solid #EAEFEE",
-                        borderRadius: 14, padding: 14, marginBottom: 20, cursor: "pointer",
-                    }}>
-                        <div style={{ fontSize: 10, fontWeight: 800, color: "#427b77", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6, fontFamily: "'Neue Montreal', sans-serif" }}>
-                            Deliver to
+                        {/* Total */}
+                        <div className="mb-5 flex items-baseline justify-between">
+                            <span className="text-[15px] font-extrabold text-[#262626] epilogue-header">Total</span>
+                            <span className="text-[22px] font-extrabold text-[#427b77] epilogue-header" style={{ letterSpacing: "-0.02em" }}>
+                                ₱{total.toLocaleString()}
+                            </span>
                         </div>
-                        <div style={{ fontSize: 13, fontWeight: 700, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>
-                            {address.firstName} {address.lastName}
+
+                        <Btn
+                            variant="primary"
+                            size="lg"
+                            fullWidth
+                            onClick={() => navigateTo("checkout")}
+                            disabled={cartItems.length === 0}
+                        >
+                            Proceed to Checkout
+                        </Btn>
+
+                        {/* Trust badge */}
+                        <div className="mt-4 flex items-center justify-center gap-1.5">
+                            <Shield size={12} strokeWidth={2} className="text-[#262626]/30" />
+                            <span className="text-[11px] text-[#262626]/40 epilogue-regular">
+                                Secure checkout · End-to-end encrypted
+                            </span>
                         </div>
-                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginTop: 2, fontFamily: "'Neue Montreal', sans-serif", lineHeight: 1.5 }}>
-                            {address.line}, {address.city} {address.zip}
-                        </div>
-                    </div>
-
-                    {/* Line items */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
-                        {[
-                            { label: `Subtotal (${cartItems.length} items)`, value: `₱${cartTotal.toLocaleString()}`, color: "#262626" },
-                            { label: "Delivery Fee",  value: `₱${DELIVERY_FEE}`, color: "rgba(38,38,38,0.6)" },
-                            { label: "Discount",      value: `−₱${DISCOUNT}`,    color: "#22C55E" },
-                        ].map(({ label, value, color }) => (
-                            <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-                                <span style={{ color: "rgba(38,38,38,0.7)", fontFamily: "'Neue Montreal', sans-serif" }}>{label}</span>
-                                <span style={{ color, fontWeight: 600, fontFamily: "'Neue Montreal', sans-serif" }}>{value}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div style={{ height: 1, background: "#F0F3F2", marginBottom: 16 }} />
-
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 17, fontWeight: 800, marginBottom: 20 }}>
-                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#262626" }}>Total</span>
-                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
-                    </div>
-
-                    <Btn variant="primary" size="lg" fullWidth
-                         onClick={() => navigateTo("checkout")}
-                         disabled={cartItems.length === 0}>
-                        Proceed to Checkout
-                    </Btn>
-
-                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "rgba(38,38,38,0.5)", fontFamily: "'Neue Montreal', sans-serif" }}>
-                        Secure checkout · End-to-end encrypted
                     </div>
                 </div>
-            </div>
+            )}
+
+            {/* ── Mobile order summary (below cart) ── */}
+            {cartItems.length > 0 && (
+                <div className="lg:hidden w-full mt-6">
+                    <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)]">
+                        <div className="mb-4 flex items-baseline justify-between">
+                            <span className="text-[15px] font-extrabold text-[#262626] epilogue-header">Total</span>
+                            <span className="text-[22px] font-extrabold text-[#427b77] epilogue-header" style={{ letterSpacing: "-0.02em" }}>
+                                ₱{total.toLocaleString()}
+                            </span>
+                        </div>
+                        <Btn
+                            variant="primary"
+                            size="lg"
+                            fullWidth
+                            onClick={() => navigateTo("checkout")}
+                        >
+                            Proceed to Checkout
+                        </Btn>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
