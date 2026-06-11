@@ -9,13 +9,11 @@ import PickupPage from "./pages/PickUpPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import FavoritesPage from "./pages/FavoritesPage";
-import {
-    OrdersPage,
-    TrackingPage,
-    PaymentPage,
-    PaymentHistoryPage,
-    AccountPage,
-} from "./pages/OtherPages";
+import { OrdersPage } from "./pages/OrdersPage";
+import { TrackingPage } from "./pages/TrackingPage";
+import { PaymentPage } from "./pages/PaymentPage";
+import { PaymentHistoryPage } from "./pages/PaymentHistoryPage";
+import { AccountPage } from "./pages/AccountPage";
 import PharmaciesPage from "./pages/PharmaciesPage.tsx";
 
 const homeRendersPickupExperience = HomePage.name === "PickupPage";
