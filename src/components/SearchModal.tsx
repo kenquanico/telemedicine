@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Search, X, Clock, TrendingUp, ArrowRight } from "lucide-react";
 
 interface SearchModalProps {
@@ -23,6 +23,10 @@ const RECENT = [
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const [query, setQuery] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
+    const handleClose = useCallback(() => {
+        setQuery("");
+        onClose();
+    }, [onClose]);
 
     useEffect(() => {
         if (isOpen) {
@@ -30,18 +34,17 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
-            setQuery("");
         }
         return () => { document.body.style.overflow = ""; };
     }, [isOpen]);
 
     useEffect(() => {
         const handler = (e: KeyboardEvent) => {
-            if (e.key === "Escape") onClose();
+            if (e.key === "Escape") handleClose();
         };
         document.addEventListener("keydown", handler);
         return () => document.removeEventListener("keydown", handler);
-    }, [onClose]);
+    }, [handleClose]);
 
     if (!isOpen) return null;
 
@@ -56,7 +59,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             {/* Backdrop */}
             <div
                 className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm"
-                onClick={onClose}
+                onClick={handleClose}
                 style={{ animation: "fadeIn 0.18s ease-out" }}
             />
 
@@ -87,7 +90,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             </button>
                         )}
                         <button
-                            onClick={onClose}
+                            onClick={handleClose}
                             className="ml-1 text-xs epilogue-regular text-[#262626]/40 hover:text-[#262626]/70 transition-colors duration-150 cursor-pointer shrink-0 border border-gray-200 rounded-md px-2 py-1"
                         >
                             Esc
