@@ -43,7 +43,7 @@ interface AppContextValue {
 
 export interface ModalState {
     type: "success" | "info" | "warning" | "error" | "added";
-    icon: string;
+    icon: React.ReactNode;
     title: string;
     message: string;
     actionLabel?: string;
