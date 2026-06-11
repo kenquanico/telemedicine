@@ -20,7 +20,6 @@ type MenuItem = {
     icon: ReactNode;
     label: string;
     action: () => void;
-    danger?: boolean;
 };
 
 export function AccountPage() {
