@@ -1,5 +1,6 @@
 import React from "react";
 import { AppProvider, useApp } from "./hooks/useApp";
+import type { PageKey } from "./types";
 import Navbar from "./components/NavBar.tsx";
 import { NotificationModal } from "./components/UI";
 import HomePage from "./pages/HomePage";
@@ -22,7 +23,7 @@ const homeRendersPickupExperience = HomePage.name === "PickupPage";
 function PageRouter() {
     const { currentPage } = useApp();
 
-    const pages: Record<string, React.ReactNode> = {
+    const pages: Record<PageKey, React.ReactNode> = {
         home: homeRendersPickupExperience ? <PickupPage /> : <HomePage />,
         catalog: <CatalogPage />,
         medicines: <CatalogPage />,
@@ -38,6 +39,7 @@ function PageRouter() {
         payment: <PaymentPage />,
         history: <PaymentHistoryPage />,
         account: <AccountPage />,
+        settings: <AccountPage />,
     };
 
     return <>{pages[currentPage] ?? <HomePage />}</>;
