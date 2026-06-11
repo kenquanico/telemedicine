@@ -157,7 +157,7 @@ export function PaymentPage() {
                         onClick={() =>
                             showModal({
                                 type:        "success",
-                                icon:        "",
+                                icon:        <CheckCircle2 size={30} strokeWidth={1.8} className="text-[#427b77]" />,
                                 title:       "Payment Confirmed",
                                 message:     `Payment of ₱${total.toLocaleString()} via ${PAYMENT_META[selected].label} has been confirmed.`,
                                 actionLabel: "View Orders",
