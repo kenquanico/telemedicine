@@ -1,10 +1,23 @@
 // ─── Account Page ─────────────────────────────────────────────────────────────
+import {
+    Bell,
+    ChevronRight,
+    ClipboardList,
+    CreditCard,
+    Edit3,
+    LogOut,
+    MapPin,
+    Package,
+    Settings,
+    ShieldCheck,
+} from "lucide-react";
+import type { ReactNode } from "react";
 import { useApp } from "../hooks/useApp";
 import { PAYMENT_HISTORY } from "../data/mockData";
 import type { PageKey } from "../types";
 
 type MenuItem = {
-    icon: string;
+    icon: ReactNode;
     label: string;
     action: () => void;
     danger?: boolean;
@@ -14,19 +27,19 @@ export function AccountPage() {
     const { navigateTo, orders } = useApp();
 
     const quickCards: {
-        icon: string;
+        icon: ReactNode;
         label: string;
         sub: string;
         page: PageKey;
     }[] = [
         {
-            icon:  "📦",
+            icon:  <Package size={22} strokeWidth={1.8} />,
             label: "My Orders",
             sub:   `${orders.length} orders`,
             page:  "orders",
         },
         {
-            icon:  "💳",
+            icon:  <CreditCard size={22} strokeWidth={1.8} />,
             label: "Payment History",
             sub:   `${PAYMENT_HISTORY.length} transactions`,
             page:  "history",
@@ -34,82 +47,90 @@ export function AccountPage() {
     ];
 
     const menuItems: MenuItem[] = [
-        { icon: "📋", label: "My Prescriptions", action: () => {} },
-        { icon: "📍", label: "Saved Addresses",  action: () => {} },
-        { icon: "🔔", label: "Notifications",    action: () => {} },
-        { icon: "⚙️", label: "Settings",         action: () => {} },
+        { icon: <ClipboardList size={18} strokeWidth={1.8} />, label: "My Prescriptions", action: () => {} },
+        { icon: <MapPin size={18} strokeWidth={1.8} />,        label: "Saved Addresses",  action: () => {} },
+        { icon: <Bell size={18} strokeWidth={1.8} />,          label: "Notifications",    action: () => {} },
+        { icon: <Settings size={18} strokeWidth={1.8} />,      label: "Settings",         action: () => navigateTo("settings") },
     ];
 
     return (
-        <div className="px-6 py-6 max-w-[600px] mx-auto">
-            {/* Profile hero */}
-            <div
-                className="rounded-[20px] p-7 text-white mb-6 text-center"
-                style={{ background: "linear-gradient(135deg, #061E29, #1D546D)" }}
-            >
-                {/* Avatar */}
-                <div className="w-[72px] h-[72px] rounded-full bg-[#5F9598] flex items-center justify-center text-[28px] font-bold mx-auto mb-3 epilogue-header">
-                    M
-                </div>
-                <div className="epilogue-header text-[20px] font-bold">Maria Santos</div>
-                <div className="text-[13px] opacity-80 mt-1 epilogue-regular">
-                    maria.santos@email.com · +63 912 345 6789
-                </div>
-                <div
-                    className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[12px] mt-2.5 epilogue-regular"
-                    style={{ background: "rgba(255,255,255,0.10)" }}
-                >
-                    ⭐ Premium Member
-                </div>
-            </div>
-
-            {/* Quick-access cards */}
-            <div className="grid grid-cols-2 gap-3 mb-5">
-                {quickCards.map((card) => (
-                    <div
-                        key={card.label}
-                        onClick={() => navigateTo(card.page)}
-                        className="bg-white border border-[#E5E7EB] rounded-xl p-4 text-center cursor-pointer hover:border-[#1D546D]/30 transition-colors duration-150"
-                    >
-                        <div className="text-[28px] mb-1.5">{card.icon}</div>
-                        <div className="text-[13px] font-semibold text-[#262626] epilogue-header">
-                            {card.label}
+        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6">
+            <div className="mx-auto max-w-[640px]">
+                <div className="mb-5 rounded-[14px] border border-[#E5E7EB] bg-white p-5">
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-[72px] w-[72px] shrink-0 items-center justify-center rounded-full bg-[#5F9598] text-[28px] font-extrabold text-white epilogue-header">
+                                M
+                            </div>
+                            <div className="min-w-0">
+                                <h2 className="text-[22px] font-extrabold leading-tight text-[#262626] epilogue-header">
+                                    Maria Santos
+                                </h2>
+                                <p className="mt-1 text-[13px] leading-relaxed text-[#262626]/55 epilogue-regular">
+                                    maria.santos@email.com · +63 912 345 6789
+                                </p>
+                                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[#EAF3F5] px-3 py-1.5 text-[12px] font-bold text-[#1D546D] epilogue-header">
+                                    <ShieldCheck size={14} strokeWidth={2} />
+                                    Premium Member
+                                </div>
+                            </div>
                         </div>
-                        <div className="text-[12px] text-[#6B7280] epilogue-regular mt-0.5">
-                            {card.sub}
-                        </div>
+                        <button className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[12px] font-bold text-[#427b77] transition-colors duration-150 hover:border-[#5F9598] epilogue-header">
+                            <Edit3 size={15} strokeWidth={2} />
+                            Edit Profile
+                        </button>
                     </div>
-                ))}
-            </div>
+                </div>
 
-            {/* Menu list */}
-            <div className="bg-white border border-[#E5E7EB] rounded-[14px] overflow-hidden">
-                {menuItems.map((item, i) => (
-                    <button
-                        key={item.label}
-                        onClick={item.action}
-                        className="w-full flex justify-between items-center px-4 py-3.5 cursor-pointer hover:bg-[#F7FAF9] transition-colors duration-150 border-none bg-transparent"
-                        style={{
-                            borderBottom:
-                                i < menuItems.length - 1
-                                    ? "1px solid #E5E7EB"
-                                    : "none",
-                        }}
-                    >
-                        <span className="text-[14px] font-medium text-[#262626] epilogue-regular">
-                            {item.icon} {item.label}
+                <div className="mb-5 grid grid-cols-2 gap-3">
+                    {quickCards.map((card) => (
+                        <button
+                            key={card.label}
+                            onClick={() => navigateTo(card.page)}
+                            className="rounded-[14px] border border-[#E5E7EB] bg-white p-4 text-left transition-colors duration-150 hover:border-[#5F9598]"
+                        >
+                            <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-[14px] bg-[#F3F4F4] text-[#427b77]">
+                                {card.icon}
+                            </span>
+                            <span className="block text-[14px] font-extrabold text-[#262626] epilogue-header">
+                                {card.label}
+                            </span>
+                            <span className="mt-1 block text-[12px] text-[#262626]/50 epilogue-regular">
+                                {card.sub}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+
+                <div className="overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white">
+                    {menuItems.map((item, i) => (
+                        <button
+                            key={item.label}
+                            onClick={item.action}
+                            className="flex w-full items-center justify-between gap-3 bg-white px-4 py-4 text-left transition-colors duration-150 hover:bg-[#F3F4F4]"
+                            style={{
+                                borderBottom:
+                                    i < menuItems.length - 1
+                                        ? "1px solid #E5E7EB"
+                                        : "none",
+                            }}
+                        >
+                            <span className="inline-flex min-w-0 items-center gap-3 text-[14px] font-bold text-[#262626] epilogue-header">
+                                <span className="text-[#427b77]">{item.icon}</span>
+                                {item.label}
+                            </span>
+                            <ChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-[#262626]/35" />
+                        </button>
+                    ))}
+
+                    <button className="flex w-full items-center justify-between gap-3 border-t border-[#E5E7EB] bg-white px-4 py-4 text-left transition-colors duration-150 hover:bg-red-50">
+                        <span className="inline-flex min-w-0 items-center gap-3 text-[14px] font-bold text-red-500 epilogue-header">
+                            <LogOut size={18} strokeWidth={1.8} />
+                            Logout
                         </span>
-                        <span className="text-[#6B7280] text-lg leading-none">›</span>
+                        <ChevronRight size={18} strokeWidth={1.8} className="shrink-0 text-red-400" />
                     </button>
-                ))}
-
-                {/* Logout */}
-                <button className="w-full flex justify-between items-center px-4 py-3.5 cursor-pointer hover:bg-red-50 transition-colors duration-150 border-none bg-transparent border-t border-[#E5E7EB]">
-                    <span className="text-[14px] font-medium text-red-400 epilogue-regular">
-                        🚪 Logout
-                    </span>
-                    <span className="text-red-400 text-lg leading-none">›</span>
-                </button>
+                </div>
             </div>
         </div>
     );
