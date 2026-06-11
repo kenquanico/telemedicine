@@ -26,13 +26,22 @@ export function TrackingPage() {
         orders.find((o) => o.status === "out_for_delivery") ??
         orders[0];
 
+    const currentKeyByStatus = {
+        pending:          "placed",
+        preparing:        "preparing",
+        out_for_delivery: "delivery",
+        delivered:        "delivered",
+        cancelled:        "placed",
+    } as const;
+    const currentKey = currentKeyByStatus[order.status];
     const steps: Step[] = [
-        { key: "placed",    label: "Order Placed",     time: order.createdAt,                    done: true },
-        { key: "confirmed", label: "Order Confirmed",  time: "Pharmacist reviewed your order",   done: true },
-        { key: "preparing", label: "Preparing Order",  time: "Medicines packed and sealed",      done: true },
-        { key: "delivery",  label: "Out for Delivery", time: "Rider is heading to your address", current: true },
+        { key: "placed",    label: "Order Placed",     time: order.createdAt },
+        { key: "confirmed", label: "Order Confirmed",  time: "Pharmacist reviewed your order" },
+        { key: "preparing", label: "Preparing Order",  time: "Medicines packed and sealed" },
+        { key: "delivery",  label: "Out for Delivery", time: "Rider is heading to your address" },
         { key: "delivered", label: "Delivered",        time: `Estimated: ${order.estimatedDelivery}` },
     ];
+    const currentIndex = steps.findIndex((step) => step.key === currentKey);
 
     return (
         <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6">
@@ -76,18 +85,20 @@ export function TrackingPage() {
                     </h3>
                     {steps.map((step, i) => {
                         const isLast = i === steps.length - 1;
-                        const dotClass = step.current
+                        const isCurrent = i === currentIndex;
+                        const isDone = i < currentIndex;
+                        const dotClass = isCurrent
                             ? "bg-[#1D546D] text-white"
-                            : step.done
+                            : isDone
                                 ? "bg-[#5F9598] text-white"
                                 : "bg-[#F3F4F4] text-[#262626]/45";
-                        const lineClass = step.done ? "bg-[#5F9598]" : "bg-[#E5E7EB]";
+                        const lineClass = i < currentIndex ? "bg-[#5F9598]" : "bg-[#E5E7EB]";
 
                         return (
                             <div key={step.key} className="flex gap-4">
                                 <div className="flex flex-col items-center">
                                     <div className="relative">
-                                        {step.current && (
+                                        {isCurrent && (
                                             <span className="absolute inset-0 rounded-full bg-[#1D546D]/20 animate-ping" />
                                         )}
                                         <div className={`relative z-10 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${dotClass}`}>
@@ -98,7 +109,7 @@ export function TrackingPage() {
                                 </div>
 
                                 <div className={isLast ? "pb-0" : "pb-6"}>
-                                    <h4 className={`text-[14px] font-bold epilogue-header ${step.current ? "text-[#1D546D]" : "text-[#262626]"}`}>
+                                    <h4 className={`text-[14px] font-bold epilogue-header ${isCurrent ? "text-[#1D546D]" : "text-[#262626]"}`}>
                                         {step.label}
                                     </h4>
                                     <p className="mt-1 text-[12px] leading-relaxed text-[#262626]/55 epilogue-regular">
