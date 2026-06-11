@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import type { CartItem, Product, Order, Address, PageKey } from "../types";
 import { ORDERS, ADDRESSES } from "../data/mockData";
+import { getPathForPage, getRouteFromPath } from "../utils/pageRoutes";
 
 // ─── Context Shape ────────────────────────────────────────────────────────────
 interface AppContextValue {
@@ -64,9 +65,10 @@ function getSavedFavoriteIds() {
 }
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-    const [currentPage, setCurrentPage] = useState<PageKey>("home");
+    const initialRoute = getRouteFromPath(window.location.pathname);
+    const [currentPage, setCurrentPage] = useState<PageKey>(initialRoute.page);
     const [previousPage, setPreviousPage] = useState<PageKey | null>(null);
-    const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+    const [selectedProductId, setSelectedProductId] = useState<string | null>(initialRoute.productId ?? null);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [orders] = useState<Order[]>(ORDERS);
     const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
@@ -89,17 +91,47 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             return page;
         });
         if (productId) setSelectedProductId(productId);
+        const nextPath = getPathForPage(page, productId);
+        if (window.location.pathname !== nextPath) {
+            window.history.pushState({ page, productId: productId ?? null }, "", nextPath);
+        }
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     const navigateBack = useCallback(() => {
+        const destination = previousPage ?? "home";
         setCurrentPage((current) => {
-            const destination = previousPage ?? "home";
             setPreviousPage(current);
             return destination;
         });
+        const nextPath = getPathForPage(destination);
+        if (window.location.pathname !== nextPath) {
+            window.history.pushState({ page: destination, productId: null }, "", nextPath);
+        }
         window.scrollTo({ top: 0, behavior: "smooth" });
     }, [previousPage]);
+
+    useEffect(() => {
+        const route = getRouteFromPath(window.location.pathname);
+        window.history.replaceState(
+            { page: route.page, productId: route.productId ?? null },
+            "",
+            getPathForPage(route.page, route.productId ?? undefined)
+        );
+
+        function handlePopState() {
+            const nextRoute = getRouteFromPath(window.location.pathname);
+            setCurrentPage((current) => {
+                if (current !== nextRoute.page) setPreviousPage(current);
+                return nextRoute.page;
+            });
+            setSelectedProductId(nextRoute.productId ?? null);
+            window.scrollTo({ top: 0, behavior: "auto" });
+        }
+
+        window.addEventListener("popstate", handlePopState);
+        return () => window.removeEventListener("popstate", handlePopState);
+    }, []);
 
     const addToCart = useCallback((product: Product, qty = 1) => {
         setCartItems((prev) => {
