@@ -4,7 +4,7 @@ import { SectionHeader } from "../components/UI";
 import Footer from "../components/Footer";
 import FilterPanel from "../components/FilterPanel";
 import { getDefaultFilters } from "../utils/filterState";
-import { X, Filter, BadgeCheck } from "lucide-react";
+import { BadgeCheck } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 type ServiceTag = "delivery" | "pickup" | "24hrs" | "senior_discount" | "prescription";
@@ -133,14 +133,6 @@ const PHARMACIES: Pharmacy[] = [
     },
 ];
 
-const SERVICE_TAGS: { key: ServiceTag; label: string }[] = [
-    { key: "delivery",        label: "Delivery"        },
-    { key: "pickup",          label: "Pickup"          },
-    { key: "24hrs",           label: "24 Hours"        },
-    { key: "senior_discount", label: "Senior Discount" },
-    { key: "prescription",    label: "Prescription"    },
-];
-
 // ── Pharmacy Card — same structure as VendorMedicineCard ──────────────────────
 function PharmacyCard({ pharmacy, onView }: { pharmacy: Pharmacy; onView: () => void }) {
     return (
@@ -223,7 +215,6 @@ export default function PharmaciesPage() {
     const { navigateTo, showModal } = useApp();
     const [search, setSearch]               = useState("");
     const [activeFilters, setActiveFilters] = useState<ServiceTag[]>([]);
-    const [sortBy, setSortBy]               = useState<"distance" | "rating" | "delivery">("distance");
     const [filters, setFilters]             = useState(getDefaultFilters);
 
     const filtered = PHARMACIES.filter((p) => {
@@ -235,11 +226,7 @@ export default function PharmaciesPage() {
             activeFilters.length === 0 ||
             activeFilters.every((f) => p.tags.includes(f));
         return matchSearch && matchTags;
-    }).sort((a, b) => {
-        if (sortBy === "rating")   return b.rating - a.rating;
-        if (sortBy === "delivery") return parseInt(a.deliveryTime) - parseInt(b.deliveryTime);
-        return parseFloat(a.distance) - parseFloat(b.distance);
-    });
+    }).sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
 
     const handleView = (pharmacy: Pharmacy) => {
         showModal?.({
