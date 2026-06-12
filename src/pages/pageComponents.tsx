@@ -112,7 +112,7 @@ export function PageShell({
     breadcrumbLabel?: string;
 }) {
     return (
-        <div className="bg-[#F3F4F4] px-5 py-8 sm:px-8 lg:px-16">
+        <div className="bg-white px-5 py-8 sm:px-8 lg:px-16">
             <div className="mx-auto max-w-3xl">
                 {breadcrumbLabel && <CollectionBreadcrumb current={breadcrumbLabel} onBack={onBack} />}
                 {children}
