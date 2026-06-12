@@ -7,10 +7,22 @@ const DELIVERY_FEE = 49;
 const DISCOUNT = 28;
 
 export default function CartPage() {
-    const { cartItems, removeFromCart, updateQuantity, cartTotal, navigateTo, addresses, selectedAddressId } = useApp();
+    const {
+        cartItems,
+        removeFromCart,
+        updateQuantity,
+        cartTotal,
+        navigateTo,
+        proceedToCheckout,
+        cartRequiresPrescription,
+        hasUploadedPrescription,
+        addresses,
+        selectedAddressId,
+    } = useApp();
     const address = addresses.find((a) => a.id === selectedAddressId) ?? addresses[0];
     const total = cartTotal + DELIVERY_FEE - DISCOUNT;
     const [removingId, setRemovingId] = useState<string | null>(null);
+    const needsPrescriptionUpload = cartRequiresPrescription && !hasUploadedPrescription;
 
     const handleRemove = (id: string) => {
         setRemovingId(id);
@@ -200,11 +212,16 @@ export default function CartPage() {
                             variant="primary"
                             size="lg"
                             fullWidth
-                            onClick={() => navigateTo("checkout")}
+                            onClick={proceedToCheckout}
                             disabled={cartItems.length === 0}
                         >
-                            Proceed to Checkout
+                            {needsPrescriptionUpload ? "Upload Prescription to Checkout" : "Proceed to Checkout"}
                         </Btn>
+                        {needsPrescriptionUpload && (
+                            <p className="mt-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                                Your cart includes prescription medicine. Upload a valid prescription to continue.
+                            </p>
+                        )}
 
                         {/* Trust badge */}
                         <div className="mt-4 flex items-center justify-center gap-1.5">
@@ -231,10 +248,15 @@ export default function CartPage() {
                             variant="primary"
                             size="lg"
                             fullWidth
-                            onClick={() => navigateTo("checkout")}
+                            onClick={proceedToCheckout}
                         >
-                            Proceed to Checkout
+                            {needsPrescriptionUpload ? "Upload Prescription to Checkout" : "Proceed to Checkout"}
                         </Btn>
+                        {needsPrescriptionUpload && (
+                            <p className="mt-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                                Your cart includes prescription medicine. Upload a valid prescription to continue.
+                            </p>
+                        )}
                     </div>
                 </div>
             )}
