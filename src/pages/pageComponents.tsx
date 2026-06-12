@@ -136,7 +136,7 @@ export function LegalPolicyPage({
                         <span className="sr-only">Select language</span>
                         <div className="relative flex items-center">
                             <select
-                                className="h-10 max-w-full grow appearance-none truncate rounded-sm border border-[#262626]/12 bg-white px-3 pr-8 text-[14px] font-medium text-[#262626] outline-none ring-[#262626]/12 transition-colors hover:border-[#262626]/40 focus:border-[#262626]/40 focus:ring-4"
+                                className="h-10 max-w-full grow appearance-none truncate rounded-sm border border-[#262626]/12 bg-white px-3 pr-8 text-[14px] text-[#262626] outline-none ring-[#262626]/12 transition-colors hover:border-[#262626]/40 focus:border-[#262626]/40 focus:ring-4 epilogue-regular"
                                 name="Locale Select"
                                 aria-label="Select language"
                                 defaultValue="en-US"
@@ -158,13 +158,13 @@ export function LegalPolicyPage({
                 </div>
 
                 <header className="flex flex-col items-center text-center">
-                    <p className="mb-5 text-[13px] font-medium text-[#262626]">Published: {published}</p>
+                    <p className="mb-5 text-[13px] text-[#262626] epilogue-regular">Published: {published}</p>
                     <h1 className="max-w-[62.5rem] text-[42px] font-extrabold leading-[1.02] text-[#262626] epilogue-header sm:text-[64px]">
                         {title}
                     </h1>
                 </header>
 
-                <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 text-[15px] font-medium leading-7 text-[#262626]/72">
+                <div className="mx-auto flex w-full max-w-2xl flex-col gap-5 text-[15px] leading-7 text-[#262626]/72 epilogue-regular">
                     <p>
                         <span>Effective: {effective} (</span>
                         <a
@@ -184,7 +184,7 @@ export function LegalPolicyPage({
                             <h2 className="mb-3 text-[25px] font-extrabold leading-tight text-[#262626] epilogue-header">
                                 {section.title}
                             </h2>
-                            <div className="text-[15px] font-medium leading-7 text-[#262626]/72">
+                            <div className="text-[15px] leading-7 text-[#262626]/72 epilogue-regular">
                                 {section.body}
                             </div>
                         </section>
@@ -192,7 +192,7 @@ export function LegalPolicyPage({
                 </div>
 
                 <Divider />
-                <p className="mx-auto w-full max-w-2xl text-[13px] font-medium leading-6 text-[#262626]/60">
+                <p className="mx-auto w-full max-w-2xl text-[13px] leading-6 text-[#262626]/60 epilogue-regular">
                     {contact}
                 </p>
             </article>
