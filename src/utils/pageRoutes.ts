@@ -22,6 +22,7 @@ export const PAGE_PATHS: Record<PageKey, string> = {
     payment: "/payment",
     history: "/history",
     account: "/account",
+    profile: "/profile",
     settings: "/account",
     returns: "/returns",
     prescription_upload: "/prescription-upload",
