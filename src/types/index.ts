@@ -59,6 +59,7 @@ export interface Product {
     genericName: string;
     manufacturer: string;
     category: Category;
+    requiresPrescription: boolean;
     price: number;
     originalPrice?: number;
     image: string;
