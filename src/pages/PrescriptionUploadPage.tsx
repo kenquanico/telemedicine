@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { PageShell, PageHero, Card, SectionTitle, TealButton, Divider, Step } from "./pageComponents";
+import { Check, Upload } from "lucide-react";
 
 export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void }) {
     const [dragging, setDragging] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
 
     return (
-        <PageShell onBack={onBack}>
+        <PageShell onBack={onBack} breadcrumbLabel="Prescription Upload">
             <PageHero
                 eyebrow="Prescriptions"
                 title="Upload Your Prescription"
@@ -23,7 +24,7 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
                         "Photo or scan accepted — JPG, PNG, or PDF up to 10 MB",
                     ].map((req) => (
                         <li key={req} className="flex items-start gap-3">
-                            <span className="mt-0.5 text-[#427b77]">✓</span>
+                            <Check size={15} strokeWidth={2.2} className="mt-0.5 shrink-0 text-[#427b77]" />
                             <span className="text-[13px] text-[#262626]/70 epilogue-regular">{req}</span>
                         </li>
                     ))}
@@ -39,14 +40,12 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
                     const file = e.dataTransfer.files[0];
                     if (file) setFileName(file.name);
                 }}
-                className={`mb-5 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed py-14 px-6 text-center transition-colors duration-200 ${
+                className={`mb-5 flex flex-col items-center justify-center rounded-[14px] border-2 border-dashed py-14 px-6 text-center transition-colors duration-200 ${
                     dragging ? "border-[#427b77] bg-[#427b77]/5" : "border-[#EAEFEE] bg-white"
                 }`}
             >
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-[#427b77]/10">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#427b77" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-[14px] bg-[#427b77]/10 text-[#427b77]">
+                    <Upload size={24} strokeWidth={1.8} />
                 </div>
                 {fileName ? (
                     <>
@@ -88,7 +87,7 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
 
             <Divider />
             <p className="text-[13px] text-[#262626]/50 epilogue-regular">
-                Need help? <a href="#" className="text-[#427b77] font-semibold hover:underline">Chat with our pharmacist</a> — available 8 AM – 9 PM daily.
+                Need help? <a href="mailto:pharmacist@dosely.ph" className="text-[#427b77] font-semibold hover:underline">Chat with our pharmacist</a> — available 8 AM – 9 PM daily.
             </p>
         </PageShell>
     );

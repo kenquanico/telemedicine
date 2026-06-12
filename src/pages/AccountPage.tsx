@@ -46,9 +46,9 @@ export function AccountPage() {
     ];
 
     const menuItems: MenuItem[] = [
-        { icon: <ClipboardList size={18} strokeWidth={1.8} />, label: "My Prescriptions", action: () => {} },
-        { icon: <MapPin size={18} strokeWidth={1.8} />,        label: "Saved Addresses",  action: () => {} },
-        { icon: <Bell size={18} strokeWidth={1.8} />,          label: "Notifications",    action: () => {} },
+        { icon: <ClipboardList size={18} strokeWidth={1.8} />, label: "My Prescriptions", action: () => navigateTo("prescription_upload") },
+        { icon: <MapPin size={18} strokeWidth={1.8} />,        label: "Saved Addresses",  action: () => navigateTo("checkout") },
+        { icon: <Bell size={18} strokeWidth={1.8} />,          label: "Notifications",    action: () => navigateTo("orders") },
         { icon: <Settings size={18} strokeWidth={1.8} />,      label: "Settings",         action: () => navigateTo("settings") },
     ];
 

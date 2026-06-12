@@ -1,4 +1,4 @@
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 const LOCALE_OPTIONS = [
@@ -73,20 +73,48 @@ type LegalSection = {
     body: ReactNode;
 };
 
-export function PageShell({ children, onBack }: { children: ReactNode; onBack?: () => void }) {
+export function CollectionBreadcrumb({ current, onBack }: { current: string; onBack?: () => void }) {
+    if (!onBack) return null;
+
     return (
-        <div className="bg-white px-5 py-8 sm:px-8 lg:px-16">
-            <div className="mx-auto max-w-3xl">
-                {onBack && (
+        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
+            <ol className="flex flex-wrap">
+                <li className="flex max-w-full items-center">
                     <button
                         type="button"
                         onClick={onBack}
-                        className="mb-6 inline-flex items-center gap-2 text-[13px] font-bold text-[#427b77] epilogue-header transition-colors hover:text-[#2f5f5b]"
+                        className="text-[#262626] transition-colors hover:text-[#427b77] hover:underline epilogue-regular"
                     >
-                        <span aria-hidden="true">←</span>
-                        Back to home
+                        All collections
                     </button>
-                )}
+                    <ChevronRight
+                        aria-hidden="true"
+                        size={16}
+                        strokeWidth={1.8}
+                        className="mx-1 inline-block align-middle text-[#262626]/40"
+                    />
+                </li>
+                <li className="flex max-w-full items-center">
+                    <span className="text-[#262626]/55 epilogue-regular">{current}</span>
+                </li>
+            </ol>
+        </nav>
+    );
+}
+
+export function PageShell({
+    children,
+    onBack,
+    breadcrumbLabel,
+}: {
+    children: ReactNode;
+    onBack?: () => void;
+    breadcrumbLabel?: string;
+}) {
+    return (
+        <div className="bg-[#F3F4F4] px-5 py-8 sm:px-8 lg:px-16">
+            <div className="mx-auto max-w-3xl">
+                {breadcrumbLabel && <CollectionBreadcrumb current={breadcrumbLabel} onBack={onBack} />}
                 {children}
             </div>
         </div>
@@ -129,7 +157,7 @@ export function LegalPolicyPage({
     contact: ReactNode;
 }) {
     return (
-        <PageShell onBack={onBack}>
+        <PageShell onBack={onBack} breadcrumbLabel={title}>
             <article className="mt-2 flex min-w-0 flex-col gap-10">
                 <div className="flex flex-col gap-4">
                     <label className="flex flex-col gap-2">
@@ -202,7 +230,7 @@ export function LegalPolicyPage({
 
 export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
     return (
-        <div className={`rounded-2xl border border-[#EAEFEE] bg-white p-5 ${className}`}>
+        <div className={`rounded-[14px] border border-[#E5E7EB] bg-white p-5 ${className}`}>
             {children}
         </div>
     );
@@ -248,7 +276,7 @@ export function TealButton({ children }: { children: ReactNode }) {
     return (
         <button
             type="button"
-            className="mt-5 rounded-xl bg-[#427b77] px-5 py-3 text-[13px] font-extrabold text-white epilogue-header transition-colors hover:bg-[#356c68]"
+            className="mt-5 rounded-[14px] bg-[#1D546D] px-5 py-3 text-[13px] font-extrabold text-white epilogue-header transition-colors hover:bg-[#427b77]"
         >
             {children}
         </button>

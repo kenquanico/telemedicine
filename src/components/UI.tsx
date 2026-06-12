@@ -2,6 +2,8 @@ import React from "react";
 import type { StockStatus, OrderStatus } from "../types";
 import { STATUS_META } from "../data/mockData";
 import { useApp } from "../hooks/useApp";
+import DiscountTag from "./DiscountTag";
+import { Minus, PackageOpen, Plus } from "lucide-react";
 
 // ─── Product Image ────────────────────────────────────────────────────────────
 function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size?: number }) {
@@ -12,7 +14,7 @@ function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size
                 style={{
                     width: "100%",
                     height: size,
-                    background: "linear-gradient(135deg, #f0f7f6 0%, #e8f4f3 100%)",
+                    background: "#F3F4F4",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -22,11 +24,8 @@ function ProductImage({ src, alt, size = 140 }: { src: string; alt: string; size
                     textAlign: "center",
                 }}
             >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#427b77" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.5">
-                    <rect x="3" y="3" width="18" height="18" rx="3" />
-                    <path d="M3 9h18M9 21V9" />
-                </svg>
-                <span style={{ fontSize: 11, color: "#262626", opacity: 0.7, fontFamily: "'Neue Montreal', sans-serif", fontWeight: 700 }}>{alt}</span>
+                <PackageOpen size={32} strokeWidth={1.5} className="text-[#427b77]/50" />
+                <span className="text-[11px] font-bold text-[#262626]/70 epilogue-header">{alt}</span>
             </div>
         );
     }
@@ -111,42 +110,24 @@ export function QtySelector({ value, onChange, min = 1, max = 99, size = "md" }:
     const btnSize = size === "sm" ? 30 : 38;
     const fontSize = size === "sm" ? 13 : 16;
     return (
-        <div style={{ display: "inline-flex", alignItems: "center", gap: size === "sm" ? 6 : 10, background: "#F7F9F9", borderRadius: 10, padding: "3px 4px" }}>
+        <div className="inline-flex items-center rounded-[14px] bg-[#F3F4F4] p-1" style={{ gap: size === "sm" ? 6 : 10 }}>
             <button
                 onClick={() => onChange(Math.max(min, value - 1))}
-                style={{
-                    width: btnSize, height: btnSize,
-                    border: "1.5px solid #E5ECEB",
-                    background: "#fff",
-                    borderRadius: 8,
-                    fontSize,
-                    cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontWeight: 600,
-                    color: "#427b77",
-                    lineHeight: 1,
-                    transition: "all 0.15s",
-                    fontFamily: "'Neue Montreal', sans-serif",
-                }}
-            >−</button>
-            <span style={{ fontSize, fontWeight: 700, minWidth: 28, textAlign: "center", fontFamily: "'Neue Montreal', sans-serif", color: "#262626" }}>{value}</span>
+                className="flex items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white text-[#427b77] transition-colors hover:border-[#BFD4D1] epilogue-header"
+                style={{ width: btnSize, height: btnSize, fontSize }}
+                aria-label="Decrease quantity"
+            >
+                <Minus size={size === "sm" ? 14 : 16} strokeWidth={2} />
+            </button>
+            <span className="min-w-7 text-center font-bold text-[#262626] epilogue-header" style={{ fontSize }}>{value}</span>
             <button
                 onClick={() => onChange(Math.min(max, value + 1))}
-                style={{
-                    width: btnSize, height: btnSize,
-                    border: "1.5px solid #E5ECEB",
-                    background: "#fff",
-                    borderRadius: 8,
-                    fontSize,
-                    cursor: "pointer",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontWeight: 600,
-                    color: "#427b77",
-                    lineHeight: 1,
-                    transition: "all 0.15s",
-                    fontFamily: "'Neue Montreal', sans-serif",
-                }}
-            >+</button>
+                className="flex items-center justify-center rounded-[10px] border border-[#E5E7EB] bg-white text-[#427b77] transition-colors hover:border-[#BFD4D1] epilogue-header"
+                style={{ width: btnSize, height: btnSize, fontSize }}
+                aria-label="Increase quantity"
+            >
+                <Plus size={size === "sm" ? 14 : 16} strokeWidth={2} />
+            </button>
         </div>
     );
 }
@@ -159,9 +140,9 @@ interface BtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 export function Btn({ variant = "primary", size = "md", fullWidth, children, style, ...rest }: BtnProps) {
     const variants = {
-        primary:   { background: "#2d2d2d", color: "#fff", border: "none" },
+        primary:   { background: "#1D546D", color: "#fff", border: "none" },
         secondary: { background: "#427b77", color: "#fff", border: "none" },
-        outline:   { background: "#fff", color: "#427b77", border: "1.5px solid #427b77" },
+        outline:   { background: "#fff", color: "#427b77", border: "1px solid #E5E7EB" },
         ghost:     { background: "transparent", color: "#427b77", border: "none" },
     };
     const sizes = {
@@ -175,7 +156,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
                 ...variants[variant],
                 ...sizes[size],
                 cursor: rest.disabled ? "not-allowed" : "pointer",
-                fontFamily: "'Neue Montreal', sans-serif",
+                fontFamily: "inherit",
                 fontWeight: 600,
                 width: fullWidth ? "100%" : undefined,
                 display: "inline-flex",
@@ -198,7 +179,7 @@ export function Btn({ variant = "primary", size = "md", fullWidth, children, sty
 export function SectionHeader({ title }: { title: string }) {
     return (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-            <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 28, fontWeight: 500, color: "#262626", letterSpacing: "-0.01em" }}>
+            <h2 className="text-[28px] font-medium text-[#262626] epilogue-regular">
                 {title}
             </h2>
         </div>
@@ -306,6 +287,8 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                     </div>
                     <span style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Neue Montreal', sans-serif" }}>({product.reviewCount})</span>
                 </div>
+
+                <DiscountTag />
             </div>
         </div>
     );

@@ -28,7 +28,7 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
     const { cartItems, cartTotal, navigateTo } = useApp();
 
     return (
-        <div className="absolute top-[calc(100%+10px)] right-0 w-[340px] bg-white rounded-2xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-[#EAEFEE] z-50 overflow-hidden animate-slideDown">
+        <div className="absolute top-[calc(100%+10px)] right-0 z-50 w-[340px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white animate-slideDown">
 
             {/* Header */}
             <div className="px-5 pt-4 pb-3 border-b border-[#F0F3F2] flex items-center justify-between">
@@ -121,7 +121,7 @@ function AccountDropdown({ onClose, navigateTo }: { onClose: () => void; navigat
     ];
 
     return (
-        <div className="absolute top-[calc(100%+10px)] right-0 w-56 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
+        <div className="absolute top-[calc(100%+10px)] right-0 z-50 w-56 rounded-[14px] border border-[#E5E7EB] bg-white py-1.5 animate-slideDown">
             <div className="px-4 py-2.5 mb-0.5">
                 <p className="text-sm font-semibold text-[#262626] leading-tight epilogue-regular">Ken Aldrey Quanico</p>
                 <button className="text-xs text-[#3B82F6] mt-0.5 epilogue-subheader hover:text-[#2563EB]">View Profile</button>
@@ -223,7 +223,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
 
     return (
         <>
-            <nav className="sticky top-0 z-40 bg-white shadow-[0_4px_16px_rgba(6,30,41,0.10)]">
+            <nav className="sticky top-0 z-40 border-b border-[#E5E7EB] bg-white">
 
                 {/* ── Top row ── */}
                 <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
@@ -258,7 +258,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                 <span className="relative">
                                     <Heart size={20} strokeWidth={1.8} />
                                     {favoriteIds.length > 0 && (
-                                        <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none shadow-sm">
+                                        <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#1D546D] text-[9px] font-bold leading-none text-white">
                                             {favoriteIds.length}
                                         </span>
                                     )}
@@ -275,7 +275,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                         <span className="relative">
                                             <ShoppingBag size={20} strokeWidth={1.8} />
                                             {cartCount > 0 && (
-                                                <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center leading-none shadow-sm">
+                                                <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#1D546D] text-[9px] font-bold leading-none text-white">
                                                     {cartCount}
                                                 </span>
                                             )}
@@ -302,7 +302,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                     <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" style={{ transform: langOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s ease" }} />
                                 </button>
                                 {langOpen && (
-                                    <div className="absolute top-[calc(100%+10px)] right-0 w-40 bg-white rounded-xl shadow-[0_20px_56px_rgba(6,30,41,0.16)] border border-gray-100 z-50 py-1.5 animate-slideDown">
+                                    <div className="absolute top-[calc(100%+10px)] right-0 z-50 w-40 rounded-[14px] border border-[#E5E7EB] bg-white py-1.5 animate-slideDown">
                                         <div className="px-1.5 py-1 space-y-0.5">
                                             {LANGUAGES.map((lang) => (
                                                 <button
@@ -332,7 +332,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                                     <span className="relative w-9 h-9 rounded-full bg-[#427b77] flex items-center justify-center shrink-0">
                                             <UserRound size={16} strokeWidth={2} className="text-white" />
                                             <span
-                                                className="absolute -bottom-0.5 -right-0.5 w-[17px] h-[17px] rounded-full bg-white border border-gray-200 flex items-center justify-center shadow-sm"
+                                                className="absolute -bottom-0.5 -right-0.5 flex h-[17px] w-[17px] items-center justify-center rounded-full border border-[#E5E7EB] bg-white"
                                                 style={{ transition: "transform 0.2s ease", transform: accountOpen ? "rotate(180deg)" : "rotate(0deg)" }}
                                             >
                                                 <ChevronDown size={22} strokeWidth={1.6} className="text-[#262626]" />
@@ -373,15 +373,16 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                             );
                         })}
 
-                        {/* ── Search circle button ── */}
+                        {/* ── Search capsule ── */}
                         <div className="flex items-center gap-3 ml-auto shrink-0 py-2">
                             <button
                                 onClick={() => setSearchOpen(true)}
-                                className="icon-btn"
+                                className="search-capsule"
                                 title="Search medicines"
                                 aria-label="Open search"
                             >
-                                <Search size={18} strokeWidth={1.8} />
+                                <Search size={17} strokeWidth={1.8} className="shrink-0" />
+                                <span>Search medicines</span>
                             </button>
                         </div>
                     </div>
@@ -453,6 +454,51 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                         transition: background 0.15s ease, color 0.15s ease; flex-shrink: 0;
                     }
                     .icon-btn:hover { background: rgba(45,45,45,0.08); color: #427b77; }
+
+                    .search-capsule {
+                        width: min(248px, 22vw);
+                        min-width: 184px;
+                        height: 38px;
+                        border-radius: 9999px;
+                        border: 1px solid transparent;
+                        background: #F4F7F8;
+                        color: rgba(38,38,38,0.62);
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        gap: 8px;
+                        padding: 0 15px;
+                        cursor: pointer;
+                        transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+                    }
+                    .search-capsule span {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-size: 13px;
+                        font-weight: 400;
+                        line-height: 1;
+                    }
+                    .search-capsule:hover {
+                        border-color: rgba(38,38,38,0.04);
+                        background: rgba(45,45,45,0.08);
+                        color: #262626;
+                    }
+                    .search-capsule:focus-visible {
+                        outline: none;
+                        border-color: rgba(66,123,119,0.36);
+                        box-shadow: 0 0 0 3px rgba(66,123,119,0.12);
+                    }
+
+                    @media (max-width: 900px) {
+                        .search-capsule {
+                            width: 42px;
+                            min-width: 42px;
+                            justify-content: center;
+                            padding: 0;
+                        }
+                        .search-capsule span { display: none; }
+                    }
                 `}</style>
             </nav>
 

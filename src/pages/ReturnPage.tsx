@@ -2,7 +2,7 @@ import { PageShell, PageHero, Card, SectionTitle, Pill, Divider, Step } from "./
 
 export default function ReturnsPage({ onBack }: { onBack?: () => void }) {
     return (
-        <PageShell onBack={onBack}>
+        <PageShell onBack={onBack} breadcrumbLabel="Returns & Refunds">
             <PageHero
                 eyebrow="Support"
                 title="Returns & Refunds"
@@ -83,7 +83,7 @@ export default function ReturnsPage({ onBack }: { onBack?: () => void }) {
 
             <Divider />
             <p className="text-[13px] text-[#262626]/50 epilogue-regular">
-                Questions? <a href="#" className="text-[#427b77] font-semibold hover:underline">Contact our support team</a> — we're available 8 AM – 9 PM daily.
+                Questions? <a href="mailto:support@dosely.ph" className="text-[#427b77] font-semibold hover:underline">Contact our support team</a> — we're available 8 AM – 9 PM daily.
             </p>
         </PageShell>
     );

@@ -1,14 +1,15 @@
 import { useApp } from "../hooks/useApp";
 import type { PageKey } from "../types";
+import { Facebook, Instagram, LockKeyhole, Music2, Pill, Plus, Truck } from "lucide-react";
 
 export default function Footer() {
     const { navigateTo } = useApp();
-    const supportLinks: { label: string; page?: PageKey }[] = [
+    const supportLinks: { label: string; page: PageKey }[] = [
         { label: "Help Center", page: "help_center" },
-        { label: "Track Order" },
+        { label: "Track Order", page: "tracking" },
         { label: "Returns", page: "returns" },
         { label: "Prescription Upload", page: "prescription_upload" },
-        { label: "Contact Us" },
+        { label: "Contact Us", page: "help_center" },
     ];
     const companyLinks: { label: string; page: PageKey }[] = [
         { label: "About Dosely", page: "about" },
@@ -29,10 +30,7 @@ export default function Footer() {
                     <div className="col-span-2 sm:col-span-1 lg:col-span-2">
                         <div className="mb-3 flex items-center gap-2">
                             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#427b77]">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 3H5C3.9 3 3 3.9 3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Z" fill="white" fillOpacity="0.3"/>
-                                    <path d="M12 8v8M8 12h8" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                                </svg>
+                                <Plus size={18} strokeWidth={2.2} className="text-white" />
                             </div>
                             <span className="text-[18px] font-extrabold text-[#262626] epilogue-header tracking-tight">
                                 Dosely
@@ -44,37 +42,16 @@ export default function Footer() {
                         {/* Social links */}
                         <div className="mt-5 flex gap-2.5">
                             {[
-                                {
-                                    label: "Facebook",
-                                    icon: (
-                                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                                    ),
-                                },
-                                {
-                                    label: "Instagram",
-                                    icon: (
-                                        <>
-                                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="1.6" fill="none"/>
-                                            <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.6" fill="none"/>
-                                            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-                                        </>
-                                    ),
-                                },
-                                {
-                                    label: "TikTok",
-                                    icon: (
-                                        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                                    ),
-                                },
-                            ].map(({ label, icon }) => (
+                                { label: "Facebook", Icon: Facebook },
+                                { label: "Instagram", Icon: Instagram },
+                                { label: "TikTok", Icon: Music2 },
+                            ].map(({ label, Icon }) => (
                                 <button
                                     key={label}
                                     aria-label={label}
                                     className="flex h-8 w-8 items-center justify-center rounded-xl border border-[#EAEFEE] bg-white text-[#262626]/50 transition-colors duration-200 hover:border-[#427b77] hover:text-[#427b77]"
                                 >
-                                    <svg width="15" height="15" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        {icon}
-                                    </svg>
+                                    <Icon size={15} strokeWidth={1.8} />
                                 </button>
                             ))}
                         </div>
@@ -88,12 +65,13 @@ export default function Footer() {
                         <ul className="space-y-2.5">
                             {["All Medicines", "Featured Products", "Best Sellers", "Sale Items", "New Arrivals"].map((item) => (
                                 <li key={item}>
-                                    <a
-                                        href="#"
+                                    <button
+                                        type="button"
+                                        onClick={() => navigateTo("catalog")}
                                         className="text-[13px] text-[#262626]/60 epilogue-regular transition-colors duration-150 hover:text-[#427b77]"
                                     >
                                         {item}
-                                    </a>
+                                    </button>
                                 </li>
                             ))}
                         </ul>
@@ -107,7 +85,6 @@ export default function Footer() {
                         <ul className="space-y-2.5">
                             {supportLinks.map(({ label, page }) => (
                                 <li key={label}>
-                                    {page ? (
                                     <button
                                         type="button"
                                         onClick={() => navigateTo(page)}
@@ -115,14 +92,6 @@ export default function Footer() {
                                     >
                                         {label}
                                     </button>
-                                    ) : (
-                                    <a
-                                        href="#"
-                                        className="text-[13px] text-[#262626]/60 epilogue-regular transition-colors duration-150 hover:text-[#427b77]"
-                                    >
-                                        {label}
-                                    </a>
-                                    )}
                                 </li>
                             ))}
                         </ul>
@@ -161,15 +130,15 @@ export default function Footer() {
                     {/* Trust badges */}
                     <div className="flex flex-wrap items-center gap-2">
                         {[
-                            { icon: "🔒", label: "SSL Secured" },
-                            { icon: "💊", label: "FDA Registered" },
-                            { icon: "🚚", label: "Same-Day Delivery" },
-                        ].map(({ icon, label }) => (
+                            { Icon: LockKeyhole, label: "SSL Secured" },
+                            { Icon: Pill, label: "FDA Registered" },
+                            { Icon: Truck, label: "Same-Day Delivery" },
+                        ].map(({ Icon, label }) => (
                             <span
                                 key={label}
                                 className="flex items-center gap-1.5 rounded-lg border border-[#EAEFEE] bg-white px-3 py-1.5 text-[11px] font-bold text-[#262626]/55 epilogue-header"
                             >
-                                <span className="text-[13px]">{icon}</span>
+                                <Icon size={13} strokeWidth={1.8} className="text-[#427b77]" />
                                 {label}
                             </span>
                         ))}

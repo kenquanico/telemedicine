@@ -1,4 +1,5 @@
 import { PageShell, PageHero, Card, SectionTitle, Pill, Divider } from "./pageComponents";
+import { HeartPulse, Home, Pill as PillIcon, TrendingUp } from "lucide-react";
 
 const JOBS = [
     { title: "Licensed Pharmacist", team: "Operations", location: "Cebu City", type: "Full-time" },
@@ -10,7 +11,7 @@ const JOBS = [
 
 export default function CareersPage({ onBack }: { onBack?: () => void }) {
     return (
-        <PageShell onBack={onBack}>
+        <PageShell onBack={onBack} breadcrumbLabel="Careers">
             <PageHero
                 eyebrow="Careers"
                 title="Build the pharmacy of the future."
@@ -19,13 +20,15 @@ export default function CareersPage({ onBack }: { onBack?: () => void }) {
 
             <div className="mb-8 grid gap-4 sm:grid-cols-2">
                 {[
-                    { icon: "🏥", title: "HMO from day one", body: "Full health coverage for you and one dependent, starting your first month." },
-                    { icon: "🏡", title: "Remote-first culture", body: "Most roles are fully remote. We meet in Cebu quarterly — and actually enjoy it." },
-                    { icon: "📈", title: "Early equity", body: "Early team members receive meaningful equity as we scale across the Philippines." },
-                    { icon: "💊", title: "Dosely credits", body: "₱3,000/month in free medicine and wellness products for you and your household." },
-                ].map(({ icon, title, body }) => (
+                    { Icon: HeartPulse, title: "HMO from day one", body: "Full health coverage for you and one dependent, starting your first month." },
+                    { Icon: Home, title: "Remote-first culture", body: "Most roles are fully remote. We meet in Cebu quarterly — and actually enjoy it." },
+                    { Icon: TrendingUp, title: "Early equity", body: "Early team members receive meaningful equity as we scale across the Philippines." },
+                    { Icon: PillIcon, title: "Dosely credits", body: "₱3,000/month in free medicine and wellness products for you and your household." },
+                ].map(({ Icon, title, body }) => (
                     <Card key={title} className="flex gap-4">
-                        <span className="text-[24px]">{icon}</span>
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-[#F3F4F4] text-[#427b77]">
+                            <Icon size={20} strokeWidth={1.8} />
+                        </span>
                         <div>
                             <p className="text-[14px] font-extrabold text-[#262626] epilogue-header mb-1">{title}</p>
                             <p className="text-[13px] text-[#262626]/60 epilogue-regular leading-relaxed">{body}</p>

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Check } from "lucide-react";
 import { CATEGORY_META } from "../data/mockData";
 import type { Category } from "../types";
 import { getActiveFilterCount, getDefaultFilters, type FilterState } from "../utils/filterState";
@@ -72,15 +73,7 @@ function CheckRow({ active, onClick, children }: { active: boolean; onClick: () 
                 }`}
             >
                 {active && (
-                    <svg width="8" height="8" viewBox="0 0 8 8" fill="none" aria-hidden="true">
-                        <path
-                            d="M1.5 4L3.2 5.7L6.5 2.5"
-                            stroke="#427b77"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
+                    <Check size={9} strokeWidth={2.4} className="text-[#427b77]" aria-hidden="true" />
                 )}
             </span>
             <span className="min-w-0 truncate">{children}</span>
@@ -186,7 +179,7 @@ export default function FilterPanel({
 
     return (
         <>
-            <div className="w-[252px] shrink-0 overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)]">
+            <div className="w-[252px] shrink-0 overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white">
                 <div className="flex items-center justify-between border-b border-[#F4F6F5] px-5 py-4">
                     <div>
                         <p className="text-sm font-bold text-[#262626] epilogue-header">Filters</p>

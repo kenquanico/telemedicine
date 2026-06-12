@@ -2,6 +2,7 @@ import { type ReactNode, useState } from "react";
 import { useApp } from "../hooks/useApp";
 import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import { StockBadge, QtySelector, Stars, Btn } from "../components/UI";
+import { ArrowLeft, Check, ClipboardList, ShoppingCart, ShieldCheck, Tag, TriangleAlert, Truck } from "lucide-react";
 
 type Tab = "details" | "dosage" | "warnings" | "reviews";
 
@@ -9,51 +10,6 @@ const formatPeso = (value?: number) => {
     if (typeof value !== "number") return "";
     return `₱${value.toLocaleString()}`;
 };
-
-function BackIcon() {
-    return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M19 12H5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            <path d="M12 5 5 12l7 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
-function CartIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6.5 6h15l-1.7 8.4a2 2 0 0 1-2 1.6H9.3a2 2 0 0 1-2-1.6L5 3H2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M9 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="currentColor" />
-        </svg>
-    );
-}
-
-function CheckIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
-
-function DeliveryIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 7h10v10H4V7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-            <path d="M14 10h3.5L21 14v3h-7v-7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-            <path d="M7.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM17.5 20a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="currentColor" />
-        </svg>
-    );
-}
-
-function ShieldIcon() {
-    return (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 3 5 6v5.5c0 4.2 2.8 7.4 7 8.5 4.2-1.1 7-4.3 7-8.5V6l-7-3Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-            <path d="m8.8 12 2.2 2.2 5-5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-    );
-}
 
 type FieldValue = string | number | null | undefined;
 
@@ -78,8 +34,8 @@ function AssuranceItem({
     subtitle: string;
 }) {
     return (
-        <div className="flex items-start gap-3 rounded-2xl border border-[#E6ECEB] bg-white px-4 py-3">
-            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EFF7F6] text-[#427b77]">
+        <div className="flex items-start gap-3 rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-3">
+            <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] bg-[#EFF7F6] text-[#427b77]">
                 {icon}
             </div>
             <div>
@@ -153,25 +109,25 @@ export default function ProductDetailPage() {
     };
 
     return (
-        <main className="min-h-screen bg-white">
-            <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
+        <main className="min-h-screen bg-[#F3F4F4]">
+            <div className="px-4 py-6 sm:px-6 lg:px-16 lg:py-8">
                 <button
                     type="button"
                     onClick={() => navigateTo("catalog")}
-                    className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#DCE6E4] bg-white px-4 py-2 text-[13px] font-bold text-[#262626] shadow-sm transition hover:border-[#BFD4D1] hover:bg-[#F0F7F6] epilogue-header"
+                    className="mb-6 inline-flex items-center gap-2 rounded-[14px] border border-[#E5E7EB] bg-white px-4 py-2 text-[13px] font-bold text-[#262626] transition hover:border-[#BFD4D1] hover:bg-[#F0F7F6] epilogue-header"
                 >
-                    <BackIcon />
+                    <ArrowLeft size={18} strokeWidth={1.8} />
                     Back to Catalog
                 </button>
 
                 <section className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start">
                     <div className="space-y-5">
-                        <div className="overflow-hidden rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
+                        <div className="overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white">
                             <div className="relative flex min-h-[360px] items-center justify-center bg-white p-6 sm:min-h-[460px] sm:p-8">
                                 <div className="absolute left-5 top-5 rounded-full bg-[#1D546D] px-3 py-1 text-[11px] font-extrabold uppercase text-white epilogue-header">
                                     {product.packSize}
                                 </div>
-                                <div className="absolute right-5 top-5 rounded-full border border-white/70 bg-white/85 px-3 py-1 text-[11px] font-bold text-[#427b77] shadow-sm backdrop-blur epilogue-header">
+                                <div className="absolute right-5 top-5 rounded-full border border-[#E5E7EB] bg-white/90 px-3 py-1 text-[11px] font-bold text-[#427b77] backdrop-blur epilogue-header">
                                     Authentic
                                 </div>
                                 <ProductVisual
@@ -184,8 +140,8 @@ export default function ProductDetailPage() {
                             <div className="grid grid-cols-3 gap-3 border-t border-[#E4ECEA] bg-white p-4">
                                 {[
                                     { icon: product.image, label: "Product" },
-                                    { icon: "📋", label: product.dosageForm },
-                                    { icon: "🏷️", label: product.packSize },
+                                    { icon: <ClipboardList size={22} strokeWidth={1.8} />, label: product.dosageForm },
+                                    { icon: <Tag size={22} strokeWidth={1.8} />, label: product.packSize },
                                 ].map((item, index) => (
                                     <button
                                         key={item.label}
@@ -196,10 +152,10 @@ export default function ProductDetailPage() {
                                                 : "border-[#E6ECEB] bg-white hover:border-[#BFD4D1] hover:bg-[#F8FBFA]"
                                         }`}
                                     >
-                                        {String(item.icon).startsWith("http") || String(item.icon).startsWith("/") || String(item.icon).startsWith("data:") ? (
+                                        {typeof item.icon === "string" && (item.icon.startsWith("http") || item.icon.startsWith("/") || item.icon.startsWith("data:")) ? (
                                             <img src={item.icon} alt="" className="h-8 w-8 scale-[1.2] object-contain" />
                                         ) : (
-                                            <span className="text-2xl leading-none" aria-hidden="true">{item.icon}</span>
+                                            <span className="text-[#427b77]" aria-hidden="true">{item.icon}</span>
                                         )}
                                         <span className="mt-2 max-w-full truncate text-[11px] font-bold text-[#262626]/70 epilogue-header">{item.label}</span>
                                     </button>
@@ -222,7 +178,7 @@ export default function ProductDetailPage() {
                                             {product.genericName} by {product.manufacturer}. {product.description}
                                         </p>
                                     </div>
-                                    <div className="shrink-0 rounded-2xl border border-[#EAEFEE] px-4 py-3 sm:text-right">
+                                    <div className="shrink-0 rounded-[14px] border border-[#E5E7EB] px-4 py-3 sm:text-right">
                                         <p className="text-[11px] font-extrabold uppercase tracking-[0.1em] text-[#262626]/60 epilogue-header">
                                             Rating
                                         </p>
@@ -238,13 +194,13 @@ export default function ProductDetailPage() {
                         </div>
 
                         <div className="grid gap-3 sm:grid-cols-3">
-                            <AssuranceItem icon={<DeliveryIcon />} title="Same-day delivery" subtitle="Available in Cebu City" />
-                            <AssuranceItem icon={<ShieldIcon />} title="Verified source" subtitle="FDA-registered pharmacy" />
-                            <AssuranceItem icon={<CheckIcon />} title="Easy returns" subtitle="Support for order issues" />
+                            <AssuranceItem icon={<Truck size={20} strokeWidth={1.8} />} title="Same-day delivery" subtitle="Available in Cebu City" />
+                            <AssuranceItem icon={<ShieldCheck size={20} strokeWidth={1.8} />} title="Verified source" subtitle="FDA-registered pharmacy" />
+                            <AssuranceItem icon={<Check size={20} strokeWidth={1.8} />} title="Easy returns" subtitle="Support for order issues" />
                         </div>
                     </div>
 
-                    <aside className="overflow-hidden rounded-[20px] border border-[#EAEFEE] bg-white shadow-[0_2px_16px_rgba(45,45,45,0.05)] lg:sticky lg:top-[120px]">
+                    <aside className="overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white lg:sticky lg:top-[120px]">
                         <div className="border-b border-[#F4F6F5] px-5 py-4">
                             <p className="text-sm font-bold text-[#262626] epilogue-header">Add to cart</p>
                             <p className="mt-0.5 text-[11px] text-[#262626]/60 epilogue-regular">Same-day Cebu delivery</p>
@@ -311,18 +267,18 @@ export default function ProductDetailPage() {
                                     gap: 8,
                                 }}
                             >
-                                <CartIcon />
+                                <ShoppingCart size={18} strokeWidth={1.8} />
                                 {isOutOfStock ? "Out of Stock" : "Add to Cart"}
                             </Btn>
 
-                            <div className="rounded-2xl border border-[#F4C971] bg-white px-4 py-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                            <div className="rounded-[14px] border border-[#F4C971] bg-white px-4 py-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
                                 Please follow dosage guidance. Prescription medicines may require validation.
                             </div>
                         </div>
                     </aside>
                 </section>
 
-                <section className="mt-10 rounded-[20px] border border-[#E4ECEA] bg-white shadow-sm">
+                <section className="mt-10 rounded-[14px] border border-[#E5E7EB] bg-white">
                     <div className="bds-c-tabs__container overflow-x-auto border-b border-[#E4ECEA] px-4 sm:px-6" data-testid="tabs__tabs-container">
                         <ul
                             className="bds-c-tabs__list flex min-w-max gap-6"
@@ -407,10 +363,10 @@ export default function ProductDetailPage() {
                                         Important precautions before taking this medicine.
                                     </p>
                                 </div>
-                                <div className="rounded-2xl border border-[#F4C971] bg-[#FFF7E6] p-5">
+                                <div className="rounded-[14px] border border-[#F4C971] bg-[#FFF7E6] p-5">
                                     <div className="flex gap-4">
-                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#FDE7B5] text-xl" aria-hidden="true">
-                                            ⚠️
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] bg-[#FDE7B5] text-[#8A5A12]" aria-hidden="true">
+                                            <TriangleAlert size={20} strokeWidth={1.8} />
                                         </div>
                                         <div>
                                             <p className="text-[15px] font-extrabold text-[#8A5A12] epilogue-header">Use with care</p>

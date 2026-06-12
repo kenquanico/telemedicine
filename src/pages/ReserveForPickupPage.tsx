@@ -346,6 +346,56 @@ function OrderStep({
     );
 }
 
+function SlotGroup({
+    label,
+    slots,
+    selected,
+    onSelect,
+}: {
+    label: string;
+    slots: typeof PICKUP_SLOTS;
+    selected: string;
+    onSelect: (id: string) => void;
+}) {
+    return (
+        <div className="mb-4">
+            <p className="text-[10.5px] font-bold text-[#262626]/50 uppercase tracking-widest epilogue-subheader mb-2.5">{label}</p>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {slots.map((slot) => {
+                    const isSelected = selected === slot.id;
+                    return (
+                        <button
+                            key={slot.id}
+                            onClick={() => slot.available && onSelect(slot.id)}
+                            disabled={!slot.available}
+                            className={`relative flex flex-col items-start px-3.5 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
+                                !slot.available
+                                    ? "bg-[#f7f9f9] border-[#EAEFEE] cursor-not-allowed opacity-50"
+                                    : isSelected
+                                        ? "bg-[#427b77]/8 border-[#427b77] shadow-[0_0_0_1px_#427b77]"
+                                        : "bg-white border-[#EAEFEE] hover:border-[#427b77]/40 hover:bg-[#f7fafa]"
+                            }`}
+                        >
+                            {isSelected && (
+                                <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#427b77] flex items-center justify-center">
+                                    <Check size={9} strokeWidth={3} className="text-white" />
+                                </div>
+                            )}
+                            <Clock size={13} strokeWidth={1.75} className={`mb-1.5 ${isSelected ? "text-[#427b77]" : "text-[#262626]/40"}`} />
+                            <span className={`text-[12.5px] font-bold leading-tight epilogue-header ${isSelected ? "text-[#427b77]" : "text-[#262626]"}`}>
+                                {slot.time}
+                            </span>
+                            {!slot.available && (
+                                <span className="text-[10px] text-[#262626]/40 mt-0.5 epilogue-regular">Fully booked</span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Step 2 — Schedule
 // ─────────────────────────────────────────────────────────────────────────────
@@ -354,51 +404,11 @@ function ScheduleStep({ selected, onSelect }: { selected: string; onSelect: (id:
     const today    = PICKUP_SLOTS.filter((s) => s.label === "Today");
     const tomorrow = PICKUP_SLOTS.filter((s) => s.label === "Tomorrow");
 
-    function SlotGroup({ label, slots }: { label: string; slots: typeof PICKUP_SLOTS }) {
-        return (
-            <div className="mb-4">
-                <p className="text-[10.5px] font-bold text-[#262626]/50 uppercase tracking-widest epilogue-subheader mb-2.5">{label}</p>
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    {slots.map((slot) => {
-                        const isSelected = selected === slot.id;
-                        return (
-                            <button
-                                key={slot.id}
-                                onClick={() => slot.available && onSelect(slot.id)}
-                                disabled={!slot.available}
-                                className={`relative flex flex-col items-start px-3.5 py-3 rounded-xl border text-left transition-all duration-150 cursor-pointer ${
-                                    !slot.available
-                                        ? "bg-[#f7f9f9] border-[#EAEFEE] cursor-not-allowed opacity-50"
-                                        : isSelected
-                                            ? "bg-[#427b77]/8 border-[#427b77] shadow-[0_0_0_1px_#427b77]"
-                                            : "bg-white border-[#EAEFEE] hover:border-[#427b77]/40 hover:bg-[#f7fafa]"
-                                }`}
-                            >
-                                {isSelected && (
-                                    <div className="absolute top-2 right-2 w-4 h-4 rounded-full bg-[#427b77] flex items-center justify-center">
-                                        <Check size={9} strokeWidth={3} className="text-white" />
-                                    </div>
-                                )}
-                                <Clock size={13} strokeWidth={1.75} className={`mb-1.5 ${isSelected ? "text-[#427b77]" : "text-[#262626]/40"}`} />
-                                <span className={`text-[12.5px] font-bold leading-tight epilogue-header ${isSelected ? "text-[#427b77]" : "text-[#262626]"}`}>
-                                    {slot.time}
-                                </span>
-                                {!slot.available && (
-                                    <span className="text-[10px] text-[#262626]/40 mt-0.5 epilogue-regular">Fully booked</span>
-                                )}
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div>
             <Section title="Choose a pickup window">
-                <SlotGroup label="Today" slots={today} />
-                <SlotGroup label="Tomorrow" slots={tomorrow} />
+                <SlotGroup label="Today" slots={today} selected={selected} onSelect={onSelect} />
+                <SlotGroup label="Tomorrow" slots={tomorrow} selected={selected} onSelect={onSelect} />
             </Section>
             <div className="flex items-start gap-3 px-4 py-3 rounded-2xl bg-[#f0f8f7] border border-[#d4e9e6] mb-4">
                 <CalendarDays size={15} strokeWidth={1.75} className="text-[#427b77] flex-shrink-0 mt-0.5" />
@@ -421,6 +431,42 @@ interface PersonalDetails {
     paymentMethod: "cash" | "gcash" | "card";
 }
 
+function DetailsField({
+    label,
+    value,
+    onChange,
+    placeholder,
+    type = "text",
+    icon: Icon,
+    required,
+}: {
+    label: string;
+    value: string;
+    onChange: (v: string) => void;
+    placeholder?: string;
+    type?: string;
+    icon: React.ElementType;
+    required?: boolean;
+}) {
+    return (
+        <div>
+            <label className="block text-[10px] font-bold text-[#262626]/50 uppercase tracking-widest mb-1.5 epilogue-subheader">
+                {label}{required && <span className="text-red-500 ml-0.5">*</span>}
+            </label>
+            <div className="relative">
+                <Icon size={14} strokeWidth={1.75} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#262626]/40 pointer-events-none" />
+                <input
+                    type={type}
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
+                    placeholder={placeholder}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#EAEFEE] bg-[#fafbfb] text-[13px] text-[#262626] placeholder-[#262626]/30 outline-none focus:border-[#427b77]/60 focus:bg-white transition-all epilogue-regular"
+                />
+            </div>
+        </div>
+    );
+}
+
 function DetailsStep({ details, onChange }: { details: PersonalDetails; onChange: (d: PersonalDetails) => void }) {
     const PAYMENT_OPTIONS = [
         { id: "cash",  label: "Cash",   icon: "💵" },
@@ -428,41 +474,16 @@ function DetailsStep({ details, onChange }: { details: PersonalDetails; onChange
         { id: "card",  label: "Card",   icon: "💳" },
     ] as const;
 
-    function Field({
-                       label, value, onChange, placeholder, type = "text", icon: Icon, required,
-                   }: {
-        label: string; value: string; onChange: (v: string) => void;
-        placeholder?: string; type?: string; icon: React.ElementType; required?: boolean;
-    }) {
-        return (
-            <div>
-                <label className="block text-[10px] font-bold text-[#262626]/50 uppercase tracking-widest mb-1.5 epilogue-subheader">
-                    {label}{required && <span className="text-red-500 ml-0.5">*</span>}
-                </label>
-                <div className="relative">
-                    <Icon size={14} strokeWidth={1.75} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#262626]/40 pointer-events-none" />
-                    <input
-                        type={type}
-                        value={value}
-                        onChange={(e) => onChange(e.target.value)}
-                        placeholder={placeholder}
-                        className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#EAEFEE] bg-[#fafbfb] text-[13px] text-[#262626] placeholder-[#262626]/30 outline-none focus:border-[#427b77]/60 focus:bg-white transition-all epilogue-regular"
-                    />
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div>
             <Section title="Your information">
                 <div className="space-y-4">
-                    <Field
+                    <DetailsField
                         label="Full name" value={details.name}
                         onChange={(v) => onChange({ ...details, name: v })}
                         placeholder="Juan dela Cruz" icon={User} required
                     />
-                    <Field
+                    <DetailsField
                         label="Mobile number" value={details.phone}
                         onChange={(v) => onChange({ ...details, phone: v })}
                         placeholder="09xx xxx xxxx" icon={Phone} type="tel" required
@@ -619,7 +640,7 @@ function ConfirmStep({
 function SuccessScreen({ pharmacy, slotId, onDone }: { pharmacy: Pharmacy; slotId: string; onDone: () => void }) {
     const slot  = PICKUP_SLOTS.find((s) => s.id === slotId);
     const color = getBrandColor(pharmacy.name);
-    const ref   = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const [reference] = useState(() => `RX${pharmacy.id.replace(/\W/g, "").slice(0, 2).toUpperCase()}${slotId.toUpperCase()}`);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh] px-6 py-10 text-center">
@@ -637,7 +658,7 @@ function SuccessScreen({ pharmacy, slotId, onDone }: { pharmacy: Pharmacy; slotI
             <div className="w-full max-w-[360px] rounded-2xl border border-[#EAEFEE] bg-white overflow-hidden mb-5">
                 <div className="px-5 py-4 border-b border-[#f2f5f4]">
                     <p className="text-[10px] font-bold text-[#262626]/40 uppercase tracking-widest epilogue-subheader">Reservation reference</p>
-                    <p className="text-[22px] font-black tracking-[0.12em] text-[#262626] mt-0.5 epilogue-header">{ref}</p>
+                    <p className="text-[22px] font-black tracking-[0.12em] text-[#262626] mt-0.5 epilogue-header">{reference}</p>
                 </div>
                 {slot && (
                     <div className="px-5 py-4 flex items-center gap-3">

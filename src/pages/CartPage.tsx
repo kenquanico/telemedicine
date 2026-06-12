@@ -21,7 +21,7 @@ export default function CartPage() {
     };
 
     return (
-        <div className="relative flex items-start gap-7 px-5 py-10 sm:px-8 lg:px-16 lg:py-12">
+        <div className="relative flex min-h-screen items-start gap-7 bg-[#F3F4F4] px-4 py-6 sm:px-6 lg:px-16 lg:py-8">
 
             {/* ── Main content ── */}
             <div className="flex-1 min-w-0">
@@ -40,7 +40,7 @@ export default function CartPage() {
 
                 {/* ── Empty state ── */}
                 {cartItems.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-3xl border border-[#EAEFEE] bg-white px-8 py-20 text-center">
+                    <div className="flex flex-col items-center justify-center rounded-[14px] border border-[#E5E7EB] bg-white px-8 py-20 text-center">
                         <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-[24px] bg-[#F4F7F8]">
                             <ShoppingBag size={34} strokeWidth={1.4} className="text-[#427b77]" />
                         </div>
@@ -61,14 +61,12 @@ export default function CartPage() {
                             return (
                                 <div
                                     key={item.product.id}
-                                    className="group flex flex-col gap-4 rounded-2xl border border-[#EAEFEE] bg-white p-5 transition-all duration-200 sm:flex-row sm:items-center"
+                                    className="group flex flex-col gap-4 rounded-[14px] border border-[#E5E7EB] bg-white p-5 transition-all duration-200 sm:flex-row sm:items-center"
                                     style={{
                                         opacity: isRemoving ? 0 : 1,
                                         transform: isRemoving ? "translateX(12px)" : "translateX(0)",
-                                        transition: "opacity 0.22s ease, transform 0.22s ease, box-shadow 0.2s ease",
+                                        transition: "opacity 0.22s ease, transform 0.22s ease",
                                     }}
-                                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "0 4px 20px rgba(45,45,45,0.07)"}
-                                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.boxShadow = "none"}
                                 >
                                     {/* ── Product image ── */}
                                     <div
@@ -128,7 +126,7 @@ export default function CartPage() {
             {/* ── Order Summary sidebar ── */}
             {cartItems.length > 0 && (
                 <div className="sticky top-[120px] hidden w-[340px] shrink-0 self-start lg:block">
-                    <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)]">
+                    <div className="rounded-[14px] border border-[#E5E7EB] bg-white p-6">
 
                         <h3 className="mb-5 text-[16px] font-extrabold text-[#262626] epilogue-header" style={{ letterSpacing: "-0.01em" }}>
                             Order Summary
@@ -222,7 +220,7 @@ export default function CartPage() {
             {/* ── Mobile order summary (below cart) ── */}
             {cartItems.length > 0 && (
                 <div className="lg:hidden w-full mt-6">
-                    <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)]">
+                    <div className="rounded-[14px] border border-[#E5E7EB] bg-white p-6">
                         <div className="mb-4 flex items-baseline justify-between">
                             <span className="text-[15px] font-extrabold text-[#262626] epilogue-header">Total</span>
                             <span className="text-[22px] font-extrabold text-[#427b77] epilogue-header" style={{ letterSpacing: "-0.02em" }}>

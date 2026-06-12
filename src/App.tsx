@@ -37,6 +37,17 @@ const defaultReservePharmacy = {
     userRatingsTotal: 1240,
 };
 
+const footerPages = new Set<PageKey>([
+    "returns",
+    "prescription_upload",
+    "help_center",
+    "about",
+    "careers",
+    "press",
+    "privacy",
+    "terms",
+]);
+
 // ─── Page Router ──────────────────────────────────────────────────────────────
 function PageRouter() {
     const { currentPage, navigateTo } = useApp();
@@ -81,7 +92,8 @@ function AppShell() {
         currentPage === "pharmacy" ||
         (currentPage === "home" && homeRendersPickupExperience);
     const compactNav =
-        currentPage === "pharmacies";
+        currentPage === "pharmacies" ||
+        footerPages.has(currentPage);
 
     return (
         <div className="min-h-screen bg-white font-['Geist']">

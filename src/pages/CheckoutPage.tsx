@@ -3,9 +3,37 @@ import { useApp } from "../hooks/useApp";
 import type { PaymentMethod } from "../types";
 import { PAYMENT_META } from "../data/mockData";
 import { Btn } from "../components/UI";
+import { Banknote, CheckCircle2, CreditCard, MapPin, ShieldCheck, Smartphone } from "lucide-react";
 
 const DELIVERY_FEE = 49;
 const DISCOUNT = 28;
+
+const METHOD_ICON: Record<PaymentMethod, React.ElementType> = {
+    cod: Banknote,
+    gcash: Smartphone,
+    maya: Smartphone,
+    credit_card: CreditCard,
+};
+
+function Field({
+    label,
+    value,
+}: {
+    label: string;
+    value: string;
+}) {
+    return (
+        <label className="grid gap-2">
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#262626]/60 epilogue-header">
+                {label}
+            </span>
+            <input
+                defaultValue={value}
+                className="h-11 w-full rounded-[14px] border border-[#E5E7EB] bg-white px-3.5 text-[14px] font-medium text-[#262626] outline-none transition-colors focus:border-[#427b77] focus:ring-4 focus:ring-[#427b77]/10 epilogue-regular"
+            />
+        </label>
+    );
+}
 
 export default function CheckoutPage() {
     const { cartItems, cartTotal, navigateTo, addresses, selectedAddressId, showModal } = useApp();
@@ -15,7 +43,9 @@ export default function CheckoutPage() {
 
     const handlePlaceOrder = () => {
         showModal({
-            type: "success", icon: "🎉", title: "Order Placed!",
+            type: "success",
+            icon: <CheckCircle2 size={30} strokeWidth={1.8} className="text-[#427b77]" />,
+            title: "Order Placed!",
             message: "Your order #MM-20250601 has been placed. Estimated delivery: Today, 2–4 PM.",
             actionLabel: "Track My Order",
             onAction: () => navigateTo("tracking"),
@@ -23,201 +53,153 @@ export default function CheckoutPage() {
     };
 
     return (
-        <div className="px-5 py-8 sm:px-8 lg:px-16 lg:py-10">
-            <h2 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 24, fontWeight: 800, color: "#262626", letterSpacing: "-0.02em", marginBottom: 32 }}>
-                Checkout
-            </h2>
-
-            <div className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
-                {/* ── Left ── */}
-                <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-
-                    {/* Delivery Address */}
-                    <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 22, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", display: "flex", alignItems: "center", gap: 8 }}>
-                            Delivery Address
-                        </h3>
-                        <div className="mb-3.5 grid gap-3.5 sm:grid-cols-2">
-                            {[
-                                { label: "First Name", value: address.firstName },
-                                { label: "Last Name",  value: address.lastName  },
-                            ].map(({ label, value }) => (
-                                <div key={label}>
-                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                        {label}
-                                    </label>
-                                    <input defaultValue={value}
-                                           style={{
-                                               border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                               fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
-                                               width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
-                                               transition: "border-color 0.15s",
-                                           }}
-                                           onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
-                                           onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                        <div style={{ marginBottom: 14 }}>
-                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                Address Line
-                            </label>
-                            <input defaultValue={address.line}
-                                   style={{
-                                       border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                       fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
-                                       width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
-                                       transition: "border-color 0.15s",
-                                   }}
-                                   onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
-                                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
-                            />
-                        </div>
-                        <div className="mb-3.5 grid gap-3.5 sm:grid-cols-2">
-                            {[
-                                { label: "City",     value: address.city },
-                                { label: "ZIP Code", value: address.zip  },
-                            ].map(({ label, value }) => (
-                                <div key={label}>
-                                    <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                        {label}
-                                    </label>
-                                    <input defaultValue={value}
-                                           style={{
-                                               border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                               fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
-                                               width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
-                                               transition: "border-color 0.15s",
-                                           }}
-                                           onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
-                                           onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
-                                    />
-                                </div>
-                            ))}
-                        </div>
-                        <div>
-                            <label style={{ fontSize: 11, fontWeight: 700, color: "rgba(38,38,38,0.6)", textTransform: "uppercase", letterSpacing: "0.07em", display: "block", marginBottom: 7, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                Phone Number
-                            </label>
-                            <input defaultValue={address.phone}
-                                   style={{
-                                       border: "1.5px solid #EAEFEE", borderRadius: 12, padding: "11px 14px",
-                                       fontSize: 14, fontFamily: "'Neue Montreal', sans-serif", outline: "none",
-                                       width: "100%", boxSizing: "border-box", color: "#262626", fontWeight: 500,
-                                       transition: "border-color 0.15s",
-                                   }}
-                                   onFocus={e => (e.target as HTMLInputElement).style.borderColor = "#427b77"}
-                                   onBlur={e => (e.target as HTMLInputElement).style.borderColor = "#EAEFEE"}
-                            />
-                        </div>
-                    </div>
-
-                    {/* Payment Method */}
-                    <div style={{ background: "#fff", border: "1px solid #EAEFEE", borderRadius: 20, padding: 28 }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 20, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>
-                            Payment Method
-                        </h3>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                            {(Object.entries(PAYMENT_META) as [PaymentMethod, { label: string; icon: string }][]).map(([key, meta]) => (
-                                <div key={key} onClick={() => setPayment(key)}
-                                     style={{
-                                         border: `1.5px solid ${payment === key ? "#427b77" : "#EAEFEE"}`,
-                                         background: payment === key ? "rgba(66,123,119,0.05)" : "#fff",
-                                         borderRadius: 14, padding: "16px 18px", cursor: "pointer",
-                                         display: "flex", alignItems: "center", gap: 14,
-                                         transition: "all 0.18s",
-                                     }}
-                                >
-                                    <div style={{
-                                        width: 18, height: 18, borderRadius: "50%",
-                                        border: `2px solid ${payment === key ? "#427b77" : "#D1D5DB"}`,
-                                        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-                                        transition: "border-color 0.15s",
-                                    }}>
-                                        {payment === key && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#427b77" }} />}
-                                    </div>
-                                    <span style={{ fontSize: 22 }}>{meta.icon}</span>
-                                    <div>
-                                        <div style={{ fontSize: 14, fontWeight: 700, color: "#262626", fontFamily: "'Neue Montreal', sans-serif" }}>{meta.label}</div>
-                                        <div style={{ fontSize: 12, color: "rgba(38,38,38,0.6)", marginTop: 2, fontFamily: "'Neue Montreal', sans-serif" }}>
-                                            {key === "cod"         && "Pay when your order arrives"}
-                                            {key === "gcash"       && "Pay via GCash e-wallet"}
-                                            {key === "maya"        && "Pay via Maya e-wallet"}
-                                            {key === "credit_card" && "Visa, Mastercard, JCB"}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
+        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6 lg:py-8">
+            <div className="mx-auto max-w-6xl">
+                <div className="mb-6">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#427b77] epilogue-header">
+                        Secure Checkout
+                    </p>
+                    <h2 className="mt-1 text-[24px] font-extrabold leading-tight text-[#262626] epilogue-header">
+                        Checkout
+                    </h2>
                 </div>
 
-                {/* ── Order Summary ── */}
-                <div className="rounded-[20px] border border-[#EAEFEE] bg-white p-6 shadow-[0_2px_20px_rgba(45,45,45,0.06)] lg:sticky lg:top-[120px]">
-                    <h3 style={{ fontFamily: "'Neue Montreal', sans-serif", fontSize: 16, fontWeight: 700, color: "#262626", marginBottom: 20, letterSpacing: "-0.01em" }}>
-                        Order Summary
-                    </h3>
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start">
+                    <div className="grid gap-5">
+                        <section className="rounded-[14px] border border-[#E5E7EB] bg-white p-5">
+                            <div className="mb-5 flex items-center gap-3">
+                                <span className="flex h-10 w-10 items-center justify-center rounded-[14px] bg-[#F3F4F4] text-[#427b77]">
+                                    <MapPin size={20} strokeWidth={1.8} />
+                                </span>
+                                <div>
+                                    <h3 className="text-[16px] font-extrabold text-[#262626] epilogue-header">
+                                        Delivery Address
+                                    </h3>
+                                    <p className="mt-0.5 text-[12px] text-[#262626]/55 epilogue-regular">
+                                        Confirm where your medicines should be delivered.
+                                    </p>
+                                </div>
+                            </div>
 
-                    {/* Items */}
-                    <div style={{ background: "#F7FAF9", borderRadius: 14, padding: 14, marginBottom: 18 }}>
-                        <div style={{ fontSize: 11, color: "rgba(38,38,38,0.6)", fontFamily: "'Neue Montreal', sans-serif", fontWeight: 600, marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.07em" }}>
-                            {cartItems.length} items
-                        </div>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                            {cartItems.map((item) => (
-                                <div key={item.product.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-                                        <div style={{
-                                            width: 36, height: 36, borderRadius: 8, background: "#fff",
-                                            overflow: "hidden", flexShrink: 0, border: "1px solid #EAEFEE",
-                                        }}>
-                                            <img src={item.product.image} alt={item.product.brandName}
-                                                 style={{ width: "100%", height: "100%", objectFit: "contain", padding: 0, transform: "scale(1.18)" }}
-                                                 onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
-                                            />
+                            <div className="grid gap-3.5 sm:grid-cols-2">
+                                <Field label="First Name" value={address.firstName} />
+                                <Field label="Last Name" value={address.lastName} />
+                                <div className="sm:col-span-2">
+                                    <Field label="Address Line" value={address.line} />
+                                </div>
+                                <Field label="City" value={address.city} />
+                                <Field label="ZIP Code" value={address.zip} />
+                                <div className="sm:col-span-2">
+                                    <Field label="Phone Number" value={address.phone} />
+                                </div>
+                            </div>
+                        </section>
+
+                        <section className="rounded-[14px] border border-[#E5E7EB] bg-white p-5">
+                            <h3 className="mb-3.5 text-[16px] font-extrabold text-[#262626] epilogue-header">
+                                Payment Method
+                            </h3>
+                            <div className="grid gap-2.5">
+                                {(Object.keys(PAYMENT_META) as PaymentMethod[]).map((key) => {
+                                    const active = payment === key;
+                                    const Icon = METHOD_ICON[key];
+                                    return (
+                                        <button
+                                            key={key}
+                                            type="button"
+                                            onClick={() => setPayment(key)}
+                                            className={[
+                                                "flex w-full items-center gap-3 rounded-[14px] border px-4 py-3.5 text-left transition-colors duration-150",
+                                                active
+                                                    ? "border-[#427b77] bg-[#F3F4F4]"
+                                                    : "border-[#E5E7EB] bg-white hover:border-[#5F9598]",
+                                            ].join(" ")}
+                                        >
+                                            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-[14px] ${active ? "bg-[#EAF3F5] text-[#1D546D]" : "bg-[#F3F4F4] text-[#427b77]"}`}>
+                                                <Icon size={20} strokeWidth={1.8} />
+                                            </span>
+                                            <span className="min-w-0 flex-1">
+                                                <span className="block text-[14px] font-bold text-[#262626] epilogue-header">
+                                                    {PAYMENT_META[key].label}
+                                                </span>
+                                                <span className="mt-1 block text-[12px] text-[#262626]/50 epilogue-regular">
+                                                    {key === "cod" ? "Pay when your order arrives" : "Confirm using your linked wallet or card"}
+                                                </span>
+                                            </span>
+                                            <span className={`flex h-5 w-5 items-center justify-center rounded-full border ${active ? "border-[#427b77] bg-[#427b77]" : "border-[#D1D5DB]"}`}>
+                                                {active && <CheckCircle2 size={14} strokeWidth={2.4} className="text-white" />}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    </div>
+
+                    <aside className="rounded-[14px] border border-[#E5E7EB] bg-white p-5 lg:sticky lg:top-[120px]">
+                        <h3 className="mb-4 text-[16px] font-extrabold text-[#262626] epilogue-header">
+                            Order Summary
+                        </h3>
+
+                        <div className="mb-5 rounded-[14px] border border-[#E5E7EB] bg-[#F3F4F4] p-3.5">
+                            <p className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.08em] text-[#262626]/60 epilogue-header">
+                                {cartItems.length} item{cartItems.length !== 1 ? "s" : ""}
+                            </p>
+                            <div className="grid gap-2.5">
+                                {cartItems.map((item) => (
+                                    <div key={item.product.id} className="flex items-center justify-between gap-3">
+                                        <div className="flex min-w-0 items-center gap-2.5">
+                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-[#E5E7EB] bg-white">
+                                                <img
+                                                    src={item.product.image}
+                                                    alt={item.product.brandName}
+                                                    className="h-full w-full scale-[1.18] object-contain"
+                                                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                                                />
+                                            </div>
+                                            <span className="truncate text-[13px] font-bold text-[#262626] epilogue-header">
+                                                {item.product.brandName} x{item.quantity}
+                                            </span>
                                         </div>
-                                        <span style={{ fontSize: 13, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", fontWeight: 500, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                            {item.product.brandName} ×{item.quantity}
+                                        <span className="shrink-0 text-[13px] font-bold text-[#262626] epilogue-header">
+                                            ₱{(item.product.price * item.quantity).toLocaleString()}
                                         </span>
                                     </div>
-                                    <span style={{ fontSize: 13, fontWeight: 700, color: "#262626", fontFamily: "'Neue Montreal', sans-serif", flexShrink: 0, marginLeft: 8 }}>
-                                        ₱{(item.product.price * item.quantity).toLocaleString()}
-                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mb-4 grid gap-3">
+                            {[
+                                { label: "Subtotal", value: `₱${cartTotal.toLocaleString()}`, className: "text-[#262626]" },
+                                { label: "Delivery", value: `₱${DELIVERY_FEE}`, className: "text-[#262626]/60" },
+                                { label: "Discount", value: `-₱${DISCOUNT}`, className: "text-[#427b77]" },
+                            ].map((row) => (
+                                <div key={row.label} className="flex items-center justify-between text-[13px]">
+                                    <span className="text-[#262626]/65 epilogue-regular">{row.label}</span>
+                                    <span className={`font-bold epilogue-header ${row.className}`}>{row.value}</span>
                                 </div>
                             ))}
                         </div>
-                    </div>
 
-                    {/* Rows */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 16 }}>
-                        {[
-                            { label: "Subtotal",  value: `₱${cartTotal.toLocaleString()}`, color: "#262626" },
-                            { label: "Delivery",  value: `₱${DELIVERY_FEE}`, color: "rgba(38,38,38,0.6)" },
-                            { label: "Discount",  value: `−₱${DISCOUNT}`,    color: "#22C55E" },
-                        ].map(({ label, value, color }) => (
-                            <div key={label} style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
-                                <span style={{ color: "rgba(38,38,38,0.7)", fontFamily: "'Neue Montreal', sans-serif" }}>{label}</span>
-                                <span style={{ color, fontWeight: 600, fontFamily: "'Neue Montreal', sans-serif" }}>{value}</span>
+                        <div className="mb-5 border-t border-[#E5E7EB] pt-4">
+                            <div className="flex items-baseline justify-between">
+                                <span className="text-[15px] font-extrabold text-[#262626] epilogue-header">Total</span>
+                                <span className="text-[22px] font-extrabold text-[#1D546D] epilogue-header">
+                                    ₱{total.toLocaleString()}
+                                </span>
                             </div>
-                        ))}
-                    </div>
+                        </div>
 
-                    <div style={{ height: 1, background: "#F0F3F2", marginBottom: 16 }} />
+                        <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder}>
+                            Place Order
+                        </Btn>
 
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 17, fontWeight: 800, marginBottom: 20 }}>
-                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#262626" }}>Total</span>
-                        <span style={{ fontFamily: "'Neue Montreal', sans-serif", color: "#427b77" }}>₱{total.toLocaleString()}</span>
-                    </div>
-
-                    <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder}>
-                        Place Order
-                    </Btn>
-
-                    <div style={{ textAlign: "center", marginTop: 12, fontSize: 11, color: "rgba(38,38,38,0.5)", fontFamily: "'Neue Montreal', sans-serif" }}>
-                        Your data is encrypted and secure
-                    </div>
+                        <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-[#262626]/45 epilogue-regular">
+                            <ShieldCheck size={12} strokeWidth={2} />
+                            Your data is encrypted and secure
+                        </div>
+                    </aside>
                 </div>
             </div>
         </div>
