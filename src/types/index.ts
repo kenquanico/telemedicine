@@ -34,7 +34,15 @@ export type PageKey =
     | "payment"
     | "history"
     | "account"
-    | "settings";
+    | "settings"
+    | "returns"
+    | "prescription_upload"
+    | "help_center"
+    | "about"
+    | "careers"
+    | "press"
+    | "privacy"
+    | "terms";
 
 export interface Review {
     id: string;
