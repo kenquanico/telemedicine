@@ -8,7 +8,7 @@ import DiscountTag from "../components/DiscountTag";
 import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
 import { getDefaultFilters } from "../utils/filterState";
-import { Heart, Plus, Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 
 const CATEGORY_ICON_SRC: Record<Category, string> = {
     pain_relief: "/SVG/Pain Relief.svg",
@@ -74,18 +74,15 @@ function CategoryImageTile({
 function VendorMedicineCard({
                                 product,
                                 onView,
-                                onAdd,
                                 isFavorite,
                                 onToggleFavorite,
                             }: {
     product: Product;
     onView: () => void;
-    onAdd: () => void;
     isFavorite: boolean;
     onToggleFavorite: () => void;
 }) {
     const [imageFailed, setImageFailed] = useState(false);
-    const isOutOfStock = product.stockStatus === "out_of_stock";
     const hasImagePath = product.image.startsWith("http") || product.image.startsWith("/") || product.image.startsWith("data:");
 
     return (
@@ -117,25 +114,9 @@ function VendorMedicineCard({
                 <button
                     onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
                     aria-label={isFavorite ? "Remove from favourites" : "Add to favourites"}
-                    className="absolute bottom-2.5 right-[46px] flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
+                    className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
                 >
                     <Heart size={15} strokeWidth={2} fill={isFavorite ? "#e11d48" : "none"} className={isFavorite ? "text-[#e11d48]" : "text-[#262626]/50"} />
-                </button>
-
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAdd();
-                    }}
-                    disabled={isOutOfStock}
-                    aria-label={`Add ${product.brandName} to cart`}
-                    className={`absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] transition-transform duration-150 active:scale-90 ${
-                        isOutOfStock
-                            ? "cursor-not-allowed bg-white/80 text-[#262626]/40"
-                            : "bg-white/90 text-[#262626] backdrop-blur-sm hover:scale-110"
-                    }`}
-                >
-                    <Plus size={18} strokeWidth={2.2} />
                 </button>
             </div>
 
@@ -184,26 +165,12 @@ function VendorMedicineCard({
 
 // ── HomePage ─────────────────────────────────────────────────────────────────
 export default function HomePage() {
-    const { navigateTo, addToCart, showModal, favoriteIds, toggleFavorite } = useApp();
+    const { navigateTo, favoriteIds, toggleFavorite } = useApp();
     const [filters, setFilters] = useState(getDefaultFilters);
     const [bannerFailed, setBannerFailed] = useState(false);
     const filteredProducts = applyProductFilters(PRODUCTS, filters);
     const featuredProducts = filteredProducts.slice(0, 4);
     const bestSellerProducts = filteredProducts.slice(4);
-
-    const handleAddToCart = (productId: string) => {
-        const product = PRODUCTS.find((p) => p.id === productId);
-        if (!product) return;
-        addToCart(product);
-        showModal({
-            type: "added",
-            icon: "✅",
-            title: "Added to Cart!",
-            message: `${product.brandName} ${product.strength} has been added to your cart.`,
-            actionLabel: "View Cart",
-            onAction: () => navigateTo("cart"),
-        });
-    };
 
     return (
         <>
@@ -288,7 +255,6 @@ export default function HomePage() {
                                     key={p.id}
                                     product={p}
                                     onView={() => navigateTo("product", p.id)}
-                                    onAdd={() => handleAddToCart(p.id)}
                                     isFavorite={favoriteIds.includes(p.id)}
                                     onToggleFavorite={() => toggleFavorite(p.id)}
                                 />
@@ -307,7 +273,6 @@ export default function HomePage() {
                                     key={p.id}
                                     product={p}
                                     onView={() => navigateTo("product", p.id)}
-                                    onAdd={() => handleAddToCart(p.id)}
                                     isFavorite={favoriteIds.includes(p.id)}
                                     onToggleFavorite={() => toggleFavorite(p.id)}
                                 />
