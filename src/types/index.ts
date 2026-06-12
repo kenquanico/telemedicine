@@ -34,6 +34,7 @@ export type PageKey =
     | "payment"
     | "history"
     | "account"
+    | "profile"
     | "settings"
     | "returns"
     | "prescription_upload"
