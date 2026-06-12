@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronRight } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 const LOCALE_OPTIONS = [
     ["en-US", "English (United States)"],
@@ -272,11 +272,12 @@ export function Step({ number, title, children }: { number: number; title: strin
     );
 }
 
-export function TealButton({ children }: { children: ReactNode }) {
+export function TealButton({ children, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { children: ReactNode }) {
     return (
         <button
             type="button"
             className="mt-5 rounded-[14px] bg-[#1D546D] px-5 py-3 text-[13px] font-extrabold text-white epilogue-header transition-colors hover:bg-[#427b77]"
+            {...props}
         >
             {children}
         </button>
