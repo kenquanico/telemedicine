@@ -62,13 +62,14 @@ function ProductVisual({ image, name, className = "" }: { image: string; name: s
 }
 
 export default function ProductDetailPage() {
-    const { selectedProductId, navigateTo, addToCart, showModal } = useApp();
+    const { selectedProductId, navigateTo, addToCart, hasUploadedPrescription, showModal } = useApp();
     const [qty, setQty] = useState(1);
     const [activeTab, setActiveTab] = useState<Tab>("details");
 
     const product = PRODUCTS.find((p) => p.id === selectedProductId) ?? PRODUCTS[0];
     const reviewCount = product.reviews.length;
     const isOutOfStock = product.stockStatus === "out_of_stock";
+    const needsPrescriptionUpload = product.requiresPrescription && !hasUploadedPrescription;
 
     const tabs: { key: Tab; label: string }[] = [
         { key: "details", label: "Details" },
@@ -97,7 +98,9 @@ export default function ProductDetailPage() {
     ];
 
     const handleAddToCart = () => {
-        addToCart(product, qty);
+        const added = addToCart(product, qty);
+        if (!added) return;
+
         showModal({
             type: "added",
             icon: "✅",
@@ -223,6 +226,11 @@ export default function ProductDetailPage() {
                                 <p className="line-clamp-2 text-[12px] leading-relaxed text-[#262626]/70 epilogue-regular">
                                     {product.genericName}
                                 </p>
+                                {needsPrescriptionUpload && (
+                                    <p className="mt-3 rounded-[14px] border border-[#F4C971] bg-[#FFF7E6] px-3 py-2 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                                        Upload a valid prescription before adding this medicine to your cart.
+                                    </p>
+                                )}
                             </div>
 
                             <div className="h-px bg-[#F4F6F5]" />
@@ -268,7 +276,7 @@ export default function ProductDetailPage() {
                                 }}
                             >
                                 <ShoppingCart size={18} strokeWidth={1.8} />
-                                {isOutOfStock ? "Out of Stock" : "Add to Cart"}
+                                {isOutOfStock ? "Out of Stock" : needsPrescriptionUpload ? "Upload Prescription to Add" : "Add to Cart"}
                             </Btn>
 
                             <div className="rounded-[14px] border border-[#F4C971] bg-white px-4 py-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
