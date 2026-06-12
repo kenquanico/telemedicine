@@ -36,12 +36,25 @@ function Field({
 }
 
 export default function CheckoutPage() {
-    const { cartItems, cartTotal, navigateTo, addresses, selectedAddressId, showModal } = useApp();
+    const {
+        cartItems,
+        cartTotal,
+        navigateTo,
+        addresses,
+        selectedAddressId,
+        showModal,
+        ensurePrescriptionForOrder,
+        cartRequiresPrescription,
+        hasUploadedPrescription,
+    } = useApp();
     const address = addresses.find((a) => a.id === selectedAddressId) ?? addresses[0];
     const [payment, setPayment] = useState<PaymentMethod>("cod");
     const total = cartTotal + DELIVERY_FEE - DISCOUNT;
+    const needsPrescriptionUpload = cartRequiresPrescription && !hasUploadedPrescription;
 
     const handlePlaceOrder = () => {
+        if (!ensurePrescriptionForOrder()) return;
+
         showModal({
             type: "success",
             icon: <CheckCircle2 size={30} strokeWidth={1.8} className="text-[#427b77]" />,
@@ -192,8 +205,13 @@ export default function CheckoutPage() {
                         </div>
 
                         <Btn variant="primary" size="lg" fullWidth onClick={handlePlaceOrder}>
-                            Place Order
+                            {needsPrescriptionUpload ? "Upload Prescription to Order" : "Place Order"}
                         </Btn>
+                        {needsPrescriptionUpload && (
+                            <p className="mt-3 text-[12px] leading-relaxed text-[#8A5A12] epilogue-regular">
+                                Upload a valid prescription before placing this order.
+                            </p>
+                        )}
 
                         <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-[#262626]/45 epilogue-regular">
                             <ShieldCheck size={12} strokeWidth={2} />
