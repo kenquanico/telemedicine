@@ -1,10 +1,55 @@
 import { useState } from "react";
+import type { ChangeEvent, DragEvent } from "react";
 import { PageShell, PageHero, Card, SectionTitle, TealButton, Divider, Step } from "./pageComponents";
 import { Check, Upload } from "lucide-react";
+import { useApp } from "../hooks/useApp";
 
 export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void }) {
+    const { completePrescriptionUpload, showModal } = useApp();
     const [dragging, setDragging] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+
+    const acceptFile = (file: File | undefined) => {
+        if (!file) return;
+
+        const validExtension = /\.(jpe?g|png|pdf)$/i.test(file.name);
+        const validSize = file.size <= 10 * 1024 * 1024;
+
+        if (!validExtension || !validSize) {
+            setFileName(null);
+            setUploadError("Upload a JPG, PNG, or PDF file up to 10 MB.");
+            return;
+        }
+
+        setUploadError(null);
+        setFileName(file.name);
+    };
+
+    const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+        acceptFile(e.target.files?.[0]);
+    };
+
+    const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        setDragging(false);
+        acceptFile(e.dataTransfer.files[0]);
+    };
+
+    const handleSubmit = () => {
+        if (!fileName) {
+            setUploadError("Upload a JPG, PNG, or PDF file up to 10 MB.");
+            return;
+        }
+
+        completePrescriptionUpload();
+        showModal({
+            type: "success",
+            icon: <Check size={30} strokeWidth={1.8} className="text-[#427b77]" />,
+            title: "Prescription Uploaded",
+            message: "Your prescription has been attached. You can continue with your restricted medicine order.",
+        });
+    };
 
     return (
         <PageShell onBack={onBack} breadcrumbLabel="Prescription Upload">
@@ -34,12 +79,7 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
             <div
                 onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
                 onDragLeave={() => setDragging(false)}
-                onDrop={(e) => {
-                    e.preventDefault();
-                    setDragging(false);
-                    const file = e.dataTransfer.files[0];
-                    if (file) setFileName(file.name);
-                }}
+                onDrop={handleDrop}
                 className={`mb-5 flex flex-col items-center justify-center rounded-[14px] border-2 border-dashed py-14 px-6 text-center transition-colors duration-200 ${
                     dragging ? "border-[#427b77] bg-[#427b77]/5" : "border-[#EAEFEE] bg-white"
                 }`}
@@ -50,7 +90,7 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
                 {fileName ? (
                     <>
                         <p className="text-[14px] font-bold text-[#262626] epilogue-header">{fileName}</p>
-                        <button onClick={() => setFileName(null)} className="mt-2 text-[12px] text-[#427b77] font-semibold epilogue-header hover:underline">Remove</button>
+                        <button onClick={() => { setFileName(null); setUploadError(null); }} className="mt-2 text-[12px] text-[#427b77] font-semibold epilogue-header hover:underline">Remove</button>
                     </>
                 ) : (
                     <>
@@ -58,15 +98,17 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
                         <p className="mt-1 text-[13px] text-[#262626]/50 epilogue-regular">or</p>
                         <label className="mt-3 cursor-pointer rounded-xl border border-[#DCE6E4] px-5 py-2.5 text-[13px] font-bold text-[#427b77] epilogue-header hover:bg-[#427b77]/5 transition-colors">
                             Browse files
-                            <input type="file" className="sr-only" accept=".jpg,.jpeg,.png,.pdf" onChange={(e) => {
-                                const f = e.target.files?.[0];
-                                if (f) setFileName(f.name);
-                            }} />
+                            <input type="file" className="sr-only" accept=".jpg,.jpeg,.png,.pdf" onChange={handleFileChange} />
                         </label>
                         <p className="mt-3 text-[11px] text-[#262626]/40 epilogue-regular">JPG, PNG, or PDF · Max 10 MB</p>
                     </>
                 )}
             </div>
+            {uploadError && (
+                <p className="-mt-2 mb-5 text-[12px] font-semibold text-[#8A5A12] epilogue-header">
+                    {uploadError}
+                </p>
+            )}
 
             <Card>
                 <SectionTitle>What happens next?</SectionTitle>
@@ -83,7 +125,7 @@ export default function PrescriptionUploadPage({ onBack }: { onBack?: () => void
                 </div>
             </Card>
 
-            {fileName && <TealButton>Submit Prescription</TealButton>}
+            {fileName && <TealButton onClick={handleSubmit}>Submit Prescription</TealButton>}
 
             <Divider />
             <p className="text-[13px] text-[#262626]/50 epilogue-regular">
