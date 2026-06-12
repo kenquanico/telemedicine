@@ -7,7 +7,9 @@ import type {
 } from "../types";
 
 // ─── Products ─────────────────────────────────────────────────────────────────
-const RAW_PRODUCTS: Product[] = [
+type RawProduct = Omit<Product, "requiresPrescription"> & Partial<Pick<Product, "requiresPrescription">>;
+
+const RAW_PRODUCTS: RawProduct[] = [
     // ── Pain Relief ──────────────────────────────────────────────────────────
     {
         id: "p1",
@@ -1215,6 +1217,7 @@ const WEBSITE_PRODUCT_IMAGES: Record<Product["category"], string> = {
 
 export const PRODUCTS: Product[] = RAW_PRODUCTS.map((product) => ({
     ...product,
+    requiresPrescription: product.requiresPrescription ?? product.warnings.toLowerCase().includes("prescription required"),
     image: WEBSITE_PRODUCT_IMAGES[product.category],
 }));
 
