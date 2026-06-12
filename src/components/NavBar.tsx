@@ -31,7 +31,7 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
         <div className="absolute top-[calc(100%+10px)] right-0 z-50 w-[340px] overflow-hidden rounded-[14px] border border-[#E5E7EB] bg-white animate-slideDown">
 
             {/* Header */}
-            <div className="px-5 pt-4 pb-3 border-b border-[#F0F3F2] flex items-center justify-between">
+            <div className="px-5 pt-4 pb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <ShoppingBag size={14} strokeWidth={2} className="text-[#427b77]" />
                     <span className="text-xs font-extrabold text-[#262626] epilogue-header tracking-wide uppercase">
@@ -115,6 +115,7 @@ function CartDropdown({ onClose }: { onClose: () => void }) {
 // ─── Account Dropdown ─────────────────────────────────────────────────────────
 function AccountDropdown({ onClose, navigateTo }: { onClose: () => void; navigateTo: (p: PageKey) => void }) {
     const items = [
+        { Icon: UserRound,      label: "Profile",    page: "profile"   as PageKey },
         { Icon: ClipboardList, label: "My Orders",  page: "orders"    as PageKey },
         { Icon: Heart,         label: "Favorites",  page: "favorites" as PageKey },
         { Icon: Settings,      label: "Settings",   page: "settings"  as PageKey },
@@ -124,7 +125,13 @@ function AccountDropdown({ onClose, navigateTo }: { onClose: () => void; navigat
         <div className="absolute top-[calc(100%+10px)] right-0 z-50 w-56 rounded-[14px] border border-[#E5E7EB] bg-white py-1.5 animate-slideDown">
             <div className="px-4 py-2.5 mb-0.5">
                 <p className="text-sm font-semibold text-[#262626] leading-tight epilogue-regular">Ken Aldrey Quanico</p>
-                <button className="text-xs text-[#3B82F6] mt-0.5 epilogue-subheader hover:text-[#2563EB]">View Profile</button>
+                <button
+                    type="button"
+                    onClick={() => { navigateTo("profile"); onClose(); }}
+                    className="text-xs text-[#3B82F6] mt-0.5 epilogue-subheader hover:text-[#2563EB] cursor-pointer"
+                >
+                    View Profile
+                </button>
             </div>
             <div className="px-1.5 py-0.5">
                 {items.map(({ Icon, label, page }) => (
@@ -223,7 +230,7 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
 
     return (
         <>
-            <nav className="sticky top-0 z-40 border-b border-[#E5E7EB] bg-white">
+            <nav className="sticky top-0 z-40 bg-white">
 
                 {/* ── Top row ── */}
                 <div className={hideSecondaryNav ? "px-12 py-4 flex items-center gap-5" : "px-12 pt-3.5 pb-0 flex items-center gap-5"}>
@@ -378,11 +385,11 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                             <button
                                 onClick={() => setSearchOpen(true)}
                                 className="search-capsule"
-                                title="Search medicines"
+                                title="Search pharmacies by name, location, or medicine"
                                 aria-label="Open search"
                             >
                                 <Search size={17} strokeWidth={1.8} className="shrink-0" />
-                                <span>Search medicines</span>
+                                <span className="epilogue-thin">Search pharmacies by name, location, or medicine…</span>
                             </button>
                         </div>
                     </div>
@@ -475,9 +482,10 @@ export default function Navbar({ compact = false }: { compact?: boolean }) {
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-                        font-size: 13px;
-                        font-weight: 400;
-                        line-height: 1;
+                        font-size: 14px;
+                        font-weight: 500;
+                        line-height: 1.25rem;
+                        color: rgba(38,38,38,0.30);
                     }
                     .search-capsule:hover {
                         border-color: rgba(38,38,38,0.04);
