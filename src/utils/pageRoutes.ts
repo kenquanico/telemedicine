@@ -23,6 +23,14 @@ export const PAGE_PATHS: Record<PageKey, string> = {
     history: "/history",
     account: "/account",
     settings: "/account",
+    returns: "/returns",
+    prescription_upload: "/prescription-upload",
+    help_center: "/help-center",
+    about: "/about",
+    careers: "/careers",
+    press: "/press",
+    privacy: "/privacy-policy",
+    terms: "/terms",
 };
 
 export function getRouteFromPath(pathname: string): PageRoute {
