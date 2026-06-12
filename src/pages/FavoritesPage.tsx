@@ -4,22 +4,19 @@ import { PRODUCTS, CATEGORY_META } from "../data/mockData";
 import Footer from "../components/Footer";
 import DiscountTag from "../components/DiscountTag";
 import type { Product } from "../types";
-import { Heart, Trash2, ShoppingBag, Search, Plus, Star } from "lucide-react";
+import { Heart, Trash2, ShoppingBag, Search, Star } from "lucide-react";
 
 // ── Reused from HomePage ─────────────────────────────────────────────────────
 function VendorMedicineCard({
                                 product,
                                 onView,
-                                onAdd,
                                 onUnfavorite,
                             }: {
     product: Product;
     onView: () => void;
-    onAdd: () => void;
     onUnfavorite: () => void;
 }) {
     const [imageFailed, setImageFailed] = useState(false);
-    const isOutOfStock = product.stockStatus === "out_of_stock";
     const hasImagePath =
         product.image.startsWith("http") ||
         product.image.startsWith("/") ||
@@ -55,26 +52,9 @@ function VendorMedicineCard({
                         onUnfavorite();
                     }}
                     aria-label="Remove from favourites"
-                    className="absolute bottom-2.5 right-[46px] flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
+                    className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
                 >
                     <Heart size={15} strokeWidth={2} fill="#e11d48" className="text-[#e11d48]" />
-                </button>
-
-                {/* Add to cart button */}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAdd();
-                    }}
-                    disabled={isOutOfStock}
-                    aria-label={`Add ${product.brandName} to cart`}
-                    className={`absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] transition-transform duration-150 active:scale-90 ${
-                        isOutOfStock
-                            ? "cursor-not-allowed bg-white/80 text-[#262626]/40"
-                            : "bg-white/90 text-[#262626] backdrop-blur-sm hover:scale-110"
-                    }`}
-                >
-                    <Plus size={18} strokeWidth={2.2} />
                 </button>
             </div>
 
@@ -170,29 +150,20 @@ export default function FavoritesPage() {
         setSearchQuery("");
     };
 
-    const handleAddToCart = (productId: string) => {
-        const product = PRODUCTS.find((p) => p.id === productId);
-        if (!product) return;
-        addToCart(product);
-        showModal({
-            type: "added",
-            icon: "✅",
-            title: "Added to Cart!",
-            message: `${product.brandName} ${product.strength} has been added to your cart.`,
-            actionLabel: "View Cart",
-            onAction: () => navigateTo("cart"),
-        });
-    };
-
     const handleAddAllToCart = () => {
-        filteredFavorites.forEach((p) => {
-            if (p.stockStatus !== "out_of_stock") addToCart(p);
-        });
+        let addedCount = 0;
+        for (const p of filteredFavorites) {
+            if (p.stockStatus === "out_of_stock") continue;
+            const added = addToCart(p);
+            if (!added) return;
+            addedCount += 1;
+        }
+
         showModal({
             type: "added",
             icon: "✅",
             title: "All added to Cart!",
-            message: `${filteredFavorites.filter((p) => p.stockStatus !== "out_of_stock").length} item(s) added to your cart.`,
+            message: `${addedCount} item(s) added to your cart.`,
             actionLabel: "View Cart",
             onAction: () => navigateTo("cart"),
         });
@@ -270,7 +241,6 @@ export default function FavoritesPage() {
                                             key={p.id}
                                             product={p}
                                             onView={() => navigateTo("product", p.id)}
-                                            onAdd={() => handleAddToCart(p.id)}
                                             onUnfavorite={() => handleUnfavorite(p.id)}
                                         />
                                     ))}
