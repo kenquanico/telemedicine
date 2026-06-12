@@ -190,10 +190,8 @@ export function SectionHeader({ title }: { title: string }) {
 interface MedCardProps {
     product: import("../types").Product;
     onView: () => void;
-    onAdd: () => void;
 }
-export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
-    const isOOS = product.stockStatus === "out_of_stock";
+export function MedicineCard({ product, onView }: MedCardProps) {
     return (
         <div
             onClick={onView}
@@ -231,31 +229,6 @@ export function MedicineCard({ product, onView, onAdd }: MedCardProps) {
                         SALE
                     </div>
                 )}
-                {/* Foodpanda-style floating + button */}
-                <button
-                    onClick={(e) => { e.stopPropagation(); onAdd(); }}
-                    disabled={isOOS}
-                    style={{
-                        position: "absolute", bottom: 10, right: 10,
-                        width: 34, height: 34,
-                        background: isOOS ? "#E5E7EB" : "#2d2d2d",
-                        color: isOOS ? "rgba(38,38,38,0.5)" : "#fff",
-                        border: "none",
-                        borderRadius: 10,
-                        fontSize: 22,
-                        fontWeight: 300,
-                        cursor: isOOS ? "not-allowed" : "pointer",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        lineHeight: 1,
-                        transition: "background 0.2s, transform 0.15s",
-                        boxShadow: isOOS ? "none" : "0 2px 8px rgba(45,45,45,0.18)",
-                        fontFamily: "'Neue Montreal', sans-serif",
-                    }}
-                    onMouseEnter={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#427b77"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}}
-                    onMouseLeave={e => { if (!isOOS) { (e.currentTarget as HTMLButtonElement).style.background = "#2d2d2d"; (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}}
-                >
-                    +
-                </button>
             </div>
 
             {/* Info */}
