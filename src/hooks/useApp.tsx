@@ -14,11 +14,16 @@ interface AppContextValue {
 
     // Cart
     cartItems: CartItem[];
-    addToCart: (product: Product, qty?: number) => void;
+    addToCart: (product: Product, qty?: number) => boolean;
     removeFromCart: (productId: string) => void;
     updateQuantity: (productId: string, qty: number) => void;
     cartTotal: number;
     cartCount: number;
+    cartRequiresPrescription: boolean;
+    hasUploadedPrescription: boolean;
+    proceedToCheckout: () => boolean;
+    ensurePrescriptionForOrder: () => boolean;
+    completePrescriptionUpload: () => void;
 
     // Favorites
     favoriteIds: string[];
@@ -41,6 +46,11 @@ interface AppContextValue {
     showModal: (modal: ModalState) => void;
     closeModal: () => void;
 }
+
+type PrescriptionIntent =
+    | { type: "add_to_cart"; product: Product; qty: number }
+    | { type: "checkout" }
+    | { type: "place_order" };
 
 export interface ModalState {
     type: "success" | "info" | "warning" | "error" | "added";
@@ -76,6 +86,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const [selectedAddressId, setSelectedAddressId] = useState<string>(ADDRESSES[0].id);
     const [modal, setModal] = useState<ModalState | null>(null);
     const [favoriteIds, setFavoriteIds] = useState<string[]>(getSavedFavoriteIds);
+    const [hasUploadedPrescription, setHasUploadedPrescription] = useState(false);
+    const [pendingPrescriptionIntent, setPendingPrescriptionIntent] = useState<PrescriptionIntent | null>(null);
 
     const saveFavoriteIds = useCallback((ids: string[]) => {
         try {
@@ -133,7 +145,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         return () => window.removeEventListener("popstate", handlePopState);
     }, []);
 
-    const addToCart = useCallback((product: Product, qty = 1) => {
+    const addItemToCart = useCallback((product: Product, qty = 1) => {
         setCartItems((prev) => {
             const existing = prev.find((i) => i.product.id === product.id);
             if (existing) {
@@ -146,6 +158,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             return [...prev, { product, quantity: qty }];
         });
     }, []);
+
+    const addToCart = useCallback((product: Product, qty = 1) => {
+        if (product.requiresPrescription && !hasUploadedPrescription) {
+            setPendingPrescriptionIntent({ type: "add_to_cart", product, qty });
+            navigateTo("prescription_upload");
+            return false;
+        }
+
+        addItemToCart(product, qty);
+        return true;
+    }, [addItemToCart, hasUploadedPrescription, navigateTo]);
 
     const removeFromCart = useCallback((productId: string) => {
         setCartItems((prev) => prev.filter((i) => i.product.id !== productId));
@@ -191,9 +214,47 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         0
     );
     const cartCount = cartItems.reduce((sum, i) => sum + i.quantity, 0);
+    const cartRequiresPrescription = cartItems.some((i) => i.product.requiresPrescription);
+
+    const proceedToCheckout = useCallback(() => {
+        if (cartRequiresPrescription && !hasUploadedPrescription) {
+            setPendingPrescriptionIntent({ type: "checkout" });
+            navigateTo("prescription_upload");
+            return false;
+        }
+
+        navigateTo("checkout");
+        return true;
+    }, [cartRequiresPrescription, hasUploadedPrescription, navigateTo]);
+
+    const ensurePrescriptionForOrder = useCallback(() => {
+        if (cartRequiresPrescription && !hasUploadedPrescription) {
+            setPendingPrescriptionIntent({ type: "place_order" });
+            navigateTo("prescription_upload");
+            return false;
+        }
+
+        return true;
+    }, [cartRequiresPrescription, hasUploadedPrescription, navigateTo]);
 
     const showModal = useCallback((m: ModalState) => setModal(m), []);
     const closeModal = useCallback(() => setModal(null), []);
+
+    const completePrescriptionUpload = useCallback(() => {
+        setHasUploadedPrescription(true);
+        const intent = pendingPrescriptionIntent;
+        setPendingPrescriptionIntent(null);
+
+        if (intent?.type === "add_to_cart") {
+            addItemToCart(intent.product, intent.qty);
+            navigateTo("cart");
+            return;
+        }
+
+        if (intent?.type === "checkout" || intent?.type === "place_order") {
+            navigateTo("checkout");
+        }
+    }, [addItemToCart, navigateTo, pendingPrescriptionIntent]);
 
     return (
         <AppContext.Provider
@@ -208,6 +269,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
                 updateQuantity,
                 cartTotal,
                 cartCount,
+                cartRequiresPrescription,
+                hasUploadedPrescription,
+                proceedToCheckout,
+                ensurePrescriptionForOrder,
+                completePrescriptionUpload,
                 favoriteIds,
                 toggleFavorite,
                 removeFavorite,
