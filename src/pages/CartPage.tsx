@@ -21,7 +21,7 @@ export default function CartPage() {
     };
 
     return (
-        <div className="relative flex min-h-screen items-start gap-7 bg-[#F3F4F4] px-4 py-6 sm:px-6 lg:px-16 lg:py-8">
+        <div className="relative flex min-h-screen items-start gap-7 bg-white px-4 py-6 sm:px-6 lg:px-16 lg:py-8">
 
             {/* ── Main content ── */}
             <div className="flex-1 min-w-0">
