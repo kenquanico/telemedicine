@@ -233,7 +233,15 @@ function MapControls({
 }
 
 // ── Detail Sidebar ────────────────────────────────────────────────────────────
-function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onClose: () => void }) {
+function PharmacySidebar({
+                             pharmacy,
+                             onClose,
+                             onReserve,
+                         }: {
+    pharmacy: Pharmacy | null;
+    onClose: () => void;
+    onReserve: () => void;
+}) {
     const color    = pharmacy ? getBrandColor(pharmacy.name) : "#3d7a75";
     const photoUrl = pharmacy?.photos?.[0]?.getUrl({ maxWidth: 800, maxHeight: 400 });
 
@@ -378,6 +386,7 @@ function PharmacySidebar({ pharmacy, onClose }: { pharmacy: Pharmacy | null; onC
                 {/* CTA */}
                 <div className="flex-shrink-0 px-5 py-4 border-t border-[#f2f5f4] bg-white">
                     <button
+                        onClick={onReserve}
                         className="w-full rounded-xl py-3 px-4 text-[13px] font-bold cursor-pointer flex items-center justify-center gap-2 transition-all tracking-[-0.01em] epilogue-header"
                         style={{
                             background: color,
@@ -452,7 +461,7 @@ function PharmacyCard({ pharmacy, isSelected, onClick }: {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function PickupPage() {
-    const { navigateBack } = useApp();
+    const { navigateBack, navigateTo } = useApp();
     const mapRef       = useRef<HTMLDivElement>(null);
     const mapInstance  = useRef<google.maps.Map | null>(null);
     const markersRef   = useRef<google.maps.Marker[]>([]);
@@ -611,7 +620,11 @@ export default function PickupPage() {
             <div ref={mapRef} className="absolute inset-0 w-full h-full" />
 
             {/* Sidebar */}
-            <PharmacySidebar pharmacy={selectedPharmacy} onClose={() => setSelectedPharmacy(null)} />
+            <PharmacySidebar
+                pharmacy={selectedPharmacy}
+                onClose={() => setSelectedPharmacy(null)}
+                onReserve={() => navigateTo("reservePickup")}
+            />
 
             {/* Custom Map Controls */}
             <MapControls
