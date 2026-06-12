@@ -2,6 +2,7 @@ import React from "react";
 import { AppProvider, useApp } from "./hooks/useApp";
 import type { PageKey } from "./types";
 import Navbar from "./components/NavBar.tsx";
+import Footer from "./components/Footer";
 import { NotificationModal } from "./components/UI";
 import HomePage from "./pages/HomePage";
 import CatalogPage from "./pages/CatalogPage";
@@ -16,6 +17,7 @@ import { TrackingPage } from "./pages/TrackingPage";
 import { PaymentPage } from "./pages/PaymentPage";
 import { PaymentHistoryPage } from "./pages/PaymentHistoryPage";
 import { AccountPage } from "./pages/AccountPage";
+import ProfilePage from "./pages/ProfilePage";
 import PharmaciesPage from "./pages/PharmaciesPage.tsx";
 import ReturnsPage from "./pages/ReturnPage";
 import PrescriptionUploadPage from "./pages/PrescriptionUploadPage";
@@ -69,6 +71,7 @@ function PageRouter() {
         payment: <PaymentPage />,
         history: <PaymentHistoryPage />,
         account: <AccountPage />,
+        profile: <ProfilePage />,
         settings: <AccountPage />,
         returns: <ReturnsPage onBack={() => navigateTo("home")} />,
         prescription_upload: <PrescriptionUploadPage onBack={() => navigateTo("home")} />,
@@ -101,6 +104,7 @@ function AppShell() {
             <main>
                 <PageRouter />
             </main>
+            {footerPages.has(currentPage) && <Footer />}
             <NotificationModal />
         </div>
     );
