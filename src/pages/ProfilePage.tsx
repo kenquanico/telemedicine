@@ -242,8 +242,8 @@ export default function ProfilePage() {
 
                         {/* Avatar card */}
                         <Card className="py-6 flex flex-col items-center text-center gap-3">
-                            <div className="h-[72px] w-[72px] rounded-full bg-[#427b77]/10 border-2 border-[#427b77]/25 flex items-center justify-center">
-                                <span className="text-[26px] font-extrabold text-[#427b77] epilogue-header select-none">
+                            <div className="flex h-[72px] w-[72px] items-center justify-center rounded-full border-2 border-[#427b77]/25 bg-[#427b77]/10">
+                                <span className="text-[22px] font-extrabold text-[#427b77] epilogue-header">
                                     {profile.initials}
                                 </span>
                             </div>
