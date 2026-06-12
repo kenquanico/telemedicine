@@ -1,4 +1,23 @@
+import { useApp } from "../hooks/useApp";
+import type { PageKey } from "../types";
+
 export default function Footer() {
+    const { navigateTo } = useApp();
+    const supportLinks: { label: string; page?: PageKey }[] = [
+        { label: "Help Center", page: "help_center" },
+        { label: "Track Order" },
+        { label: "Returns", page: "returns" },
+        { label: "Prescription Upload", page: "prescription_upload" },
+        { label: "Contact Us" },
+    ];
+    const companyLinks: { label: string; page: PageKey }[] = [
+        { label: "About Dosely", page: "about" },
+        { label: "Careers", page: "careers" },
+        { label: "Press", page: "press" },
+        { label: "Privacy Policy", page: "privacy" },
+        { label: "Terms of Service", page: "terms" },
+    ];
+
     return (
         <footer className="mt-8 border-t border-[#EAEFEE] bg-[#F7F9F9]">
             <div className="px-5 sm:px-8 lg:px-16 py-12">
@@ -86,14 +105,24 @@ export default function Footer() {
                             Support
                         </h5>
                         <ul className="space-y-2.5">
-                            {["Help Center", "Track Order", "Returns", "Prescription Upload", "Contact Us"].map((item) => (
-                                <li key={item}>
+                            {supportLinks.map(({ label, page }) => (
+                                <li key={label}>
+                                    {page ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => navigateTo(page)}
+                                        className="text-[13px] text-[#262626]/60 epilogue-regular transition-colors duration-150 hover:text-[#427b77]"
+                                    >
+                                        {label}
+                                    </button>
+                                    ) : (
                                     <a
                                         href="#"
                                         className="text-[13px] text-[#262626]/60 epilogue-regular transition-colors duration-150 hover:text-[#427b77]"
                                     >
-                                        {item}
+                                        {label}
                                     </a>
+                                    )}
                                 </li>
                             ))}
                         </ul>
@@ -105,14 +134,15 @@ export default function Footer() {
                             Company
                         </h5>
                         <ul className="space-y-2.5">
-                            {["About Dosely", "Careers", "Press", "Privacy Policy", "Terms of Service"].map((item) => (
-                                <li key={item}>
-                                    <a
-                                        href="#"
+                            {companyLinks.map(({ label, page }) => (
+                                <li key={label}>
+                                    <button
+                                        type="button"
+                                        onClick={() => navigateTo(page)}
                                         className="text-[13px] text-[#262626]/60 epilogue-regular transition-colors duration-150 hover:text-[#427b77]"
                                     >
-                                        {item}
-                                    </a>
+                                        {label}
+                                    </button>
                                 </li>
                             ))}
                         </ul>
