@@ -1,6 +1,6 @@
 export default function DiscountTag({ label = "₱60 off ₱199: welcome..." }: { label?: string }) {
     return (
-        <div className="mt-2 inline-flex max-w-full items-center gap-1.5 rounded-md bg-[#FDECEC] px-2 py-1 text-[#D6293E]">
+        <div className="mt-2 inline-flex max-w-full items-center gap-1.5 rounded-md bg-[#EAF3F2] px-2 py-1 text-[#427b77]">
             <svg
                 aria-hidden="true"
                 focusable="false"
