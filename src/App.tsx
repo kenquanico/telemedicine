@@ -17,6 +17,14 @@ import { PaymentPage } from "./pages/PaymentPage";
 import { PaymentHistoryPage } from "./pages/PaymentHistoryPage";
 import { AccountPage } from "./pages/AccountPage";
 import PharmaciesPage from "./pages/PharmaciesPage.tsx";
+import ReturnsPage from "./pages/ReturnPage";
+import PrescriptionUploadPage from "./pages/PrescriptionUploadPage";
+import HelpCenterPage from "./pages/HelpCenterPage";
+import AboutPage from "./pages/AboutPage";
+import CareersPage from "./pages/CareersPage";
+import PressPage from "./pages/PressPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsPage from "./pages/TermsPage";
 
 const homeRendersPickupExperience = HomePage.name === "PickupPage";
 const defaultReservePharmacy = {
@@ -31,7 +39,7 @@ const defaultReservePharmacy = {
 
 // ─── Page Router ──────────────────────────────────────────────────────────────
 function PageRouter() {
-    const { currentPage } = useApp();
+    const { currentPage, navigateTo } = useApp();
 
     const pages: Record<PageKey, React.ReactNode> = {
         home: homeRendersPickupExperience ? <PickupPage /> : <HomePage />,
@@ -51,6 +59,14 @@ function PageRouter() {
         history: <PaymentHistoryPage />,
         account: <AccountPage />,
         settings: <AccountPage />,
+        returns: <ReturnsPage onBack={() => navigateTo("home")} />,
+        prescription_upload: <PrescriptionUploadPage onBack={() => navigateTo("home")} />,
+        help_center: <HelpCenterPage onBack={() => navigateTo("home")} />,
+        about: <AboutPage onBack={() => navigateTo("home")} />,
+        careers: <CareersPage onBack={() => navigateTo("home")} />,
+        press: <PressPage onBack={() => navigateTo("home")} />,
+        privacy: <PrivacyPolicyPage onBack={() => navigateTo("home")} />,
+        terms: <TermsPage onBack={() => navigateTo("home")} />,
     };
 
     return <>{pages[currentPage] ?? <HomePage />}</>;
