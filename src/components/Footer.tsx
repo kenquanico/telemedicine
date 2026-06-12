@@ -20,7 +20,7 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="mt-8 border-t border-[#EAEFEE] bg-[#F7F9F9]">
+        <footer className="mt-8 border-t border-[#EAEFEE] bg-[#FFFFFF]">
             <div className="px-5 sm:px-8 lg:px-16 py-12">
 
                 {/* ── Top row: brand + nav columns ── */}
