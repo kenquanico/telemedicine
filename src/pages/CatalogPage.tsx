@@ -7,7 +7,7 @@ import DiscountTag from "../components/DiscountTag";
 import type { Category, Product } from "../types";
 import { applyProductFilters } from "../utils/productFilters";
 import { getActiveFilterCount, getDefaultFilters } from "../utils/filterState";
-import { Heart, Plus, Search, Star } from "lucide-react";
+import { Heart, Search, Star } from "lucide-react";
 
 const CATEGORY_ICON_SRC: Record<Category, string> = {
     pain_relief: "/SVG/Pain%20Relief.svg",
@@ -82,13 +82,11 @@ function CategoryCuisineTile({
 function CatalogMedicineCard({
     product,
     onView,
-    onAdd,
     isFavorite,
     onToggleFavorite,
 }: {
     product: Product;
     onView: () => void;
-    onAdd: () => void;
     isFavorite: boolean;
     onToggleFavorite: () => void;
 }) {
@@ -138,25 +136,9 @@ function CatalogMedicineCard({
                         onToggleFavorite();
                     }}
                     aria-label={isFavorite ? "Remove from favourites" : "Add to favourites"}
-                    className="absolute bottom-2.5 right-[46px] flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
+                    className="absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] bg-white/90 backdrop-blur-sm transition-transform duration-150 hover:scale-110 active:scale-90"
                 >
                     <Heart size={15} strokeWidth={2} fill={isFavorite ? "#e11d48" : "none"} className={isFavorite ? "text-[#e11d48]" : "text-[#262626]/50"} />
-                </button>
-
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAdd();
-                    }}
-                    disabled={isOutOfStock}
-                    aria-label={`Add ${product.brandName} to cart`}
-                    className={`absolute bottom-2.5 right-2.5 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] transition-transform duration-150 active:scale-90 ${
-                        isOutOfStock
-                            ? "cursor-not-allowed bg-white/80 text-[#262626]/40"
-                            : "bg-white/90 text-[#262626] backdrop-blur-sm hover:scale-110"
-                    }`}
-                >
-                    <Plus size={18} strokeWidth={2.2} />
                 </button>
             </div>
 
@@ -197,7 +179,7 @@ function CatalogMedicineCard({
 }
 
 export default function CatalogPage() {
-    const { navigateTo, addToCart, showModal, favoriteIds, toggleFavorite } = useApp();
+    const { navigateTo, favoriteIds, toggleFavorite } = useApp();
 
     const [filters, setFilters] = useState(getDefaultFilters);
 
@@ -211,20 +193,6 @@ export default function CatalogPage() {
     const resetFilters = () => {
         setFilters(getDefaultFilters());
         setActiveTab("all");
-    };
-
-    const handleAdd = (productId: string) => {
-        const product = PRODUCTS.find((p) => p.id === productId);
-        if (!product) return;
-        addToCart(product);
-        showModal({
-            type: "added",
-            icon: "✅",
-            title: "Added to Cart!",
-            message: `${product.brandName} ${product.strength} has been added to your cart.`,
-            actionLabel: "View Cart",
-            onAction: () => navigateTo("cart"),
-        });
     };
 
     const activeFilterCount = getActiveFilterCount(filters);
@@ -296,7 +264,6 @@ export default function CatalogPage() {
                                     key={product.id}
                                     product={product}
                                     onView={() => navigateTo("product", product.id)}
-                                    onAdd={() => handleAdd(product.id)}
                                     isFavorite={favoriteIds.includes(product.id)}
                                     onToggleFavorite={() => toggleFavorite(product.id)}
                                 />
