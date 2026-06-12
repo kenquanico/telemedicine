@@ -44,7 +44,7 @@ export function TrackingPage() {
     const currentIndex = steps.findIndex((step) => step.key === currentKey);
 
     return (
-        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6">
+        <div className="min-h-screen bg-white px-4 py-6 sm:px-6">
             <div className="mx-auto max-w-[760px]">
                 <div className="mb-5 rounded-[14px] border border-[#E5E7EB] bg-white p-5">
                     <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
