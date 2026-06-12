@@ -50,7 +50,7 @@ export default function HelpCenterPage({ onBack }: { onBack?: () => void }) {
     }, [query]);
 
     return (
-        <main className="bg-[#F3F4F4] px-5 py-8 sm:px-8 lg:px-16">
+        <main className="bg-white px-5 py-8 sm:px-8 lg:px-16">
             <div className="mx-auto w-full max-w-5xl space-y-12" dir="ltr">
                 <CollectionBreadcrumb current="Dosely Help Center" onBack={onBack} />
 
