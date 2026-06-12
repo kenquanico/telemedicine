@@ -36,7 +36,7 @@ export function OrdersPage() {
         filter === "all" ? ORDERS : ORDERS.filter((o) => o.status === filter);
 
     return (
-        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6">
+        <div className="min-h-screen bg-white px-4 py-6 sm:px-6">
             <div className="mx-auto max-w-3xl">
                 <div className="mb-5 flex flex-col gap-1">
                     <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#427b77] epilogue-header">
