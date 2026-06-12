@@ -7,6 +7,7 @@ import HomePage from "./pages/HomePage";
 import CatalogPage from "./pages/CatalogPage";
 import ProductDetailPage from "./pages/ProductDetailPage";
 import PickupPage from "./pages/PickUpPage";
+import ReservePickupPage from "./pages/ReserveForPickupPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import FavoritesPage from "./pages/FavoritesPage";
@@ -18,6 +19,15 @@ import { AccountPage } from "./pages/AccountPage";
 import PharmaciesPage from "./pages/PharmaciesPage.tsx";
 
 const homeRendersPickupExperience = HomePage.name === "PickupPage";
+const defaultReservePharmacy = {
+    id: "ph-1",
+    name: "Mercury Drug",
+    address: "North Reclamation Area, Cebu City",
+    openNow: true,
+    hasFreeDelivery: false,
+    rating: 4.8,
+    userRatingsTotal: 1240,
+};
 
 // ─── Page Router ──────────────────────────────────────────────────────────────
 function PageRouter() {
@@ -29,6 +39,7 @@ function PageRouter() {
         medicines: <CatalogPage />,
         product: <ProductDetailPage />,
         pickup: <PickupPage />,
+        reservePickup: <ReservePickupPage pharmacy={defaultReservePharmacy} />,
         pharmacies: <PharmaciesPage />,
         pharmacy: <PickupPage />,
         cart: <CartPage />,
@@ -50,6 +61,7 @@ function AppShell() {
     const { currentPage } = useApp();
     const hideNavbar =
         currentPage === "pickup" ||
+        currentPage === "reservePickup" ||
         currentPage === "pharmacy" ||
         (currentPage === "home" && homeRendersPickupExperience);
     const compactNav =
