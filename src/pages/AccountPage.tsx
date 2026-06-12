@@ -53,7 +53,7 @@ export function AccountPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6">
+        <div className="min-h-screen bg-white px-4 py-6 sm:px-6">
             <div className="mx-auto max-w-[640px]">
                 <div className="mb-5 rounded-[14px] border border-[#E5E7EB] bg-white p-5">
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -74,7 +74,10 @@ export function AccountPage() {
                                 </div>
                             </div>
                         </div>
-                        <button className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[12px] font-bold text-[#427b77] transition-colors duration-150 hover:border-[#5F9598] epilogue-header">
+                        <button
+                            onClick={() => navigateTo("profile")}
+                            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-[#E5E7EB] bg-white px-4 py-2.5 text-[12px] font-bold text-[#427b77] transition-colors duration-150 hover:border-[#5F9598] epilogue-header"
+                        >
                             <Edit3 size={15} strokeWidth={2} />
                             Edit Profile
                         </button>
