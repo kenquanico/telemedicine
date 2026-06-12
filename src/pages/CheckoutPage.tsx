@@ -53,7 +53,7 @@ export default function CheckoutPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F3F4F4] px-4 py-6 sm:px-6 lg:py-8">
+        <div className="min-h-screen bg-white px-4 py-6 sm:px-6 lg:py-8">
             <div className="mx-auto max-w-6xl">
                 <div className="mb-6">
                     <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-[#427b77] epilogue-header">
