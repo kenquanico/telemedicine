@@ -23,6 +23,7 @@ export type PageKey =
     | "medicines"
     | "product"
     | "pickup"
+    | "reservePickup"
     | "pharmacies"
     | "pharmacy"
     | "cart"
